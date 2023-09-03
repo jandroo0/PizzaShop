@@ -1,14 +1,21 @@
 package model;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
 import java.io.*;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
 public class Database {
-    private LinkedList<Employee> employees = new LinkedList<Employee>(); // create list of employees
+    private LinkedList<Employee> employees = new LinkedList<>(); // create list of employees
 
-    private String employeesFilePath = "employees.csv";
+
+    private FileWriter fileWriter;
+    private String employeesFilePath = "employees.json";
 
     public Database() {
 
@@ -24,38 +31,72 @@ public class Database {
 
 
     public void saveToFile() throws IOException { // save to local file
-        try {
-            File file = new File(employeesFilePath);
 
-            if (file.createNewFile()) {
-                System.out.println("Employees File Created: " + file.getName());
-            } else {
-                FileOutputStream fos = new FileOutputStream(file);
-                ObjectOutputStream oos = new ObjectOutputStream(fos);
-                Employee[] employees1 = (Employee[])this.employees.toArray(new Employee[this.employees.size()]);
-                oos.writeObject(employees1);
-                oos.close();
-            }
+        fileWriter = new FileWriter(employeesFilePath);
+        StringBuilder sb = new StringBuilder();
+        sb.append("[");
+
+        // for each employee create json object and write to file
+        for (Employee employee: employees) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("ID", employee.getID());
+            jsonObject.put("First_Name", employee.getFirstName());
+            jsonObject.put("Last_Name", employee.getLastName());
+            jsonObject.put("Age", employee.getAge());
+            jsonObject.put("Role", employee.getRole());
+            jsonObject.put("Phone_Number", employee.getPhoneNumber());
+            jsonObject.put("Address", employee.getAddress());
+
+            sb.append(jsonObject.toJSONString() + ',');
+        }
+        sb.deleteCharAt(sb.length()-1);
+        sb.append("]");
+        try {
+            fileWriter.write(sb.toString());
+            System.out.println("EMPLOYEE JSON CREATED");
+            fileWriter.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+
+
     }
 
-    public void loadFromFile(File file) throws IOException{ // load from local file
-        FileInputStream fis = new FileInputStream(file);
-        ObjectInputStream ois = new ObjectInputStream(fis);
+    public void loadFromFile() throws ParseException, IOException { // load from local files
+
+
+        // LOAD EMPLOYEES---------------------------------------------
+        JSONParser parser = new JSONParser(); //create JSON parser
+        JSONArray employeesJSON = (JSONArray) parser.parse(new FileReader(employeesFilePath)); // create array from file
 
         try {
-            Employee[] employees1 = (Employee[])ois.readObject();
-            this.employees.clear();
-            this.employees.addAll(Arrays.asList(employees1));
-        } catch(ClassNotFoundException e) {
+            System.out.println("LOADING EMPLOYEES...");
+            for(Object employeeJSON : employeesJSON) { // for each employee JSON in employees file
+
+                JSONObject employee = (JSONObject) employeeJSON; // create employee object from json
+
+                // gather values
+                String ID = (String) employee.get("ID");
+                String firstName = (String) employee.get("First_Name");
+                String lastName = (String) employee.get("Last_Name");
+                String age = (String) employee.get("Age");
+                String role = (String) employee.get("Role");
+                String phoneNumber = (String) employee.get("Phone_Number");
+                String address = (String) employee.get("Address");
+
+                // add new employee to current employees list
+
+                Employee newEmployee = new Employee(ID, firstName, lastName, age, role, phoneNumber, address);
+                employees.add(newEmployee);
+                System.out.println(newEmployee.toString());
+            }
+
+
+
+        } catch (Exception e) {
             e.printStackTrace();
-        } catch(IOException e1) {
-            e1.printStackTrace();
         }
 
-        ois.close();
     }
 }

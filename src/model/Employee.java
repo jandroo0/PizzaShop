@@ -1,10 +1,9 @@
 package model;
 
 public class Employee {
-    private String firstName, lastName, role, address, phoneNumber;
-    private int ID, age;
+    private String ID, firstName, lastName, age, role, address, phoneNumber;
 
-    public Employee(int ID, String firstName, String lastName, int age, String role, String phoneNumber, String address) {
+    public Employee(String ID, String firstName, String lastName, String age, String role, String phoneNumber, String address) {
         this.ID = ID;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -46,19 +45,19 @@ public class Employee {
         this.address = address;
     }
 
-    public int getID() {
+    public String getID() {
         return ID;
     }
 
-    public void setID(int ID) {
+    public void setID(String ID) {
         this.ID = ID;
     }
 
-    public int getAge() {
+    public String getAge() {
         return age;
     }
 
-    public void setAge(int age) {
+    public void setAge(String age) {
         this.age = age;
     }
 
@@ -68,5 +67,18 @@ public class Employee {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "ID='" + ID + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", age='" + age + '\'' +
+                ", role='" + role + '\'' +
+                ", address='" + address + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                '}';
     }
 }

@@ -6,9 +6,8 @@ import java.util.EventObject;
 /** Event object for the employee/customer login event which will take the given ID in the JTextField on the login panel **/
 public class AddEmployeeEvent extends EventObject {
 
-    private int ID, age;
-    private String firstName, lastName, address, role, phoneNumber;
-    public AddEmployeeEvent(Object source, int ID, String firstName, String lastName, int age, String role, String phoneNumber, String address) {
+    private String ID, firstName, lastName, age, address, role, phoneNumber;
+    public AddEmployeeEvent(Object source, String ID, String firstName, String lastName, String age, String role, String phoneNumber, String address) {
         super(source);
         this.ID = ID;
         this.firstName = firstName;
@@ -19,19 +18,19 @@ public class AddEmployeeEvent extends EventObject {
         this.address = address;
     }
 
-    public int getID() {
+    public String getID() {
         return ID;
     }
 
-    public void setID(int ID) {
+    public void setID(String ID) {
         this.ID = ID;
     }
 
-    public int getAge() {
+    public String getAge() {
         return age;
     }
 
-    public void setAge(int age) {
+    public void setAge(String age) {
         this.age = age;
     }
 

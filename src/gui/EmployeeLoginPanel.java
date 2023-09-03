@@ -1,5 +1,7 @@
 package gui;
 
+import org.json.simple.parser.ParseException;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.text.*;
@@ -8,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 
 
 public class EmployeeLoginPanel extends JPanel{
@@ -34,7 +37,13 @@ public class EmployeeLoginPanel extends JPanel{
 
                     LoginEvent event = new LoginEvent(e, ID); // create an employee login event with the ID
                     if (EmployeeLoginPanel.this.loginListener != null) { // if there is a loginListener
-                        EmployeeLoginPanel.this.loginListener.loginEvent(event);
+                        try {
+                            EmployeeLoginPanel.this.loginListener.loginEvent(event);
+                        } catch (IOException ex) {
+                            throw new RuntimeException(ex);
+                        } catch (ParseException ex) {
+                            throw new RuntimeException(ex);
+                        }
                     }
                 }
             }

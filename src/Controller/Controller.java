@@ -3,6 +3,7 @@ package Controller;
 import gui.LoginEvent;
 import model.Database;
 import model.Employee;
+import org.json.simple.parser.ParseException;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,8 +34,8 @@ public class Controller {
         this.db.saveToFile();
     }
 
-    public void loadFromFile(File file) throws IOException {
-        this.db.loadFromFile(file);
+    public void loadFromFile() throws IOException, ParseException {
+        this.db.loadFromFile();
     }
 
 

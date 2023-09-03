@@ -6,6 +6,7 @@ import java.io.IOException;
 
 import Controller.Controller;
 import model.Employee;
+import org.json.simple.parser.ParseException;
 
 public class MainFrame extends JFrame {
 
@@ -27,7 +28,7 @@ public class MainFrame extends JFrame {
 
 
     // gui.MainFrame Constructor
-    public MainFrame() {
+    public MainFrame() throws IOException, ParseException {
         super("DANS SLICES 0.1");
 
         setSize(WIDTH, HEIGHT); // set frame size
@@ -35,6 +36,7 @@ public class MainFrame extends JFrame {
         setLocationRelativeTo(null); // centers window to screen when opened
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // closes when clicking 'X'
         setVisible(true); // set window visible
+
 
         // initialiaze components
 
@@ -48,6 +50,7 @@ public class MainFrame extends JFrame {
 
         controller = new Controller(); // MVC
 
+
         // menu bar
         setJMenuBar(menuBar);
 
@@ -56,21 +59,27 @@ public class MainFrame extends JFrame {
         // employee login event
         this.employeeLoginPanel.setLoginListener(new LoginListener() {
             @Override
-            public void loginEvent(LoginEvent e) {
-//                MainFrame.this.controller.employeeLogin(e);
+            public void loginEvent(LoginEvent e) throws IOException, ParseException {
+//                MainFrame.this.controller.employeeLogin(e); == true ->>
+
             }
         });
 
+        //handles the employee managemement dialog events
         this.getManageEmployeesDialog().setEmployeeListener(new ManageEmployeeListener() {
             @Override
-            public void addEmployeeEvent(AddEmployeeEvent e) throws IOException {
+            public void addEmployeeEvent(AddEmployeeEvent e) { // on add employee
                 Employee newHire = new Employee(e.getID(), e.getFirstName(), e.getLastName(), e.getAge(), e.getRole(), e.getPhoneNumber(), e.getAddress());
                 MainFrame.this.controller.addEmployee(newHire);
                 employeesDialog.displayEmployees(MainFrame.this.controller.getEmployees());
+            }
 
+            @Override
+            public void saveEmployeesEvent() throws IOException {// on save click
                 MainFrame.this.controller.saveToFile();
             }
         });
+
 
 
 
@@ -78,8 +87,13 @@ public class MainFrame extends JFrame {
 
         add(titlePanel, BorderLayout.NORTH);
         add(employeeLoginPanel, BorderLayout.CENTER);
+        load();
 
+    }
 
+    private void load() throws IOException, ParseException {
+        MainFrame.this.controller.loadFromFile();
+        employeesDialog.displayEmployees(MainFrame.this.controller.getEmployees());
     }
 
 

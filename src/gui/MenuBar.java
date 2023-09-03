@@ -28,6 +28,7 @@ public class MenuBar extends JMenuBar {
             @Override
             public void actionPerformed(ActionEvent e) {
                 frame.getManageEmployeesDialog().setVisible(true);
+
             }
         });
 

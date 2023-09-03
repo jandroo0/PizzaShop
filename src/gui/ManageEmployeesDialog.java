@@ -20,6 +20,7 @@ public class ManageEmployeesDialog extends JDialog {
     private JPanel employeeDisplayPanel;
     private EmployeesTextPanel employeeTextPane;
     private JPanel employeeFieldsPanel;
+    private JPanel buttonsPanel;
 
     private PlaceholderTextField idField;
     private PlaceholderTextField firstNameField;
@@ -29,12 +30,17 @@ public class ManageEmployeesDialog extends JDialog {
     private PlaceholderTextField phoneNumberField;
     private PlaceholderTextField addressField;
 
+    // manage employee buttons
     private JButton addEmployeeButton;
     private JButton removeEmployeeButton;
 
+    // lower buttons
+    private JButton saveButton;
+    private JButton cancelButton;
+
     private ManageEmployeeListener employeeListener;
 
-    public ManageEmployeesDialog(JFrame frame) {
+    public ManageEmployeesDialog(Frame frame) {
         super(frame, "Manage Employees", true);
         setSize(400,500);
         setResizable(false);
@@ -45,6 +51,7 @@ public class ManageEmployeesDialog extends JDialog {
         employeeTextPane = new EmployeesTextPanel();
         employeeFieldsPanel = new JPanel();
         employeeDisplayPanel = new JPanel();
+        buttonsPanel = new JPanel();
 
         titleLabel = new JLabel("MANAGE EMPLOYEES");
 
@@ -57,20 +64,25 @@ public class ManageEmployeesDialog extends JDialog {
         addressField = new PlaceholderTextField(" Address");
 
         addEmployeeButton = new JButton("ADD");
-        removeEmployeeButton = new JButton("TERMINATE");
+        removeEmployeeButton = new JButton("REMOVE");
 
+        saveButton = new JButton("SAVE");
+        cancelButton = new JButton("CANCEL");
+
+//        displayEmployees(employees); // display current employees with passed argument
 
 
         // handle events
 
 
+        // add employee
         addEmployeeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int ID = Integer.parseInt(idField.getText());
+                String ID = idField.getText();
                 String firstName = firstNameField.getText();
                 String lastName = lastNameField.getText();
-                int age = Integer.parseInt(ageField.getText());
+                String age = ageField.getText();
                 String role = roleField.getText();
                 String phoneNumber = phoneNumberField.getText();
                 String address = addressField.getText();
@@ -79,15 +91,31 @@ public class ManageEmployeesDialog extends JDialog {
                 if(ManageEmployeesDialog.this.employeeListener != null) {
                     try {
                         ManageEmployeesDialog.this.employeeListener.addEmployeeEvent(event);
-                    } catch (IOException ex) {
-                        throw new RuntimeException(ex);
+                    } catch (Exception ex1) {
+                        ex1.printStackTrace();
                     }
-
                 }
 
             }
         });
 
+
+        // save employee list
+        saveButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(ManageEmployeesDialog.this.employeeListener != null) {
+                    try {
+                        ManageEmployeesDialog.this.employeeListener.saveEmployeesEvent();
+                    } catch (Exception ex1) {
+                        ex1.printStackTrace();
+                    }
+                }
+
+            }
+        });
+
+        // make JButton Class
         addEmployeeButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
@@ -111,6 +139,7 @@ public class ManageEmployeesDialog extends JDialog {
 
     private void layoutComponents() {
         titlePanel.add(titleLabel);
+        titlePanel.setBorder(BorderFactory.createEmptyBorder(20,0,0,0));
 
 
         employeeDisplayPanel.setLayout(new GridBagLayout());
@@ -121,15 +150,16 @@ public class ManageEmployeesDialog extends JDialog {
         gc.insets = new Insets(10,0,0,0);
         gc.gridy++;
         employeeDisplayPanel.add(removeEmployeeButton, gc);
+        gc.gridy++;
+        employeeDisplayPanel.add(cancelButton,gc);
 
         // employee fields panel(right panel) ----------------------
-        Border border = BorderFactory.createEmptyBorder(90,10,50,50);
+        Border fieldsBorder = BorderFactory.createEmptyBorder(30,0,0,50);
         employeeFieldsPanel.setLayout(new GridBagLayout());
-        employeeFieldsPanel.setBorder(border);
-        gc.insets = new Insets(0,0,10,0);
+        employeeFieldsPanel.setBorder(fieldsBorder);
+        gc.insets = new Insets(8,0,0,0);
         gc.gridy = 0;
         gc.gridx = 0;
-        gc.weightx = .1;
         employeeFieldsPanel.add(idField, gc);
         gc.gridy++;
         employeeFieldsPanel.add(firstNameField, gc);
@@ -144,7 +174,12 @@ public class ManageEmployeesDialog extends JDialog {
         gc.gridy++;
         employeeFieldsPanel.add(addressField, gc);
         gc.gridy++;
+        gc.insets = new Insets(10,0,0,0);
         employeeFieldsPanel.add(addEmployeeButton, gc);
+        gc.gridy++;
+
+        employeeFieldsPanel.add(saveButton, gc);
+
 
 
 
@@ -162,6 +197,7 @@ public class ManageEmployeesDialog extends JDialog {
         // panels
         employeeFieldsPanel.setBackground(Utils.getBackgroundColor());
         employeeDisplayPanel.setBackground(Utils.getBackgroundColor());
+        buttonsPanel.setBackground(Utils.getBackgroundColor());
         titlePanel.setBackground(Utils.getBackgroundColor());
 
         //fields
@@ -176,6 +212,17 @@ public class ManageEmployeesDialog extends JDialog {
         removeEmployeeButton.setBackground(Utils.getButtonBackgroundColor());
         removeEmployeeButton.setForeground(Utils.getTextColor());
         removeEmployeeButton.setBorder(BorderFactory.createEmptyBorder(5,8,5,8));
+
+
+        saveButton.setFont(new Font(Utils.getFontString(), Font.BOLD, 14));
+        saveButton.setBackground(Utils.getButtonBackgroundColor());
+        saveButton.setForeground(Utils.getTextColor());
+        saveButton.setBorder(BorderFactory.createEmptyBorder(5,8,5,8));
+
+        cancelButton.setFont(new Font(Utils.getFontString(), Font.BOLD, 14));
+        cancelButton.setBackground(Utils.getButtonBackgroundColor());
+        cancelButton.setForeground(Utils.getTextColor());
+        cancelButton.setBorder(BorderFactory.createEmptyBorder(5,8,5,8));
     }
     // refreshes employees list on text panel
     public void displayEmployees(LinkedList<Employee> employees) {
