@@ -6,19 +6,19 @@ import java.util.EventObject;
 /** Event object for the employee/customer login event which will take the given ID in the JTextField on the login panel **/
 public class LoginEvent extends EventObject {
 
-    private int ID;
-    public LoginEvent(Object source, int ID) {
+    private String ID;
+    public LoginEvent(Object source, String ID) {
         super(source);
         this.ID = ID;
     }
 
 
 
-    public int getID() {
+    public String getID() {
         return ID;
     }
 
-    public void setID(int ID) {
+    public void setID(String ID) {
         this.ID = ID;
     }
 }

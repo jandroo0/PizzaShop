@@ -20,6 +20,7 @@ public class MainFrame extends JFrame {
     private TitlePanel titlePanel; // application title panel
 
     private EmployeeLoginPanel employeeLoginPanel; // panel containing the employee login
+    private EmployeeHomePanel employeeHomePanel;
 
 
     // employee menu dialogs
@@ -60,7 +61,9 @@ public class MainFrame extends JFrame {
         this.employeeLoginPanel.setLoginListener(new LoginListener() {
             @Override
             public void loginEvent(LoginEvent e) throws IOException, ParseException {
-//                MainFrame.this.controller.employeeLogin(e); == true ->>
+                if(MainFrame.this.controller.employeeLogin(e) != null) {
+
+                }
 
             }
         });

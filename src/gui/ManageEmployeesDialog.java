@@ -9,7 +9,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.IOException;
 import java.util.LinkedList;
 
 public class ManageEmployeesDialog extends JDialog {
@@ -74,8 +73,7 @@ public class ManageEmployeesDialog extends JDialog {
 
         // handle events
 
-
-        // add employee
+        // add employee listener
         addEmployeeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -100,7 +98,7 @@ public class ManageEmployeesDialog extends JDialog {
         });
 
 
-        // save employee list
+        // save employee listener
         saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -114,6 +112,9 @@ public class ManageEmployeesDialog extends JDialog {
 
             }
         });
+
+
+
 
         // make JButton Class
         addEmployeeButton.addMouseListener(new MouseAdapter() {

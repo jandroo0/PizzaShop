@@ -21,7 +21,7 @@ public class MenuBar extends JMenuBar {
         manageCustomerItem = new JMenuItem("Manage Customers");
 
         employeeMenu.add(manageEmployeesItem);
-        employeeMenu.add(manageCustomerItem);
+//        employeeMenu.add(manageCustomerItem);
 
 
         manageEmployeesItem.addActionListener(new ActionListener() {

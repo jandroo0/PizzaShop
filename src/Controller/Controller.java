@@ -26,8 +26,8 @@ public class Controller {
         this.db.addEmployee(e);
     }
 
-    public void employeeLogin(LoginEvent e) {
-
+    public Employee employeeLogin(LoginEvent e) {
+        return this.db.employeeLogin(e);
     }
 
     public void saveToFile() throws IOException {

@@ -33,7 +33,7 @@ public class EmployeeLoginPanel extends JPanel{
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (EmployeeLoginPanel.this.idField != null) { // if something is in the textfield
-                    int ID = Integer.parseInt(EmployeeLoginPanel.this.idField.getText()); // on submit, take idField contents -> convert to integer using Integer.parseInt ->  set to int ID
+                    String ID = EmployeeLoginPanel.this.idField.getText(); // on submit, take idField contents -> convert to integer using Integer.parseInt ->  set to int ID
 
                     LoginEvent event = new LoginEvent(e, ID); // create an employee login event with the ID
                     if (EmployeeLoginPanel.this.loginListener != null) { // if there is a loginListener

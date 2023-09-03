@@ -24,7 +24,7 @@ public class EmployeesTextPanel extends JPanel {
 	
 	public EmployeesTextPanel() {
 
-		setPreferredSize(new Dimension(200, 260));
+		setPreferredSize(new Dimension(200, 180));
 		setBackground(Utils.getBackgroundColor());
 		setLayout(new BorderLayout());
 		
@@ -73,7 +73,7 @@ public class EmployeesTextPanel extends JPanel {
 		StringBuilder employeeList = new StringBuilder();
 
 		for(Employee employee : employees) {
-			employeeList.append(employee.getID() + " : " + employee.getFirstName() + "\n");
+			employeeList.append(employee.getID() + " - " + employee.getFirstName() + "\n");
 		}
 		textPane.setText(new String(employeeList));
 	}

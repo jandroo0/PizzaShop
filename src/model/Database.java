@@ -1,5 +1,6 @@
 package model;
 
+import gui.LoginEvent;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -9,6 +10,7 @@ import java.io.*;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 public class Database {
     private LinkedList<Employee> employees = new LinkedList<>(); // create list of employees
@@ -28,7 +30,14 @@ public class Database {
     public void addEmployee(Employee employee) {this.employees.add(employee);} // add employee
     public void removeEmployee(int index) {this.employees.remove(index);} // remove employee
 
-
+public Employee employeeLogin(LoginEvent event) { //  checks if employee login id matches any id in employee list and returns employee or null
+        for(Employee employee : employees) {
+            if(event.getID().equals(employee.getID())) {
+                return employee;
+            }
+        }
+        return null;
+}
 
     public void saveToFile() throws IOException { // save to local file
 
