@@ -1,47 +1,113 @@
 package gui;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class MenuBar extends JMenuBar {
 
+    JMenu viewMenu;
     JMenu employeeMenu;
     JMenuItem manageEmployeesItem;
-    JMenuItem manageCustomerItem;
+    JMenuItem employeeViewItem;
+
+    JMenuItem customerViewItem;
+
+    JMenuItem logoutItem;
 
     JMenuItem exitItem = new JMenuItem("Exit");
 
     public MenuBar(MainFrame frame) {
         // menu
+        viewMenu = new JMenu("View");
         employeeMenu = new JMenu("Employee");
 
         // sub items
+        customerViewItem = new JMenuItem("Customer View");
+        employeeViewItem = new JMenuItem("Employee View");
+
+
+        logoutItem = new JMenuItem("Logout"); // logout menu item
+
+    // employee items
         manageEmployeesItem = new JMenuItem("Manage Employees");
-        manageCustomerItem = new JMenuItem("Manage Customers");
-
-        employeeMenu.add(manageEmployeesItem);
-//        employeeMenu.add(manageCustomerItem);
 
 
+        // when employee view is selected
+        employeeViewItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("EMPLOYEE VIEW");
+                CardLayout cl = (CardLayout) frame.getLoginPanels().getLayout(); // grab cardLayout from main frame
+                cl.show(frame.getLoginPanels(), "EMPLOYEE_LOGIN"); // switch to employeeLoginPanel using cardLayout
+                viewMenu.add(customerViewItem); // add the customer view item to the menu
+                viewMenu.remove(employeeViewItem); // remove the employee view item
+
+            }
+        });
+
+        // when customer view is selected
+        customerViewItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                System.out.println("CUSTOMER VIEW");
+                CardLayout cl = (CardLayout) frame.getLoginPanels().getLayout(); // grab cardLayout from main frame
+                cl.show(frame.getLoginPanels(), "CUSTOMER_LOGIN"); // switch to customerLoginPanel using cardLayout
+                viewMenu.add(employeeViewItem); // add the employee view item to the menu
+                viewMenu.remove(customerViewItem); // remove the customer view item
+            }
+        });
+
+        // manage employees action
         manageEmployeesItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 frame.getManageEmployeesDialog().setVisible(true);
-
             }
         });
 
-        manageCustomerItem.addActionListener(new ActionListener() {
+        // employee logout action
+        logoutItem.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent arg0) {
-                frame.getManageCustomersDialog().setVisible(true);
+            public void actionPerformed(ActionEvent e) {
+                CardLayout cl = (CardLayout) frame.getContainerPanel().getLayout();
+                cl.show(frame.getContainerPanel(), "LOGIN");
+
+                frame.getEmployeeHomePanel().setEmployee(null);
+                System.out.println("LOGGED OUT");
+
+                loginPanelView();
+
             }
         });
 
-        add(employeeMenu);
+        add(viewMenu);
+        viewMenu.add(employeeViewItem);
 
         styling();
+    }
+
+    // if logged in employee is admin, display manage employee menu item
+    public void employeeView() {
+        add(employeeMenu);
+        remove(viewMenu);
+        employeeMenu.add(logoutItem);
+    }
+
+    public void customerView() {
+//        add(customerMenu);
+//        customerMenu.add(logoutItem);
+    }
+
+    public void loginPanelView() {
+        remove(employeeMenu);
+        employeeMenu.remove(manageEmployeesItem);
+        add(viewMenu);
+    }
+
+    public void isAdmin() {
+        employeeMenu.add(manageEmployeesItem);
     }
 
     private void styling() {

@@ -28,6 +28,7 @@ public class ManageEmployeesDialog extends JDialog {
     private PlaceholderTextField roleField;
     private PlaceholderTextField phoneNumberField;
     private PlaceholderTextField addressField;
+    private JCheckBox isAdminBox;
 
     //remove employee combo box
     private JComboBox<String> removeEmployeeBox;
@@ -67,6 +68,8 @@ public class ManageEmployeesDialog extends JDialog {
         phoneNumberField = new PlaceholderTextField(" Phone #");
         addressField = new PlaceholderTextField(" Address");
 
+        isAdminBox = new JCheckBox("Administrator");
+
         addEmployeeButton = new JButton("ADD");
         removeEmployeeButton = new JButton("REMOVE");
 
@@ -101,7 +104,9 @@ public class ManageEmployeesDialog extends JDialog {
                 String phoneNumber = phoneNumberField.getText();
                 String address = addressField.getText();
 
-                AddEmployeeEvent event = new AddEmployeeEvent(e,ID, firstName, lastName, age, role, phoneNumber, address);
+                boolean isAdmin = isAdminBox.isSelected();
+
+                AddEmployeeEvent event = new AddEmployeeEvent(e,isAdmin, ID, firstName, lastName, age, role, phoneNumber, address);
                 if(ManageEmployeesDialog.this.employeeListener != null) {
                     try {
                         ManageEmployeesDialog.this.employeeListener.addEmployeeEvent(event);
@@ -204,6 +209,8 @@ public class ManageEmployeesDialog extends JDialog {
         gc.gridy++;
         employeeFieldsPanel.add(addressField, gc);
         gc.gridy++;
+        employeeFieldsPanel.add(isAdminBox,gc);
+        gc.gridy++;
         gc.insets = new Insets(10,0,0,0);
         employeeFieldsPanel.add(addEmployeeButton, gc);
 
@@ -240,6 +247,9 @@ public class ManageEmployeesDialog extends JDialog {
         titlePanel.setBackground(Utils.getBackgroundColor());
 
         //fields
+
+        isAdminBox.setBackground(Utils.getBackgroundColor());
+        isAdminBox.setBorder(BorderFactory.createEmptyBorder());
 
         //buttons
         addEmployeeButton.setFont(new Font(Utils.getFontString(), Font.BOLD, 14));

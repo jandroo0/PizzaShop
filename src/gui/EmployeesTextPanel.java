@@ -73,7 +73,11 @@ public class EmployeesTextPanel extends JPanel {
 		StringBuilder employeeList = new StringBuilder();
 
 		for(Employee employee : employees) {
-			employeeList.append(employee.getID() + " - " + employee.getFirstName() + "\n");
+			employeeList.append(employee.getID() + " - " + employee.getFirstName());
+			if(employee.isAdmin()) {
+				employeeList.append("*");
+			}
+			employeeList.append("\n");
 		}
 		textPane.setText(new String(employeeList));
 	}

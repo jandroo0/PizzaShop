@@ -34,6 +34,7 @@ public class EmployeeLoginPanel extends JPanel{
             public void actionPerformed(ActionEvent e) {
                 if (EmployeeLoginPanel.this.idField != null) { // if something is in the textfield
                     String ID = EmployeeLoginPanel.this.idField.getText(); // on submit, take idField contents
+                    EmployeeLoginPanel.this.idField.setText("");
                     LoginEvent event = new LoginEvent(e, ID); // create an employee login event with the ID
                     if (EmployeeLoginPanel.this.loginListener != null) { // if there is a loginListener
                         EmployeeLoginPanel.this.loginListener.loginEvent(event);

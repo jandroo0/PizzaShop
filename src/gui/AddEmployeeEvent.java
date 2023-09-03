@@ -7,8 +7,10 @@ import java.util.EventObject;
 public class AddEmployeeEvent extends EventObject {
 
     private String ID, firstName, lastName, age, address, role, phoneNumber;
-    public AddEmployeeEvent(Object source, String ID, String firstName, String lastName, String age, String role, String phoneNumber, String address) {
+    private boolean isAdmin;
+    public AddEmployeeEvent(Object source, boolean isAdmin, String ID, String firstName, String lastName, String age, String role, String phoneNumber, String address) {
         super(source);
+        this.isAdmin = isAdmin;
         this.ID = ID;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -16,6 +18,14 @@ public class AddEmployeeEvent extends EventObject {
         this.role = role;
         this.phoneNumber = phoneNumber;
         this.address = address;
+    }
+
+    public boolean isAdmin() {
+        return isAdmin;
+    }
+
+    public void setAdmin(boolean admin) {
+        isAdmin = admin;
     }
 
     public String getID() {

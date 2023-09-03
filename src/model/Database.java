@@ -7,10 +7,8 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.io.*;
-import java.util.Arrays;
 import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
+
 
 public class Database {
     private LinkedList<Employee> employees = new LinkedList<>(); // create list of employees
@@ -57,6 +55,8 @@ public Employee employeeLogin(LoginEvent event) { //  checks if employee login i
         // for each employee create json object and write to file
         for (Employee employee: employees) {
             JSONObject jsonObject = new JSONObject();
+
+            jsonObject.put("Is_Admin", employee.isAdmin());
             jsonObject.put("ID", employee.getID());
             jsonObject.put("First_Name", employee.getFirstName());
             jsonObject.put("Last_Name", employee.getLastName());
@@ -71,7 +71,7 @@ public Employee employeeLogin(LoginEvent event) { //  checks if employee login i
         sb.append("]");
         try {
             fileWriter.write(sb.toString());
-            System.out.println("EMPLOYEE JSON CREATED");
+            System.out.println("EMPLOYEE JSON CREATED AND SAVED");
             fileWriter.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -95,6 +95,8 @@ public Employee employeeLogin(LoginEvent event) { //  checks if employee login i
                 JSONObject employee = (JSONObject) employeeJSON; // create employee object from json
 
                 // gather values
+
+                boolean isAdmin = (boolean) employee.get("Is_Admin");
                 String ID = (String) employee.get("ID");
                 String firstName = (String) employee.get("First_Name");
                 String lastName = (String) employee.get("Last_Name");
@@ -105,9 +107,11 @@ public Employee employeeLogin(LoginEvent event) { //  checks if employee login i
 
                 // add new employee to current employees list
 
-                Employee newEmployee = new Employee(ID, firstName, lastName, age, role, phoneNumber, address);
+                Employee newEmployee = new Employee(isAdmin, ID, firstName, lastName, age, role, phoneNumber, address);
                 employees.add(newEmployee);
-                System.out.println(newEmployee.toString());
+                if(newEmployee.isAdmin()) System.out.println("ADMIN LOADED: " + newEmployee.getID() + ":" + newEmployee.getFirstName());
+                else System.out.println("EMPLOYEE LOADED: " + newEmployee.getID() + ":"  + newEmployee.getFirstName());
+
             }
 
 

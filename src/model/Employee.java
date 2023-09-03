@@ -2,6 +2,7 @@ package model;
 
 public class Employee {
     private String ID, firstName, lastName, age, role, address, phoneNumber;
+    private boolean admin;
 
     public Employee(String ID, String firstName, String lastName, String age, String role, String phoneNumber, String address) {
         this.ID = ID;
@@ -11,6 +12,29 @@ public class Employee {
         this.role = role;
         this.phoneNumber = phoneNumber;
         this.address = address;
+    }
+
+    public Employee(boolean admin, String ID, String firstName, String lastName, String age, String role, String phoneNumber, String address) {
+        this.admin = admin;
+        this.ID = ID;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.age = age;
+        this.role = role;
+        this.phoneNumber = phoneNumber;
+        this.address = address;
+    }
+
+    public boolean isAdmin()  {
+        return admin;
+    }
+
+    public void setAdmin() {
+        this.admin = true;
+    }
+
+    public void revokeAdmin() {
+        this.admin = false;
     }
 
     public String getFirstName() {
