@@ -20,7 +20,7 @@ public class Controller {
 
     public LinkedList<Employee> getEmployees() {return this.db.getEmployees();}
 
-    public void removeEmployee(int index) {this.db.removeEmployee(index);};
+    public void removeEmployee(String ID) {this.db.removeEmployee(ID);};
 
     public void addEmployee(Employee e) {
         this.db.addEmployee(e);

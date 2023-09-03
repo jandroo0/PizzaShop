@@ -28,7 +28,16 @@ public class Database {
     }
 
     public void addEmployee(Employee employee) {this.employees.add(employee);} // add employee
-    public void removeEmployee(int index) {this.employees.remove(index);} // remove employee
+    // remove employee
+    public void removeEmployee(String ID) {
+        Employee e = null;
+
+        for(Employee employee : employees) {
+            if(employee.getID().equals(ID)) e = employee;
+        }
+        System.out.println(e.toString());
+        employees.remove(e);
+    }
 
 public Employee employeeLogin(LoginEvent event) { //  checks if employee login id matches any id in employee list and returns employee or null
         for(Employee employee : employees) {

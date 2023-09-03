@@ -3,6 +3,8 @@ package gui;
 import java.awt.*;
 
 public class Utils {
+
+	private static int WIDTH = 600, HEIGHT = 800;
 	
 //	colors
 	private static Color titleColor = new Color(47, 39, 31);

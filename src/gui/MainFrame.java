@@ -75,6 +75,18 @@ public class MainFrame extends JFrame {
                 Employee newHire = new Employee(e.getID(), e.getFirstName(), e.getLastName(), e.getAge(), e.getRole(), e.getPhoneNumber(), e.getAddress());
                 MainFrame.this.controller.addEmployee(newHire);
                 employeesDialog.displayEmployees(MainFrame.this.controller.getEmployees());
+                employeesDialog.setComboBox(MainFrame.this.controller.getEmployees());
+            }
+
+            @Override
+            public void removeEmployeeEvent(String ID) {
+                if(ID == null) {
+                    JOptionPane.showMessageDialog(MainFrame.this,"Select an Employee.", "No Employee Selected", JOptionPane.ERROR_MESSAGE);
+                }else {
+                    MainFrame.this.controller.removeEmployee(ID);
+                    employeesDialog.displayEmployees(MainFrame.this.controller.getEmployees());
+                    employeesDialog.setComboBox(MainFrame.this.controller.getEmployees());
+                }
             }
 
             @Override
@@ -97,6 +109,7 @@ public class MainFrame extends JFrame {
     private void load() throws IOException, ParseException {
         MainFrame.this.controller.loadFromFile();
         employeesDialog.displayEmployees(MainFrame.this.controller.getEmployees());
+        employeesDialog.setComboBox(MainFrame.this.controller.getEmployees());
     }
 
 
