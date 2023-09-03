@@ -12,9 +12,16 @@ public class MainFrame extends JFrame {
     private Controller controller;
 
     // components
+
+    private MenuBar menuBar;
     private TitlePanel titlePanel; // application title panel
 
-    private EmployeeLoginPanel employeeLoginPanel;
+    private EmployeeLoginPanel employeeLoginPanel; // panel containing the employee login
+
+
+    // employee menu dialogs
+    private ManageEmployeesDialog employeesDialog; // dialog box for managing employees
+    private ManageCustomersDialog customersDialog; // dialog box for managing customers
 
 
     // gui.MainFrame Constructor
@@ -29,12 +36,22 @@ public class MainFrame extends JFrame {
 
         // initialiaze components
 
+        menuBar = new MenuBar(this);
+
         titlePanel = new TitlePanel(); // application logo panel
         employeeLoginPanel = new EmployeeLoginPanel();
 
+        employeesDialog = new ManageEmployeesDialog(this);
+        customersDialog = new ManageCustomersDialog(this);
+
+        controller = new Controller(); // MVC
+
+        // menu bar
+        setJMenuBar(menuBar);
 
         // handle events
 
+        // employee login event
         this.employeeLoginPanel.setLoginListener(new LoginListener() {
             @Override
             public void loginEvent(LoginEvent e) {
@@ -53,5 +70,13 @@ public class MainFrame extends JFrame {
     }
 
 
+    public ManageEmployeesDialog getManageEmployeesDialog() {
+        return employeesDialog;
+    }
 
+    public ManageCustomersDialog getManageCustomersDialog() {
+        return customersDialog;
+    }
 }
+
+

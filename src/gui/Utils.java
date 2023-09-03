@@ -16,7 +16,7 @@ public class Utils {
 	
 //	fonts
 	private static String fontString = "Serif";
-	private static Font textFont;
+	private static Font textFont = new Font("Serif", Font.PLAIN, 16);
 	private static Font titleFont = new Font("Serif", Font.BOLD, 30); // main application title
 	private static Font loginFont = new Font("Serif", Font.BOLD, 24); // login screen
 	private static Font dialogFont;
