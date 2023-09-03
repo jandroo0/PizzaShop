@@ -1,10 +1,10 @@
 package model;
 
 public class Employee {
-    private String firstName, lastName, role, address;
-    private int ID, age, phoneNumber;
+    private String firstName, lastName, role, address, phoneNumber;
+    private int ID, age;
 
-    public Employee(int ID, String firstName, String lastName, int age, String role, int phoneNumber, String address) {
+    public Employee(int ID, String firstName, String lastName, int age, String role, String phoneNumber, String address) {
         this.ID = ID;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -62,11 +62,11 @@ public class Employee {
         this.age = age;
     }
 
-    public int getPhoneNumber() {
+    public String getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(int phoneNumber) {
+    public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 }

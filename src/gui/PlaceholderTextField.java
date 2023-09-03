@@ -1,6 +1,10 @@
 package gui;
 
 import java.awt.*;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.*;
 import javax.swing.text.Document;
@@ -8,18 +12,10 @@ import javax.swing.text.Document;
 @SuppressWarnings("serial")
 public class PlaceholderTextField extends JTextField {
 
-    public static void main(final String[] args) {
-        final PlaceholderTextField tf = new PlaceholderTextField("");
-        tf.setColumns(20);
-        tf.setPlaceholder("All your base are belong to us!");
-        final Font f = tf.getFont();
-        tf.setFont(new Font(f.getName(), f.getStyle(), 30));
-        JOptionPane.showMessageDialog(null, tf);
-    }
-
     private String placeholder;
 
     public PlaceholderTextField() {
+
     }
 
     public PlaceholderTextField(
@@ -36,6 +32,22 @@ public class PlaceholderTextField extends JTextField {
 
     public PlaceholderTextField(final String pText) {
         super(pText);
+        setPreferredSize(new Dimension(80, 24));
+        setBorder(BorderFactory.createEmptyBorder());
+
+        addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                setText("");
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+
+            }
+        });
+
+
     }
 
     public PlaceholderTextField(final String pText, final int pColumns) {

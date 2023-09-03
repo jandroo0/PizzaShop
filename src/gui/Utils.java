@@ -124,5 +124,14 @@ public class Utils {
 	public static Color getDefaultTextFieldColor() {
 		return textFieldColor;
 	}
+
+	public static String getFileExtension(String name) {
+		int pointIndex = name.lastIndexOf(".");
+		if (pointIndex == -1) {
+			return null;
+		} else {
+			return pointIndex == name.length() - 1 ? null : name.substring(pointIndex + 1, name.length());
+		}
+	}
 	
 }

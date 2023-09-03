@@ -24,7 +24,7 @@ public class EmployeesTextPanel extends JPanel {
 	
 	public EmployeesTextPanel() {
 
-		setPreferredSize(new Dimension(200, 200));
+		setPreferredSize(new Dimension(200, 260));
 		setBackground(Utils.getBackgroundColor());
 		setLayout(new BorderLayout());
 		
@@ -52,11 +52,11 @@ public class EmployeesTextPanel extends JPanel {
 		doc.setParagraphAttributes(0, doc.getLength() - 1, attrs, false);
 		
 //		font
-		setJTextPaneFont(textPane, Utils.getDefaultFont(), Color.BLACK);
+		setJTextPaneFont(textPane, Utils.getDefaultFont(), Utils.getTextColor(), Utils.getDefaultTextFieldColor());
 		titleLabel.setFont(Utils.getDefaultFont());
 		
 //		border
-		Border outerBorder = BorderFactory.createEmptyBorder(5,5,40,70);
+		Border outerBorder = BorderFactory.createEmptyBorder(0,30,0,30);
 		setBorder(outerBorder);
 		
 		Border titleBorder = BorderFactory.createEmptyBorder(0,0,10,0);
@@ -71,8 +71,9 @@ public class EmployeesTextPanel extends JPanel {
 	
 	public void displayEmployees(LinkedList<Employee> employees) {
 		StringBuilder employeeList = new StringBuilder();
+
 		for(Employee employee : employees) {
-			employeeList.append(employee.getFirstName() + "\n");
+			employeeList.append(employee.getID() + " : " + employee.getFirstName() + "\n");
 		}
 		textPane.setText(new String(employeeList));
 	}
@@ -84,7 +85,7 @@ public class EmployeesTextPanel extends JPanel {
 
 	
 // from http://javatechniques.com/blog/setting-jtextpane-font-and-color/
-    public static void setJTextPaneFont(JTextPane jtp, Font font, Color c) {
+    public static void setJTextPaneFont(JTextPane jtp, Font font, Color c, Color bg) {
         // Start with the current input attributes for the JTextPane. This
         // should ensure that we do not wipe out any existing attributes
         // (such as alignment or other paragraph attributes) currently
@@ -101,6 +102,9 @@ public class EmployeesTextPanel extends JPanel {
 
         // Set the font color
         StyleConstants.setForeground(attrs, c);
+
+		// set background
+		StyleConstants.setBackground(attrs, bg);
 
         // Retrieve the pane's document object
         StyledDocument doc = jtp.getStyledDocument();

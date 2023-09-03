@@ -2,8 +2,10 @@ package gui;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 
 import Controller.Controller;
+import model.Employee;
 
 public class MainFrame extends JFrame {
 
@@ -56,6 +58,17 @@ public class MainFrame extends JFrame {
             @Override
             public void loginEvent(LoginEvent e) {
 //                MainFrame.this.controller.employeeLogin(e);
+            }
+        });
+
+        this.getManageEmployeesDialog().setEmployeeListener(new ManageEmployeeListener() {
+            @Override
+            public void addEmployeeEvent(AddEmployeeEvent e) throws IOException {
+                Employee newHire = new Employee(e.getID(), e.getFirstName(), e.getLastName(), e.getAge(), e.getRole(), e.getPhoneNumber(), e.getAddress());
+                MainFrame.this.controller.addEmployee(newHire);
+                employeesDialog.displayEmployees(MainFrame.this.controller.getEmployees());
+
+                MainFrame.this.controller.saveToFile();
             }
         });
 
