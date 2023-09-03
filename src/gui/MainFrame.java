@@ -1,7 +1,6 @@
 package gui;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 import java.io.IOException;
 
@@ -84,6 +83,7 @@ public class MainFrame extends JFrame {
         employeesDialog = new ManageEmployeesDialog(this);
 
         controller = new Controller(); // MVC
+        controller.loadCustomers();
 
 
         // set employee login panel invisible by default
@@ -107,7 +107,29 @@ public class MainFrame extends JFrame {
                     CardLayout hl = (CardLayout) homePanels.getLayout();
                     hl.show(homePanels, "EMPLOYEE_HOME"); // in the homePanels switch to the employeeHome
 
-                    System.out.println(employee.getID() + ":" + employee.getFirstName() + " LOGGED IN"); // print log in messsage
+                    System.out.println( "EMPLOYEE : "+ employee.getID() + " : " + employee.getFirstName() + " | LOGGED IN"); // print log in messsage
+
+                } else {
+                    JOptionPane.showMessageDialog(MainFrame.this,"Invalid ID", "Invalid ID", JOptionPane.ERROR_MESSAGE); // if unknown ID show error message
+                }
+            }
+        });
+
+        // employee login event
+        this.customerLoginPanel.setLoginListener(new LoginListener() {
+            @Override
+            public void loginEvent(LoginEvent e){ // login event
+                if(MainFrame.this.controller.customerLogin(e) != null) { // if the returned customer is not null
+                    Customer customer = MainFrame.this.controller.customerLogin(e); // set customer to logged in customer
+                    menuBar.customerView(); // set menuBar to customer view
+                    customerHomePanel.setCustomer(customer); // set the employeeHomePanel employee
+
+                    cl.show(containerPanel, "HOME"); // switch to the homePanels
+
+                    CardLayout hl = (CardLayout) homePanels.getLayout();
+                    hl.show(homePanels, "CUSTOMER_HOME"); // in the homePanels switch to the employeeHome
+
+                    System.out.println("CUSTOMER : " + customer.getID() + " : " + customer.getFirstName() + " | LOGGED IN"); // print log in messsage
 
                 } else {
                     JOptionPane.showMessageDialog(MainFrame.this,"Invalid ID", "Invalid ID", JOptionPane.ERROR_MESSAGE); // if unknown ID show error message
@@ -138,7 +160,7 @@ public class MainFrame extends JFrame {
 
             @Override
             public void saveEmployeesEvent() throws IOException {// on save click
-                MainFrame.this.controller.saveToFile();
+                MainFrame.this.controller.saveEmployees();
             }
         });
 
@@ -154,7 +176,7 @@ public class MainFrame extends JFrame {
     }
 
     private void load() throws IOException, ParseException {
-        MainFrame.this.controller.loadFromFile();
+        MainFrame.this.controller.loadEmployees();
         employeesDialog.displayEmployees(MainFrame.this.controller.getEmployees());
         employeesDialog.setComboBox(MainFrame.this.controller.getEmployees());
     }
@@ -175,6 +197,10 @@ public class MainFrame extends JFrame {
 
     public EmployeeHomePanel getEmployeeHomePanel() {
         return employeeHomePanel;
+    }
+
+    public CustomerHomePanel getCustomerHomePanel() {
+        return customerHomePanel;
     }
 
     public ManageEmployeesDialog getManageEmployeesDialog() {

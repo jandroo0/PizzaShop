@@ -1,15 +1,13 @@
 package Controller;
 
 import gui.LoginEvent;
+import model.Customer;
 import model.Database;
 import model.Employee;
 import org.json.simple.parser.ParseException;
 
-import java.io.File;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.LinkedList;
-import java.util.List;
 
 public class Controller {
     Database db = new Database();
@@ -30,12 +28,23 @@ public class Controller {
         return this.db.employeeLogin(e);
     }
 
-    public void saveToFile() throws IOException {
-        this.db.saveToFile();
+    public Customer customerLogin(LoginEvent e) {
+        return this.db.customerLogin(e);
     }
 
-    public void loadFromFile() throws IOException, ParseException {
-        this.db.loadFromFile();
+    public void saveEmployees() throws IOException {
+        this.db.saveEmployees();
+    }
+
+    public void saveCustomers() throws IOException {
+        this.db.saveCustomers();
+    }
+
+    public void loadEmployees() throws IOException, ParseException {
+        this.db.loadEmployees();
+    }
+    public void loadCustomers() throws IOException, ParseException {
+        this.db.loadCustomers();
     }
 
 

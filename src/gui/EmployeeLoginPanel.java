@@ -1,7 +1,5 @@
 package gui;
 
-import org.json.simple.parser.ParseException;
-
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.text.*;
@@ -10,7 +8,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.IOException;
 
 
 public class EmployeeLoginPanel extends JPanel{
@@ -82,6 +79,7 @@ public class EmployeeLoginPanel extends JPanel{
         idField.setBorder(BorderFactory.createLineBorder(Color.BLACK)); // set  border to empty
         idField.setDocument(new JTextFieldLimit(6)); // using gui.JTextFieldLimit class set character limit to 6
         idField.setPreferredSize(new Dimension(114,44)); // set  size
+        idField.setHorizontalAlignment(JTextField.CENTER); // center text
         idField.setFont(Utils.getLoginFont()); // set font
 
         idField.setForeground(Utils.getTextColor());
@@ -112,21 +110,4 @@ public class EmployeeLoginPanel extends JPanel{
 
     }
 
-}
-// class to set limit for idField from: https://stackoverflow.com/questions/3519151/how-to-limit-the-number-of-characters-in-jtextfield
-class JTextFieldLimit extends PlainDocument {
-    private int limit;
-
-    JTextFieldLimit(int limit) {
-        super();
-        this.limit = limit;
-    }
-
-    public void insertString( int offset, String  str, AttributeSet attr ) throws BadLocationException {
-        if (str == null) return;
-
-        if ((getLength() + str.length()) <= limit) {
-            super.insertString(offset, str, attr);
-        }
-    }
 }

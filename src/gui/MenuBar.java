@@ -9,9 +9,9 @@ public class MenuBar extends JMenuBar {
 
     JMenu viewMenu;
     JMenu employeeMenu;
+    JMenu customerMenu;
     JMenuItem manageEmployeesItem;
     JMenuItem employeeViewItem;
-
     JMenuItem customerViewItem;
 
     JMenuItem logoutItem;
@@ -22,6 +22,7 @@ public class MenuBar extends JMenuBar {
         // menu
         viewMenu = new JMenu("View");
         employeeMenu = new JMenu("Employee");
+        customerMenu = new JMenu("Customer");
 
         // sub items
         customerViewItem = new JMenuItem("Customer View");
@@ -75,6 +76,7 @@ public class MenuBar extends JMenuBar {
                 cl.show(frame.getContainerPanel(), "LOGIN");
 
                 frame.getEmployeeHomePanel().setEmployee(null);
+                frame.getCustomerHomePanel().setCustomer(null);
                 System.out.println("LOGGED OUT");
 
                 loginPanelView();
@@ -96,12 +98,14 @@ public class MenuBar extends JMenuBar {
     }
 
     public void customerView() {
-//        add(customerMenu);
-//        customerMenu.add(logoutItem);
+        add(customerMenu);
+        remove(viewMenu);
+        customerMenu.add(logoutItem);
     }
 
     public void loginPanelView() {
         remove(employeeMenu);
+        remove(customerMenu);
         employeeMenu.remove(manageEmployeesItem);
         add(viewMenu);
     }
