@@ -1,6 +1,7 @@
 package gui;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.io.IOException;
 
@@ -60,11 +61,17 @@ public class MainFrame extends JFrame {
         // employee login event
         this.employeeLoginPanel.setLoginListener(new LoginListener() {
             @Override
-            public void loginEvent(LoginEvent e) throws IOException, ParseException {
-                if(MainFrame.this.controller.employeeLogin(e) != null) {
-
+            public void loginEvent(LoginEvent e){ // login event
+                if(MainFrame.this.controller.employeeLogin(e) != null) { // if the returned employee is not null
+                    Employee employee = MainFrame.this.controller.employeeLogin(e);
+                    employeeHomePanel = new EmployeeHomePanel(employee); // create the employee home panel and pass the logged in employee
+                    add(employeeHomePanel, BorderLayout.CENTER); // add to the mainframe
+                    employeeLoginPanel.setVisible(false); // set the login pain invisible
+                    employeeHomePanel.setVisible(true); // set the home panel true
+                    System.out.println(employee.getID() + " : " + employee.getFirstName() + " logging in...");
+                } else {
+                    JOptionPane.showMessageDialog(MainFrame.this,"Invalid ID", "Invalid ID", JOptionPane.ERROR_MESSAGE); // if unknown ID show error message
                 }
-
             }
         });
 
