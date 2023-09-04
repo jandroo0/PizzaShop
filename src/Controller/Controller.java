@@ -16,13 +16,18 @@ public class Controller {
 
     }
 
-    public LinkedList<Employee> getEmployees() {return this.db.getEmployees();}
-
-    public void removeEmployee(String ID) {this.db.removeEmployee(ID);};
-
     public void addEmployee(Employee e) {
         this.db.addEmployee(e);
     }
+
+    public void addCustomer(Customer c) throws IOException {
+        this.db.addCustomer(c);
+    }
+
+    public void removeEmployee(String ID) {this.db.removeEmployee(ID);};
+
+    public LinkedList<Employee> getEmployees() {return this.db.getEmployees();}
+
 
     public Employee employeeLogin(LoginEvent e) {
         return this.db.employeeLogin(e);

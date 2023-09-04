@@ -38,11 +38,16 @@ public class PlaceholderTextField extends JTextField {
         addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
-                setText("");
+                if(getText().equals(pText)) {
+                    setText("");
+                }
             }
 
             @Override
             public void focusLost(FocusEvent e) {
+                if(getText().equals("")) {
+                    setText(pText);
+                }
 
             }
         });

@@ -1,12 +1,13 @@
-package model;
+package gui;
 
-import gui.Payment;
+import java.util.EventObject;
 
-public class Customer {
+public class CreateAccountEvent extends EventObject {
 
     private String ID, phoneNumber, firstName, lastName, address, details;
 
-    public Customer(String phoneNumber, String firstName, String lastName, String address, String details) {
+    public CreateAccountEvent(Object source, String phoneNumber, String firstName, String lastName, String address, String details) {
+        super(source);
         this.ID = phoneNumber;
         this.phoneNumber = phoneNumber;
         this.firstName = firstName;

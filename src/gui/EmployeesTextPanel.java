@@ -31,6 +31,8 @@ public class EmployeesTextPanel extends JPanel {
 //		text area
 		textPane = new JTextPane();
 		textPane.setEditable(false);
+		textPane.setBorder(null);
+		textPane.setBackground(Utils.getBackgroundColor());
 		
 		titleLabel = new JLabel("Employees");
 		
@@ -52,7 +54,7 @@ public class EmployeesTextPanel extends JPanel {
 		doc.setParagraphAttributes(0, doc.getLength() - 1, attrs, false);
 		
 //		font
-		setJTextPaneFont(textPane, Utils.getDefaultFont(), Utils.getTextColor(), Utils.getDefaultTextFieldColor());
+		setJTextPaneFont(textPane, Utils.getDefaultFont(), Utils.getTextColor(), Utils.getBackgroundColor());
 		titleLabel.setFont(Utils.getDefaultFont());
 		
 //		border

@@ -85,7 +85,7 @@ public class EmployeeLoginPanel extends JPanel{
         idField.setBackground(Utils.getDefaultTextFieldColor());
 
         // submit/login button
-        submitButton.setFont(new Font(Utils.getFontString(), Font.BOLD, 14));
+        submitButton.setFont(new Font(Utils.getFontString(), Font.BOLD, 20));
         submitButton.setBackground(Utils.getButtonBackgroundColor());
         submitButton.setForeground(Utils.getTextColor());
         submitButton.setBorder(BorderFactory.createEmptyBorder(5,8,5,8));

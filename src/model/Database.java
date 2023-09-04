@@ -42,7 +42,11 @@ public class Database {
         employees.remove(e);
     }
 
-    public void addCustomer(Customer customer) {this.customers.add(customer);} // add customer
+    // add customer
+    public void addCustomer(Customer customer) throws IOException {
+        this.customers.add(customer);
+        saveCustomers(); // save all customers
+    }
 
     public Employee employeeLogin(LoginEvent event) { //  checks if employee login id matches any id in employee list and returns employee or null
         for(Employee employee : employees) {
@@ -152,14 +156,7 @@ public class Database {
             jsonObject.put("Address", customer.getAddress());
             jsonObject.put("Details", customer.getDetails());
 
-            JSONObject paymentJSON = new JSONObject();
-            paymentJSON.put("Card_Name", customer.getPaymentType().getCardName());
-            paymentJSON.put("Card_Number", customer.getPaymentType().getCardNumber());
-            paymentJSON.put("Card_ExpDate", customer.getPaymentType().getExpDate());
-            paymentJSON.put("CVC", customer.getPaymentType().getCVC());
-            paymentJSON.put("Cash_Amount", customer.getPaymentType().getCashAmount());
-
-            jsonObject.put("Payment", paymentJSON);
+            // save payments
 
             sb.append(jsonObject.toJSONString() + ',');
         }
@@ -180,7 +177,7 @@ public class Database {
 
         // LOAD CUSTOMERS---------------------------------------------
         JSONParser parser = new JSONParser(); //create JSON parser
-        JSONArray customersJSON = (JSONArray) parser.parse(new FileReader(customersFilePath)); // create array from file
+        JSONArray customersJSON = (JSONArray) parser.parse(new FileReader(customersFilePath)); // create JSONarray from file
 
         try {
             System.out.println("LOADING CUSTOMERS --------------");
@@ -195,16 +192,13 @@ public class Database {
                 String lastName = (String) customer.get("Last_Name");
                 String address = (String) customer.get("Address");
                 String details = (String) customer.get("Details");
-                JSONObject paymentJSON = (JSONObject) customer.get("Payment");
 
-                Payment payment = new Payment((String)paymentJSON.get("Card_Name"),(String)paymentJSON.get("Card_Number"),
-                        (String)paymentJSON.get("Card_ExpDate"),(String)paymentJSON.get("Card_CVC"),
-                        (String)paymentJSON.get("Cash_Amount"));
+                // load payments here
 
 
                 // add new employee to current employees list
 
-                Customer newCustomer = new Customer( phoneNumber, firstName, lastName,address, details, payment);
+                Customer newCustomer = new Customer( phoneNumber, firstName, lastName,address, details);
                 customers.add(newCustomer);
                 System.out.println("CUSTOMER LOADED: " + newCustomer.getID() + ":"  + newCustomer.getFirstName());
 

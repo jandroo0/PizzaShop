@@ -11,22 +11,42 @@ import java.awt.event.MouseEvent;
 
 
 public class CustomerLoginPanel extends JPanel{
+
     private LoginListener loginListener; // event listener on login event
+    private NewCustomerListener newCustomerListener; // event listener on login event
 
     private JLabel idLabel; // id label
 
     private JTextField idField; // id text field
 
+    private JButton newCustomerButton; // new customer button
+
     private JButton submitButton; // form submit button
 
     public CustomerLoginPanel() {
+
         idLabel = new JLabel("PHONE NUMBER"); // set text for idLabel
 
         idField = new JTextField(); // idField
 
+        newCustomerButton = new JButton("NEW CUSTOMER?"); // new customer button
+
         submitButton = new JButton("LOGIN"); // submit button
 
-        submitButton.addActionListener(new ActionListener() { // submit button action listener, runs when submit button is pressed
+
+
+        // new customer actionListener
+        newCustomerButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CustomerLoginPanel.this.newCustomerListener.newCustomerEvent();
+
+            }
+        });
+
+
+        // submit button action listener, runs when submit button is pressed
+        submitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (CustomerLoginPanel.this.idField != null) { // if something is in the textfield
@@ -57,6 +77,19 @@ public class CustomerLoginPanel extends JPanel{
             }
         });
 
+        newCustomerButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                newCustomerButton.setForeground(Utils.getTextColor());
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                super.mouseExited(e);
+                newCustomerButton.setForeground(Color.WHITE);
+            }
+        });
+
         layoutComponents();
         styling();
     }
@@ -65,6 +98,9 @@ public class CustomerLoginPanel extends JPanel{
         this.loginListener = listener;
     }
 
+    public void setNewCustomerListener(NewCustomerListener newCustomerListener) {
+        this.newCustomerListener = newCustomerListener;
+    }
 
     // component styling
     void styling() {
@@ -86,7 +122,13 @@ public class CustomerLoginPanel extends JPanel{
         idField.setBackground(Utils.getDefaultTextFieldColor());
 
         // submit/login button
-        submitButton.setFont(new Font(Utils.getFontString(), Font.BOLD, 14));
+        newCustomerButton.setFont(new Font(Utils.getFontString(), Font.BOLD, 14));
+        newCustomerButton.setBackground(Utils.getBackgroundColor());
+        newCustomerButton.setForeground(Color.WHITE);
+        newCustomerButton.setBorder(BorderFactory.createEmptyBorder(5,8,5,8));
+
+        // submit/login button
+        submitButton.setFont(new Font(Utils.getFontString(), Font.BOLD, 20));
         submitButton.setBackground(Utils.getButtonBackgroundColor());
         submitButton.setForeground(Utils.getTextColor());
         submitButton.setBorder(BorderFactory.createEmptyBorder(5,8,5,8));
@@ -107,6 +149,8 @@ public class CustomerLoginPanel extends JPanel{
         add(idField, gc);
         gc.gridy++;
         add(submitButton, gc);
+        gc.gridy++;
+        add(newCustomerButton, gc);
     }
 
 }

@@ -2,7 +2,6 @@ package gui;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.io.IOException;
 
 import Controller.Controller;
@@ -36,7 +35,10 @@ public class MainFrame extends JFrame {
 
 
     // employee menu dialogs
-    private ManageEmployeesDialog employeesDialog; // dialog box for managing employees
+    private ManageEmployeesDialog manageEmployeesDialog; // dialog box for managing employees
+
+    // new customer dialog
+    private NewCustomerDialog newCustomerDialog;
 
 
     // gui.MainFrame Constructor
@@ -81,7 +83,8 @@ public class MainFrame extends JFrame {
         cl.show(containerPanel, "LOGIN");
 
         // dialog
-        employeesDialog = new ManageEmployeesDialog(this);
+        manageEmployeesDialog = new ManageEmployeesDialog(this);
+        newCustomerDialog = new NewCustomerDialog(this);
 
         controller = new Controller(); // MVC
 
@@ -137,6 +140,23 @@ public class MainFrame extends JFrame {
             }
         });
 
+        // new customer? event in loginPanel
+        this.customerLoginPanel.setNewCustomerListener(new NewCustomerListener() {
+            @Override
+            public void newCustomerEvent() {
+                newCustomerDialog.setVisible(true);
+            }
+        });
+
+        // create customer event in newCustomerDialog
+        this.newCustomerDialog.setCreateAccountListener(new CreateAccountListener() {
+            @Override
+            public void createAccount(CreateAccountEvent e) throws IOException {
+                Customer newCustomer = new Customer(e.getPhoneNumber(),e.getFirstName(),e.getLastName(),e.getAddress(),e.getDetails());
+                MainFrame.this.controller.addCustomer(newCustomer);
+            }
+        });
+
 
 
         // employee home panel events
@@ -151,13 +171,13 @@ public class MainFrame extends JFrame {
         });
 
         //handles the employee management dialog events
-        this.employeesDialog.setEmployeeListener(new ManageEmployeeListener() {
+        this.manageEmployeesDialog.setEmployeeListener(new ManageEmployeeListener() {
             @Override
             public void addEmployeeEvent(AddEmployeeEvent e) { // on add employee
                 Employee newHire = new Employee(e.isAdmin(), e.getID(), e.getFirstName(), e.getLastName(), e.getAge(), e.getRole(), e.getPhoneNumber(), e.getAddress());
                 MainFrame.this.controller.addEmployee(newHire);
-                employeesDialog.displayEmployees(MainFrame.this.controller.getEmployees());
-                employeesDialog.setComboBox(MainFrame.this.controller.getEmployees());
+                manageEmployeesDialog.displayEmployees(MainFrame.this.controller.getEmployees());
+                manageEmployeesDialog.setComboBox(MainFrame.this.controller.getEmployees());
             }
 
             @Override
@@ -166,15 +186,15 @@ public class MainFrame extends JFrame {
                     JOptionPane.showMessageDialog(MainFrame.this,"Select an Employee.", "No Employee Selected", JOptionPane.ERROR_MESSAGE);
                 }else {
                     MainFrame.this.controller.removeEmployee(ID);
-                    employeesDialog.displayEmployees(MainFrame.this.controller.getEmployees());
-                    employeesDialog.setComboBox(MainFrame.this.controller.getEmployees());
+                    manageEmployeesDialog.displayEmployees(MainFrame.this.controller.getEmployees());
+                    manageEmployeesDialog.setComboBox(MainFrame.this.controller.getEmployees());
                 }
             }
 
             @Override
             public void saveEmployeesEvent() throws IOException {// on save click
                 MainFrame.this.controller.saveEmployees();
-                employeesDialog.setVisible(false);
+                manageEmployeesDialog.setVisible(false);
             }
         });
 
@@ -192,8 +212,31 @@ public class MainFrame extends JFrame {
     private void load() throws IOException, ParseException {
         MainFrame.this.controller.loadEmployees();
         MainFrame.this.controller.loadCustomers();
-        employeesDialog.displayEmployees(MainFrame.this.controller.getEmployees());
-        employeesDialog.setComboBox(MainFrame.this.controller.getEmployees());
+        manageEmployeesDialog.displayEmployees(MainFrame.this.controller.getEmployees());
+        manageEmployeesDialog.setComboBox(MainFrame.this.controller.getEmployees());
+    }
+
+
+    // handles when user/employee logs out
+    public void logOut() {
+        // set the MAINFRAME containerPanel to show the LOGIN panel
+        CardLayout cl = (CardLayout) containerPanel.getLayout();
+        cl.show(containerPanel, "LOGIN");
+
+        // set the employeeHomePanel containerPanel to show the employeeHome, so that when an employee logs back in, it will display the homePanel and not the current panel on LOGOUT
+        cl = (CardLayout) employeeHomePanel.getContainerPanel().getLayout();
+        cl.show(employeeHomePanel.getContainerPanel(), "HOME");
+
+//        cl = (CardLayout) customerHomePanel.getContainerPanel().getLayout();
+//        cl.show(customerHomePanel.getContainerPanel(), "HOME");
+
+        employeeHomePanel.setEmployee(null);
+        customerHomePanel.setCustomer(null);
+
+
+        System.out.println("LOGGED OUT");
+
+
     }
 
 
@@ -219,7 +262,7 @@ public class MainFrame extends JFrame {
     }
 
     public ManageEmployeesDialog getManageEmployeesDialog() {
-        return employeesDialog;
+        return manageEmployeesDialog;
     }
 
 }

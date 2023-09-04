@@ -59,6 +59,7 @@ public class EmployeeHomePanel extends JPanel {
 
         layoutComponents();
         styling();
+        setLayout(new BorderLayout());
         add(containerPanel, BorderLayout.CENTER);
 
     }
@@ -67,13 +68,13 @@ public class EmployeeHomePanel extends JPanel {
 
 
         // employee homePanel
-        Border border = BorderFactory.createEmptyBorder(100,0,0,0);
+        Border border = BorderFactory.createEmptyBorder(0,0,60,0);
         homePanel.setBorder(border);
         homePanel.setLayout(new GridBagLayout());
         GridBagConstraints gc = new GridBagConstraints();
         gc.gridy = 0;
         gc.gridx = 0;
-        gc.insets = new Insets(0,0,10,0);
+        gc.insets = new Insets(0,0,20,0);
         homePanel.add(newOrderButton, gc);
         gc.gridy++;
         homePanel.add(orderHistoryButton, gc);

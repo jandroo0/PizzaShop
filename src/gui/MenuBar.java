@@ -72,12 +72,7 @@ public class MenuBar extends JMenuBar {
         logoutItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                CardLayout cl = (CardLayout) frame.getContainerPanel().getLayout();
-                cl.show(frame.getContainerPanel(), "LOGIN");
-
-                frame.getEmployeeHomePanel().setEmployee(null);
-                frame.getCustomerHomePanel().setCustomer(null);
-                System.out.println("LOGGED OUT");
+                frame.logOut();
 
                 loginPanelView();
 
