@@ -2,6 +2,7 @@ package gui;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.io.IOException;
 
 import Controller.Controller;
@@ -83,7 +84,6 @@ public class MainFrame extends JFrame {
         employeesDialog = new ManageEmployeesDialog(this);
 
         controller = new Controller(); // MVC
-        controller.loadCustomers();
 
 
         // set employee login panel invisible by default
@@ -93,7 +93,7 @@ public class MainFrame extends JFrame {
         // handle events
 
         // employee login event
-        this.employeeLoginPanel.setLoginListener(new LoginListener() {
+        this.employeeLoginPanel.setEmployeeLoginListener(new LoginListener() {
             @Override
             public void loginEvent(LoginEvent e){ // login event
                 if(MainFrame.this.controller.employeeLogin(e) != null) { // if the returned employee is not null
@@ -115,7 +115,7 @@ public class MainFrame extends JFrame {
             }
         });
 
-        // employee login event
+        // customer login event
         this.customerLoginPanel.setLoginListener(new LoginListener() {
             @Override
             public void loginEvent(LoginEvent e){ // login event
@@ -132,13 +132,26 @@ public class MainFrame extends JFrame {
                     System.out.println("CUSTOMER : " + customer.getID() + " : " + customer.getFirstName() + " | LOGGED IN"); // print log in messsage
 
                 } else {
-                    JOptionPane.showMessageDialog(MainFrame.this,"Invalid ID", "Invalid ID", JOptionPane.ERROR_MESSAGE); // if unknown ID show error message
+                    JOptionPane.showMessageDialog(MainFrame.this,"No Account Found", "No Account", JOptionPane.ERROR_MESSAGE); // if unknown phoneNumber show error message
                 }
             }
         });
 
+
+
+        // employee home panel events
+        this.employeeHomePanel.setEmployeeHomeListener(new EmployeeHomeListener() {
+
+            @Override
+            public void editMenuEvent(EmployeeHomeEvent e) {
+                CardLayout hl = (CardLayout) employeeHomePanel.getContainerPanel().getLayout();
+                hl.show(employeeHomePanel.getContainerPanel(), "EDIT_MENU");
+
+            }
+        });
+
         //handles the employee management dialog events
-        this.getManageEmployeesDialog().setEmployeeListener(new ManageEmployeeListener() {
+        this.employeesDialog.setEmployeeListener(new ManageEmployeeListener() {
             @Override
             public void addEmployeeEvent(AddEmployeeEvent e) { // on add employee
                 Employee newHire = new Employee(e.isAdmin(), e.getID(), e.getFirstName(), e.getLastName(), e.getAge(), e.getRole(), e.getPhoneNumber(), e.getAddress());
@@ -161,6 +174,7 @@ public class MainFrame extends JFrame {
             @Override
             public void saveEmployeesEvent() throws IOException {// on save click
                 MainFrame.this.controller.saveEmployees();
+                employeesDialog.setVisible(false);
             }
         });
 
@@ -171,12 +185,13 @@ public class MainFrame extends JFrame {
 
         add(titlePanel, BorderLayout.NORTH);
         add(containerPanel, BorderLayout.CENTER);
-        load();
+        load(); // load customers and employees and update values
 
     }
 
     private void load() throws IOException, ParseException {
         MainFrame.this.controller.loadEmployees();
+        MainFrame.this.controller.loadCustomers();
         employeesDialog.displayEmployees(MainFrame.this.controller.getEmployees());
         employeesDialog.setComboBox(MainFrame.this.controller.getEmployees());
     }

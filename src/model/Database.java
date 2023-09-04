@@ -12,8 +12,8 @@ import java.util.LinkedList;
 
 
 public class Database {
-    private LinkedList<Employee> employees = new LinkedList<>(); // create list of employees
-    private LinkedList<Customer> customers = new LinkedList<>(); // create list of customer
+    private LinkedList<Employee> employees; // create list of employees
+    private LinkedList<Customer> customers; // create list of customer
 
 
     private FileWriter fileWriter;
@@ -21,6 +21,9 @@ public class Database {
     private String customersFilePath = "customers.json";
 
     public Database() {
+
+        employees = new LinkedList<Employee>();
+        customers = new LinkedList<Customer>();
     }
 
     public LinkedList<Employee> getEmployees() { // return employees

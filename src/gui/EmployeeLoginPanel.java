@@ -2,7 +2,6 @@ package gui;
 
 import javax.swing.*;
 import javax.swing.border.Border;
-import javax.swing.text.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,7 +10,7 @@ import java.awt.event.MouseEvent;
 
 
 public class EmployeeLoginPanel extends JPanel{
-    private LoginListener loginListener; // event listener on login event
+    private LoginListener employeeLoginListener; // event listener on login event
 
     private JLabel idLabel; // id label
 
@@ -33,8 +32,8 @@ public class EmployeeLoginPanel extends JPanel{
                     String ID = EmployeeLoginPanel.this.idField.getText(); // on submit, take idField contents
                     EmployeeLoginPanel.this.idField.setText("");
                     LoginEvent event = new LoginEvent(e, ID); // create an employee login event with the ID
-                    if (EmployeeLoginPanel.this.loginListener != null) { // if there is a loginListener
-                        EmployeeLoginPanel.this.loginListener.loginEvent(event);
+                    if (EmployeeLoginPanel.this.employeeLoginListener != null) { // if there is a loginListener
+                        EmployeeLoginPanel.this.employeeLoginListener.loginEvent(event);
 
                     }
                 }
@@ -61,8 +60,8 @@ public class EmployeeLoginPanel extends JPanel{
         styling();
     }
 
-    public void setLoginListener(LoginListener listener){
-        this.loginListener = listener;
+    public void setEmployeeLoginListener(LoginListener listener){
+        this.employeeLoginListener = listener;
     }
 
 

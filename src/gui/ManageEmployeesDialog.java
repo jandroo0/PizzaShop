@@ -147,10 +147,6 @@ public class ManageEmployeesDialog extends JDialog {
             }
         });
 
-
-
-
-        // TODO---- make JButton Class
         addEmployeeButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {

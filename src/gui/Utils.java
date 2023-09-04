@@ -4,7 +4,7 @@ import java.awt.*;
 
 public class Utils {
 
-	private static int WIDTH = 600, HEIGHT = 800;
+	private static int WIDTH = 800, HEIGHT = 1000;
 	
 //	colors
 	private static Color titleColor = new Color(47, 39, 31);
@@ -19,6 +19,7 @@ public class Utils {
 //	fonts
 	private static String fontString = "Serif";
 	private static Font textFont = new Font("Serif", Font.PLAIN, 16);
+	private static Font homeButtonsFont = new Font("Serif", Font.PLAIN, 32);
 	private static Font titleFont = new Font("Serif", Font.BOLD, 30); // main application title
 	private static Font loginFont = new Font("Serif", Font.BOLD, 24); // login screen
 	private static Font dialogFont;
@@ -135,5 +136,8 @@ public class Utils {
 			return pointIndex == name.length() - 1 ? null : name.substring(pointIndex + 1, name.length());
 		}
 	}
-	
+
+    public static Font getHomeButtonsFont() {
+		return homeButtonsFont;
+    }
 }

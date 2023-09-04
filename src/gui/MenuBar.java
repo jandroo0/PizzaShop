@@ -114,8 +114,25 @@ public class MenuBar extends JMenuBar {
         employeeMenu.add(manageEmployeesItem);
     }
 
-    private void styling() {
+    public void styling() {
+        setBorder(BorderFactory.createMatteBorder(0,0,2,0, Utils.getTextColor()));
+        setBackground(Utils.getBackgroundColor());
+        setForeground(Utils.getTextColor());
 
+        viewMenu.setForeground(Utils.getTextColor());
+        viewMenu.setFont(Utils.getDefaultFont());
+
+        customerMenu.setForeground(Utils.getTextColor());
+        customerMenu.setFont(Utils.getDefaultFont());
+
+        employeeMenu.setForeground(Utils.getTextColor());
+        employeeMenu.setFont(Utils.getDefaultFont());
+
+        employeeViewItem.setForeground(Utils.getTextColor());
+        employeeViewItem.setFont(Utils.getDefaultFont());
+
+        customerViewItem.setForeground(Utils.getTextColor());
+        customerViewItem.setFont(Utils.getDefaultFont());
     }
 
 
