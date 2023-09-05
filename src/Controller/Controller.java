@@ -52,6 +52,14 @@ public class Controller {
         this.db.loadCustomers();
     }
 
+    public boolean existingCustomer(String phoneNumber) {
+        return this.db.existingCustomer(phoneNumber);
+    }
+
+    public boolean existingEmployee(String ID) {
+        return this.db.existingEmployee(ID);
+    }
+
 
 
 }

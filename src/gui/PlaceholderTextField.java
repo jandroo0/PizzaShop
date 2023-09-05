@@ -10,9 +10,12 @@ import javax.swing.*;
 import javax.swing.text.Document;
 
 @SuppressWarnings("serial")
+
 public class PlaceholderTextField extends JTextField {
 
     private String placeholder;
+
+    private String placeHolderText;
 
     public PlaceholderTextField() {
 
@@ -32,19 +35,21 @@ public class PlaceholderTextField extends JTextField {
 
     public PlaceholderTextField(final String pText) {
         super(pText);
-        setPreferredSize(new Dimension(80, 24));
+        setPreferredSize(new Dimension(90, 24));
         setBorder(BorderFactory.createEmptyBorder());
+
+        this.placeHolderText = pText;
 
         addFocusListener(new FocusListener() {
             @Override
-            public void focusGained(FocusEvent e) {
+            public void focusGained(FocusEvent e) { // if textField is selected, and the current text still = the placeholderText, set empty
                 if(getText().equals(pText)) {
                     setText("");
                 }
             }
 
             @Override
-            public void focusLost(FocusEvent e) {
+            public void focusLost(FocusEvent e) { // if textField is empty, when user clicks off, set to placeholderText
                 if(getText().equals("")) {
                     setText(pText);
                 }
@@ -61,6 +66,14 @@ public class PlaceholderTextField extends JTextField {
 
     public String getPlaceholder() {
         return placeholder;
+    }
+
+    public String getPlaceHolderText() {
+        return placeHolderText;
+    }
+
+    public void setPlaceHolderText(String placeHolderText) {
+        this.placeHolderText = placeHolderText;
     }
 
     @Override

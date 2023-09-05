@@ -26,11 +26,14 @@ public class Database {
         customers = new LinkedList<Customer>();
     }
 
+    // return employee list
     public LinkedList<Employee> getEmployees() { // return employees
         return employees;
     }
 
-    public void addEmployee(Employee employee) {this.employees.add(employee);} // add employee
+    // add employee
+    public void addEmployee(Employee employee) {this.employees.add(employee);}
+
     // remove employee
     public void removeEmployee(String ID) {
         Employee e = null;
@@ -48,7 +51,8 @@ public class Database {
         saveCustomers(); // save all customers
     }
 
-    public Employee employeeLogin(LoginEvent event) { //  checks if employee login id matches any id in employee list and returns employee or null
+    //  checks if employee login id matches any id in employee list and returns employee or null
+    public Employee employeeLogin(LoginEvent event) {
         for(Employee employee : employees) {
             if(event.getID().equals(employee.getID())) {
                 return employee;
@@ -57,13 +61,30 @@ public class Database {
         return null;
 }
 
-    public Customer customerLogin(LoginEvent event) { //  checks if customer login id matches any id in customer list and returns customer or null
+    //  checks if customer login id matches any id in customer list and returns customer or null
+    public Customer customerLogin(LoginEvent event) {
         for(Customer customer : customers) {
             if(event.getID().equals(customer.getID())) {
                 return customer;
             }
         }
         return null;
+    }
+
+    // check if given phoneNumber is already in use
+    public boolean existingCustomer(String phoneNumber) {
+        for(Customer customer : customers) {
+            if(customer.getID().equals(phoneNumber)) return true;
+        }
+        return false;
+    }
+
+    // check if there given ID is already in use for employees
+    public boolean existingEmployee(String ID) {
+        for(Employee employee : employees) {
+            if(employee.getID().equals(ID)) return true;
+        }
+        return false;
     }
 
     // save employees

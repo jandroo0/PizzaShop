@@ -66,13 +66,22 @@ public class NewCustomerDialog extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(checkFields()) { // if textFields are not empty and do not still equal the placeholders
+                    String details;
+                    // in case details field is left empty, however since there is a placeHolder text -- "Other Details" , it needs to check in order to send the proper info
+                    if(detailsField.getText().equals("Other Details")) {
+                        details = ""; // if detailsField still = Other Details
+                    } else details = detailsField.getText();
+
                     CreateAccountEvent event = new CreateAccountEvent(e, phoneNumberField.getText(),firstNameField.getText(),
-                            lastNameField.getText(), addressField.getText(), detailsField.getText());
+                            lastNameField.getText(), addressField.getText(), details);
                     try {
                         NewCustomerDialog.this.createAccountListener.createAccount(event);
                     } catch (IOException ex) {
                         ex.printStackTrace();
                     }
+                } else {
+                    JOptionPane.showMessageDialog(frame,"Info fields can not be left empty", "Empty Fields", JOptionPane.ERROR_MESSAGE);
+
                 }
 
             }
@@ -152,15 +161,13 @@ public class NewCustomerDialog extends JDialog {
     }
 
     private boolean checkFields() {
-        if((firstNameField.getText().equals(firstNameField.getPlaceholder()) || firstNameField.getText().equals(""))) {
+        if((firstNameField.getText().equals(firstNameField.getPlaceHolderText()) || firstNameField.getText().equals(""))) {
             return false;
-        }else if((lastNameField.getText().equals(lastNameField.getPlaceholder()) || lastNameField.getText().equals(""))) {
+        }else if((lastNameField.getText().equals(lastNameField.getPlaceHolderText()) || lastNameField.getText().equals(""))) {
             return false;
-        } else if((phoneNumberField.getText().equals(phoneNumberField.getPlaceholder()) || phoneNumberField.getText().equals(""))) {
+        } else if((phoneNumberField.getText().equals(phoneNumberField.getPlaceHolderText()) || phoneNumberField.getText().equals(""))) {
             return false;
-        } else if((addressField.getText().equals(addressField.getPlaceholder()) || addressField.getText().equals(""))) {
-            return false;
-        } else if((detailsField.getText().equals(detailsField.getPlaceholder()) || detailsField.getText().equals(""))) {
+        } else if ((addressField.getText().equals(addressField.getPlaceHolderText()) || addressField.getText().equals(""))) {
             return false;
         }
         return true;

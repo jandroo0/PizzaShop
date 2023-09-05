@@ -152,8 +152,16 @@ public class MainFrame extends JFrame {
         this.newCustomerDialog.setCreateAccountListener(new CreateAccountListener() {
             @Override
             public void createAccount(CreateAccountEvent e) throws IOException {
-                Customer newCustomer = new Customer(e.getPhoneNumber(),e.getFirstName(),e.getLastName(),e.getAddress(),e.getDetails());
-                MainFrame.this.controller.addCustomer(newCustomer);
+                if(!MainFrame.this.controller.existingCustomer(e.getPhoneNumber())) {
+                    Customer newCustomer = new Customer(e.getPhoneNumber(),e.getFirstName(),e.getLastName(),e.getAddress(),e.getDetails());
+                    MainFrame.this.controller.addCustomer(newCustomer);
+                    newCustomerDialog.setVisible(false);
+
+                    System.out.println("CUSTOMER CREATED: " + newCustomer.getID() + ":" + newCustomer.getFirstName());
+                } else {
+                    JOptionPane.showMessageDialog(MainFrame.this,"Phone number \"" + e.getPhoneNumber() + "\" is already in use.", "Phone # in use", JOptionPane.ERROR_MESSAGE); // if unknown phoneNumber show error message
+                }
+
             }
         });
 
@@ -164,9 +172,8 @@ public class MainFrame extends JFrame {
 
             @Override
             public void editMenuEvent(EmployeeHomeEvent e) {
-                CardLayout hl = (CardLayout) employeeHomePanel.getContainerPanel().getLayout();
-                hl.show(employeeHomePanel.getContainerPanel(), "EDIT_MENU");
-
+                CardLayout hl = (CardLayout) employeeHomePanel.getContainerPanel().getLayout(); // set hl to the employee home panel container layout
+                hl.show(employeeHomePanel.getContainerPanel(), "EDIT_MENU"); // change the cardPanel in the container layout to display the editMenuPanel
             }
         });
 
@@ -174,10 +181,18 @@ public class MainFrame extends JFrame {
         this.manageEmployeesDialog.setEmployeeListener(new ManageEmployeeListener() {
             @Override
             public void addEmployeeEvent(AddEmployeeEvent e) { // on add employee
-                Employee newHire = new Employee(e.isAdmin(), e.getID(), e.getFirstName(), e.getLastName(), e.getAge(), e.getRole(), e.getPhoneNumber(), e.getAddress());
-                MainFrame.this.controller.addEmployee(newHire);
-                manageEmployeesDialog.displayEmployees(MainFrame.this.controller.getEmployees());
-                manageEmployeesDialog.setComboBox(MainFrame.this.controller.getEmployees());
+                if(!MainFrame.this.controller.existingEmployee(e.getID())) {
+                    Employee newHire = new Employee(e.isAdmin(), e.getID(), e.getFirstName(), e.getLastName(), e.getAge(), e.getRole(), e.getPhoneNumber(), e.getAddress());
+                    MainFrame.this.controller.addEmployee(newHire);
+                    manageEmployeesDialog.displayEmployees(MainFrame.this.controller.getEmployees());
+                    manageEmployeesDialog.setComboBox(MainFrame.this.controller.getEmployees());
+
+                    System.out.println("EMPLOYEE CREATED: " + newHire.getID() + ":" + newHire.getFirstName());
+                } else {
+                    JOptionPane.showMessageDialog(MainFrame.this,"User ID \"" + e.getID() + "\" is already in use.", "User ID in use", JOptionPane.ERROR_MESSAGE); // if unknown phoneNumber show error message
+
+                }
+
             }
 
             @Override
