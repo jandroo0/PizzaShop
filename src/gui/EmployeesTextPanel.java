@@ -24,7 +24,7 @@ public class EmployeesTextPanel extends JPanel {
 	
 	public EmployeesTextPanel() {
 
-		setPreferredSize(new Dimension(200, 180));
+		setPreferredSize(new Dimension(240, 180));
 		setBackground(Utils.getBackgroundColor());
 		setLayout(new BorderLayout());
 		
