@@ -3,11 +3,14 @@ package gui;
 import java.util.EventObject;
 
 
-/** Event object for the employee/customer login event which will take the given ID in the JTextField on the login panel **/
+/**
+ * Event object for the employee/customer login event which will take the given ID in the JTextField on the login panel
+ **/
 public class AddEmployeeEvent extends EventObject {
 
     private String ID, firstName, lastName, age, address, role, phoneNumber;
     private boolean isAdmin;
+
     public AddEmployeeEvent(Object source, boolean isAdmin, String ID, String firstName, String lastName, String age, String role, String phoneNumber, String address) {
         super(source);
         this.isAdmin = isAdmin;

@@ -25,7 +25,7 @@ public class Employee {
         this.address = address;
     }
 
-    public boolean isAdmin()  {
+    public boolean isAdmin() {
         return admin;
     }
 

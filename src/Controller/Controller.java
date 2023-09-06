@@ -24,16 +24,20 @@ public class Controller {
         this.db.addCustomer(c);
     }
 
-    public void removeEmployee(String ID) {this.db.removeEmployee(ID);};
+    public void removeEmployee(String ID) {
+        this.db.removeEmployee(ID);
+    }
 
-    public LinkedList<Employee> getEmployees() {return this.db.getEmployees();}
+    public LinkedList<Employee> getEmployees() {
+        return this.db.getEmployees();
+    }
 
 
-    public Employee employeeLogin(LoginEvent e) {
+    public Employee employeeLogin(LoginEvent e) throws ParseException, IOException {
         return this.db.employeeLogin(e);
     }
 
-    public Customer customerLogin(LoginEvent e) {
+    public Customer customerLogin(LoginEvent e) throws ParseException, IOException {
         return this.db.customerLogin(e);
     }
 
@@ -48,6 +52,7 @@ public class Controller {
     public void loadEmployees() throws IOException, ParseException {
         this.db.loadEmployees();
     }
+
     public void loadCustomers() throws IOException, ParseException {
         this.db.loadCustomers();
     }
@@ -59,7 +64,6 @@ public class Controller {
     public boolean existingEmployee(String ID) {
         return this.db.existingEmployee(ID);
     }
-
 
 
 }

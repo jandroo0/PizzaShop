@@ -6,6 +6,6 @@ import java.io.IOException;
 import java.util.EventListener;
 
 public interface LoginListener extends EventListener {
-    void loginEvent(LoginEvent e);
+    void loginEvent(LoginEvent e) throws ParseException, IOException;
 
 }

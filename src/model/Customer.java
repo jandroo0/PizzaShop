@@ -1,7 +1,5 @@
 package model;
 
-import gui.Payment;
-
 public class Customer {
 
     private String ID, phoneNumber, firstName, lastName, address, details;

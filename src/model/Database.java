@@ -1,24 +1,25 @@
 package model;
 
 import gui.LoginEvent;
-import gui.Payment;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.io.*;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.LinkedList;
 
 
 public class Database {
-    private LinkedList<Employee> employees; // create list of employees
-    private LinkedList<Customer> customers; // create list of customer
+    private final LinkedList<Employee> employees; // create list of employees
+    private final LinkedList<Customer> customers; // create list of customer
 
 
     private FileWriter fileWriter;
-    private String employeesFilePath = "employees.json";
-    private String customersFilePath = "customers.json";
+    private final String employeesFilePath = "employees.json";
+    private final String customersFilePath = "customers.json";
 
     public Database() {
 
@@ -32,14 +33,16 @@ public class Database {
     }
 
     // add employee
-    public void addEmployee(Employee employee) {this.employees.add(employee);}
+    public void addEmployee(Employee employee) {
+        this.employees.add(employee);
+    }
 
     // remove employee
     public void removeEmployee(String ID) {
         Employee e = null;
 
-        for(Employee employee : employees) {
-            if(employee.getID().equals(ID)) e = employee;
+        for (Employee employee : employees) {
+            if (employee.getID().equals(ID)) e = employee;
         }
         System.out.println(e.toString());
         employees.remove(e);
@@ -52,19 +55,21 @@ public class Database {
     }
 
     //  checks if employee login id matches any id in employee list and returns employee or null
-    public Employee employeeLogin(LoginEvent event) {
-        for(Employee employee : employees) {
-            if(event.getID().equals(employee.getID())) {
+    public Employee employeeLogin(LoginEvent event) throws ParseException, IOException {
+        loadEmployees(); // refresh list
+        for (Employee employee : employees) {
+            if (event.getID().equals(employee.getID())) {
                 return employee;
             }
         }
         return null;
-}
+    }
 
     //  checks if customer login id matches any id in customer list and returns customer or null
-    public Customer customerLogin(LoginEvent event) {
-        for(Customer customer : customers) {
-            if(event.getID().equals(customer.getID())) {
+    public Customer customerLogin(LoginEvent event) throws ParseException, IOException {
+        loadCustomers(); // refresh list
+        for (Customer customer : customers) {
+            if (event.getID().equals(customer.getID())) {
                 return customer;
             }
         }
@@ -73,16 +78,16 @@ public class Database {
 
     // check if given phoneNumber is already in use
     public boolean existingCustomer(String phoneNumber) {
-        for(Customer customer : customers) {
-            if(customer.getID().equals(phoneNumber)) return true;
+        for (Customer customer : customers) {
+            if (customer.getID().equals(phoneNumber)) return true;
         }
         return false;
     }
 
     // check if there given ID is already in use for employees
     public boolean existingEmployee(String ID) {
-        for(Employee employee : employees) {
-            if(employee.getID().equals(ID)) return true;
+        for (Employee employee : employees) {
+            if (employee.getID().equals(ID)) return true;
         }
         return false;
     }
@@ -95,7 +100,7 @@ public class Database {
         sb.append("[");
 
         // for each employee create json object and write to file
-        for (Employee employee: employees) {
+        for (Employee employee : employees) {
             JSONObject jsonObject = new JSONObject();
 
             jsonObject.put("Is_Admin", employee.isAdmin());
@@ -109,7 +114,7 @@ public class Database {
 
             sb.append(jsonObject.toJSONString() + ',');
         }
-        sb.deleteCharAt(sb.length()-1);
+        sb.deleteCharAt(sb.length() - 1);
         sb.append("]");
         try {
             fileWriter.write(sb.toString());
@@ -123,6 +128,7 @@ public class Database {
     // load employees
     public void loadEmployees() throws ParseException, IOException {
 
+        employees.clear();
 
         // LOAD EMPLOYEES---------------------------------------------
         JSONParser parser = new JSONParser(); //create JSON parser
@@ -130,7 +136,7 @@ public class Database {
 
         try {
             System.out.println("LOADING EMPLOYEES --------------");
-            for(Object employeeJSON : employeesJSON) { // for each employee JSON in employees file
+            for (Object employeeJSON : employeesJSON) { // for each employee JSON in employees file
 
                 JSONObject employee = (JSONObject) employeeJSON; // create employee object from json
 
@@ -149,8 +155,9 @@ public class Database {
 
                 Employee newEmployee = new Employee(isAdmin, ID, firstName, lastName, age, role, phoneNumber, address);
                 employees.add(newEmployee);
-                if(newEmployee.isAdmin()) System.out.println("ADMIN LOADED: " + newEmployee.getID() + ":" + newEmployee.getFirstName());
-                else System.out.println("EMPLOYEE LOADED: " + newEmployee.getID() + ":"  + newEmployee.getFirstName());
+                if (newEmployee.isAdmin())
+                    System.out.println("ADMIN LOADED: " + newEmployee.getID() + ":" + newEmployee.getFirstName());
+                else System.out.println("EMPLOYEE LOADED: " + newEmployee.getID() + ":" + newEmployee.getFirstName());
             }
             System.out.println("EMPLOYEES LOADED --------------");
 
@@ -168,7 +175,7 @@ public class Database {
         sb.append("[");
 
         // for each employee create json object and write to file
-        for (Customer customer: customers) {
+        for (Customer customer : customers) {
             JSONObject jsonObject = new JSONObject();
 
             jsonObject.put("Phone_Number", customer.getPhoneNumber());
@@ -177,11 +184,11 @@ public class Database {
             jsonObject.put("Address", customer.getAddress());
             jsonObject.put("Details", customer.getDetails());
 
-            // save payments
+            //TODO  save payments
 
             sb.append(jsonObject.toJSONString() + ',');
         }
-        sb.deleteCharAt(sb.length()-1);
+        sb.deleteCharAt(sb.length() - 1);
         sb.append("]");
         try {
             fileWriter.write(sb.toString());
@@ -194,7 +201,7 @@ public class Database {
 
     // load customers
     public void loadCustomers() throws ParseException, IOException {
-
+        customers.clear(); // clear current list of customers
 
         // LOAD CUSTOMERS---------------------------------------------
         JSONParser parser = new JSONParser(); //create JSON parser
@@ -202,7 +209,7 @@ public class Database {
 
         try {
             System.out.println("LOADING CUSTOMERS --------------");
-            for(Object customerJSON : customersJSON) { // for each employee JSON in employees file
+            for (Object customerJSON : customersJSON) { // for each employee JSON in employees file
 
                 JSONObject customer = (JSONObject) customerJSON; // create employee object from json
 
@@ -214,15 +221,16 @@ public class Database {
                 String address = (String) customer.get("Address");
                 String details = (String) customer.get("Details");
 
-                // load payments here
+                // TODO load payments here
 
 
                 // add new employee to current employees list
 
-                Customer newCustomer = new Customer( phoneNumber, firstName, lastName,address, details);
-                customers.add(newCustomer);
-                System.out.println("CUSTOMER LOADED: " + newCustomer.getID() + ":"  + newCustomer.getFirstName());
+                Customer newCustomer = new Customer(phoneNumber, firstName, lastName, address, details);
+                customers.add(newCustomer); // add each customer to list
 
+                //log message
+                System.out.println("CUSTOMER LOADED: " + newCustomer.getID() + ":" + newCustomer.getFirstName());
             }
             System.out.println("CUSTOMERS LOADED --------------");
 
@@ -231,7 +239,6 @@ public class Database {
         }
 
     }
-
 
 
 }

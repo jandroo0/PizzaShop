@@ -6,7 +6,7 @@ import javax.swing.text.PlainDocument;
 
 // class to set limit for idField from: https://stackoverflow.com/questions/3519151/how-to-limit-the-number-of-characters-in-jtextfield
 class JTextFieldLimit extends PlainDocument {
-    private int limit;
+    private final int limit;
 
     JTextFieldLimit(int limit) {
         super();

@@ -11,86 +11,87 @@ import java.util.LinkedList;
 
 public class EmployeesTextPanel extends JPanel {
 
-	private MainFrame frame;
-	
-	private JTextPane textPane;
+    private MainFrame frame;
 
-	private JLabel titleLabel;
+    private final JTextPane textPane;
 
-	private LinkedList<Employee> employees;
-	
-	private StyledDocument doc;
-	private Style style;
-	
-	public EmployeesTextPanel() {
+    private final JLabel titleLabel;
 
-		setPreferredSize(new Dimension(240, 180));
-		setBackground(Utils.getBackgroundColor());
-		setLayout(new BorderLayout());
-		
+    private LinkedList<Employee> employees;
+
+    private final StyledDocument doc;
+    private Style style;
+
+    public EmployeesTextPanel() {
+
+        setPreferredSize(new Dimension(240, 180));
+        setBackground(Utils.getBackgroundColor());
+        setLayout(new BorderLayout());
+
 //		text area
-		textPane = new JTextPane();
-		textPane.setEditable(false);
-		textPane.setBorder(null);
-		textPane.setBackground(Utils.getBackgroundColor());
-		
-		titleLabel = new JLabel("Employees");
-		
-		
+        textPane = new JTextPane();
+        textPane.setEditable(false);
+        textPane.setFocusable(false);
+        textPane.setBorder(null);
+        textPane.setBackground(Utils.getBackgroundColor());
+
+        titleLabel = new JLabel("Employees");
+
+
 //		styling
-		
-		//center text
-		
+
+        //center text
+
 //		SimpleAttributeSet center = new SimpleAttributeSet();
 //		StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
 //		doc.setParagraphAttributes(0, doc.getLength(), center, true);
-		
-		// from: http://www.java2s.com/Tutorials/Java/Swing_How_to/JTextPane/Create_JEditorPane_vertical_alignment.htm
-		textPane.setEditorKit(new MyEditorKit());
-		doc = textPane.getStyledDocument();
-		SimpleAttributeSet attrs = new SimpleAttributeSet();
-		StyleConstants.setAlignment(attrs, StyleConstants.ALIGN_CENTER);
-		StyledDocument doc = (StyledDocument) textPane.getDocument();
-		doc.setParagraphAttributes(0, doc.getLength() - 1, attrs, false);
-		
+
+        // from: http://www.java2s.com/Tutorials/Java/Swing_How_to/JTextPane/Create_JEditorPane_vertical_alignment.htm
+        textPane.setEditorKit(new MyEditorKit());
+        doc = textPane.getStyledDocument();
+        SimpleAttributeSet attrs = new SimpleAttributeSet();
+        StyleConstants.setAlignment(attrs, StyleConstants.ALIGN_CENTER);
+        StyledDocument doc = (StyledDocument) textPane.getDocument();
+        doc.setParagraphAttributes(0, doc.getLength() - 1, attrs, false);
+
 //		font
-		setJTextPaneFont(textPane, Utils.getDefaultFont(), Utils.getTextColor(), Utils.getBackgroundColor());
-		titleLabel.setFont(Utils.getDefaultFont());
-		
+        setJTextPaneFont(textPane, Utils.getTextFont(), Utils.getTextColor(), Utils.getBackgroundColor());
+        titleLabel.setFont(Utils.getTextFont());
+
 //		border
-		Border outerBorder = BorderFactory.createEmptyBorder(0,30,0,30);
-		setBorder(outerBorder);
-		
-		Border titleBorder = BorderFactory.createEmptyBorder(0,0,10,0);
-		titleLabel.setBorder(titleBorder);
-		
-		titleLabel.setHorizontalAlignment(JLabel.CENTER);
-		
-		
-		add(new JScrollPane(textPane), BorderLayout.CENTER);
-		add(titleLabel, BorderLayout.NORTH);
-	}
-	
-	public void displayEmployees(LinkedList<Employee> employees) {
-		StringBuilder employeeList = new StringBuilder();
+        Border outerBorder = BorderFactory.createEmptyBorder(0, 30, 0, 30);
+        setBorder(outerBorder);
 
-		for(Employee employee : employees) {
-			employeeList.append(employee.getID() + " - " + employee.getFirstName());
-			if(employee.isAdmin()) {
-				employeeList.append("*");
-			}
-			employeeList.append("\n");
-		}
-		textPane.setText(new String(employeeList));
-	}
+        Border titleBorder = BorderFactory.createEmptyBorder(0, 0, 10, 0);
+        titleLabel.setBorder(titleBorder);
+
+        titleLabel.setHorizontalAlignment(JLabel.CENTER);
 
 
-	public int getLineCount() {
-		return TextUtilities.getLines(textPane);
-	}
+        add(new JScrollPane(textPane), BorderLayout.CENTER);
+        add(titleLabel, BorderLayout.NORTH);
+    }
 
-	
-// from http://javatechniques.com/blog/setting-jtextpane-font-and-color/
+    public void displayEmployees(LinkedList<Employee> employees) {
+        StringBuilder employeeList = new StringBuilder();
+
+        for (Employee employee : employees) {
+            employeeList.append(employee.getID() + " - " + employee.getFirstName());
+            if (employee.isAdmin()) {
+                employeeList.append("*");
+            }
+            employeeList.append("\n");
+        }
+        textPane.setText(new String(employeeList));
+    }
+
+
+    public int getLineCount() {
+        return TextUtilities.getLines(textPane);
+    }
+
+
+    // from http://javatechniques.com/blog/setting-jtextpane-font-and-color/
     public static void setJTextPaneFont(JTextPane jtp, Font font, Color c, Color bg) {
         // Start with the current input attributes for the JTextPane. This
         // should ensure that we do not wipe out any existing attributes
@@ -109,8 +110,8 @@ public class EmployeesTextPanel extends JPanel {
         // Set the font color
         StyleConstants.setForeground(attrs, c);
 
-		// set background
-		StyleConstants.setBackground(attrs, bg);
+        // set background
+        StyleConstants.setBackground(attrs, bg);
 
         // Retrieve the pane's document object
         StyledDocument doc = jtp.getStyledDocument();
@@ -120,67 +121,65 @@ public class EmployeesTextPanel extends JPanel {
         // document uses the attributes.
         doc.setCharacterAttributes(0, doc.getLength() + 1, attrs, false);
     }
-    
-    
+
+
 }
-
-
 
 
 class MyEditorKit extends StyledEditorKit {
 
-	  public ViewFactory getViewFactory() {
-	    return new StyledViewFactory();
-	  }
+    public ViewFactory getViewFactory() {
+        return new StyledViewFactory();
+    }
 
-	  static class StyledViewFactory implements ViewFactory {
+    static class StyledViewFactory implements ViewFactory {
 
-	    public View create(Element elem) {
-	      String kind = elem.getName();
-	      if (kind != null) {
-	        if (kind.equals(AbstractDocument.ContentElementName)) {
+        public View create(Element elem) {
+            String kind = elem.getName();
+            if (kind != null) {
+                if (kind.equals(AbstractDocument.ContentElementName)) {
 
-	          return new LabelView(elem);
-	        } else if (kind.equals(AbstractDocument.ParagraphElementName)) {
-	          return new ParagraphView(elem);
-	        } else if (kind.equals(AbstractDocument.SectionElementName)) {
+                    return new LabelView(elem);
+                } else if (kind.equals(AbstractDocument.ParagraphElementName)) {
+                    return new ParagraphView(elem);
+                } else if (kind.equals(AbstractDocument.SectionElementName)) {
 
-	          return new CenteredBoxView(elem, View.Y_AXIS);
-	        } else if (kind.equals(StyleConstants.ComponentElementName)) {
-	          return new ComponentView(elem);
-	        } else if (kind.equals(StyleConstants.IconElementName)) {
+                    return new CenteredBoxView(elem, View.Y_AXIS);
+                } else if (kind.equals(StyleConstants.ComponentElementName)) {
+                    return new ComponentView(elem);
+                } else if (kind.equals(StyleConstants.IconElementName)) {
 
-	          return new IconView(elem);
-	        }
-	      }
+                    return new IconView(elem);
+                }
+            }
 
-	      return new LabelView(elem);
-	    }
+            return new LabelView(elem);
+        }
 
-	  }
-	}
+    }
+}
 
 class CenteredBoxView extends BoxView {
-	  public CenteredBoxView(Element elem, int axis) {
+    public CenteredBoxView(Element elem, int axis) {
 
-	    super(elem, axis);
-	  }
+        super(elem, axis);
+    }
 
-	  protected void layoutMajorAxis(int targetSpan, int axis, int[] offsets,
-	      int[] spans) {
+    protected void layoutMajorAxis(int targetSpan, int axis, int[] offsets,
+                                   int[] spans) {
 
-	    super.layoutMajorAxis(targetSpan, axis, offsets, spans);
-	    int textBlockHeight = 0;
-	    int offset = 0;
+        super.layoutMajorAxis(targetSpan, axis, offsets, spans);
+        int textBlockHeight = 0;
+        int offset = 0;
 
-	    for (int i = 0; i < spans.length; i++) {
-	      textBlockHeight += spans[i];
-	    }
-	    offset = (targetSpan - textBlockHeight) / 2;
-	    for (int i = 0; i < offsets.length; i++) {
-	      offsets[i] += offset;
-	    }
+        for (int i = 0; i < spans.length; i++) {
+            textBlockHeight += spans[i];
+        }
+        offset = (targetSpan - textBlockHeight) / 2;
+        for (int i = 0; i < offsets.length; i++) {
+            offsets[i] += offset;
+        }
 
-	  }
-	}
+    }
+}
 

@@ -1,44 +1,47 @@
 package gui;
 
-import javax.swing.*;
-import java.awt.*;
-import java.io.IOException;
-
 import Controller.Controller;
 import model.Customer;
 import model.Employee;
 import org.json.simple.parser.ParseException;
 
+import javax.swing.*;
+import java.awt.*;
+import java.io.IOException;
+
 public class MainFrame extends JFrame {
 
     private static final int WIDTH = 600, HEIGHT = 800; // window size
 
-    private Controller controller;
+    private final Controller controller;
 
     // components
 
-    private MenuBar menuBar;
-    private TitlePanel titlePanel; // application title panel
+    private final MenuBar menuBar;
+    private final TitlePanel titlePanel; // application title panel
 
     //container panel
-    private JPanel containerPanel; // contains loginPanels and homePanels
+    private final JPanel containerPanel; // contains loginPanels and homePanels
 
     //login panels
-    private JPanel loginPanels;
-    private EmployeeLoginPanel employeeLoginPanel; // panel containing the employee login
-    private CustomerLoginPanel customerLoginPanel; // panel containing the employee login
+    private final JPanel loginPanels;
+    private final EmployeeLoginPanel employeeLoginPanel; // panel containing the employee login
+    private final CustomerLoginPanel customerLoginPanel; // panel containing the employee login
 
-    private JPanel homePanels;
+    // TODO
+//    private final NewCustomerPanel newCustomerPanel; // panel containing the new customer form
 
-    private EmployeeHomePanel employeeHomePanel;
-    private CustomerHomePanel customerHomePanel;
+    private final JPanel homePanels;
+
+    private final EmployeeHomePanel employeeHomePanel;
+    private final CustomerHomePanel customerHomePanel;
 
 
     // employee menu dialogs
-    private ManageEmployeesDialog manageEmployeesDialog; // dialog box for managing employees
+    private final ManageEmployeesDialog manageEmployeesDialog; // dialog box for managing employees
 
     // new customer dialog
-    private NewCustomerDialog newCustomerDialog;
+    private final NewCustomerDialog newCustomerDialog;
 
 
     // gui.MainFrame Constructor
@@ -98,10 +101,11 @@ public class MainFrame extends JFrame {
         // employee login event
         this.employeeLoginPanel.setEmployeeLoginListener(new LoginListener() {
             @Override
-            public void loginEvent(LoginEvent e){ // login event
-                if(MainFrame.this.controller.employeeLogin(e) != null) { // if the returned employee is not null
+            public void loginEvent(LoginEvent e) throws ParseException, IOException { // login event
+                if (MainFrame.this.controller.employeeLogin(e) != null) { // if the returned employee is not null
                     Employee employee = MainFrame.this.controller.employeeLogin(e); // set employee to logged in employee
-                    if(employee.isAdmin()) menuBar.isAdmin();//if logged in employee is admin, call isAdmin in menu bar to add manage employee menuItem for ADMIN ACCESS
+                    if (employee.isAdmin())
+                        menuBar.isAdmin();//if logged in employee is admin, call isAdmin in menu bar to add manage employee menuItem for ADMIN ACCESS
                     menuBar.employeeView(); // set menuBar to employee view
                     employeeHomePanel.setEmployee(employee); // set the employeeHomePanel employee
 
@@ -110,10 +114,10 @@ public class MainFrame extends JFrame {
                     CardLayout hl = (CardLayout) homePanels.getLayout();
                     hl.show(homePanels, "EMPLOYEE_HOME"); // in the homePanels switch to the employeeHome
 
-                    System.out.println( "EMPLOYEE : "+ employee.getID() + " : " + employee.getFirstName() + " | LOGGED IN"); // print log in messsage
+                    System.out.println("EMPLOYEE : " + employee.getID() + " : " + employee.getFirstName() + " | LOGGED IN"); // print log in messsage
 
                 } else {
-                    JOptionPane.showMessageDialog(MainFrame.this,"Invalid ID", "Invalid ID", JOptionPane.ERROR_MESSAGE); // if unknown ID show error message
+                    JOptionPane.showMessageDialog(MainFrame.this, "Invalid ID", "Invalid ID", JOptionPane.ERROR_MESSAGE); // if unknown ID show error message
                 }
             }
         });
@@ -121,8 +125,8 @@ public class MainFrame extends JFrame {
         // customer login event
         this.customerLoginPanel.setLoginListener(new LoginListener() {
             @Override
-            public void loginEvent(LoginEvent e){ // login event
-                if(MainFrame.this.controller.customerLogin(e) != null) { // if the returned customer is not null
+            public void loginEvent(LoginEvent e) throws ParseException, IOException { // login event
+                if (MainFrame.this.controller.customerLogin(e) != null) { // if the returned customer is not null
                     Customer customer = MainFrame.this.controller.customerLogin(e); // set customer to logged in customer
                     menuBar.customerView(); // set menuBar to customer view
                     customerHomePanel.setCustomer(customer); // set the employeeHomePanel employee
@@ -135,7 +139,7 @@ public class MainFrame extends JFrame {
                     System.out.println("CUSTOMER : " + customer.getID() + " : " + customer.getFirstName() + " | LOGGED IN"); // print log in messsage
 
                 } else {
-                    JOptionPane.showMessageDialog(MainFrame.this,"No Account Found", "No Account", JOptionPane.ERROR_MESSAGE); // if unknown phoneNumber show error message
+                    JOptionPane.showMessageDialog(MainFrame.this, "No Account Found", "No Account", JOptionPane.ERROR_MESSAGE); // if unknown phoneNumber show error message
                 }
             }
         });
@@ -152,19 +156,18 @@ public class MainFrame extends JFrame {
         this.newCustomerDialog.setCreateAccountListener(new CreateAccountListener() {
             @Override
             public void createAccount(CreateAccountEvent e) throws IOException {
-                if(!MainFrame.this.controller.existingCustomer(e.getPhoneNumber())) {
-                    Customer newCustomer = new Customer(e.getPhoneNumber(),e.getFirstName(),e.getLastName(),e.getAddress(),e.getDetails());
+                if (!MainFrame.this.controller.existingCustomer(e.getPhoneNumber())) {
+                    Customer newCustomer = new Customer(e.getPhoneNumber(), e.getFirstName(), e.getLastName(), e.getAddress(), e.getDetails());
                     MainFrame.this.controller.addCustomer(newCustomer);
                     newCustomerDialog.setVisible(false);
 
                     System.out.println("CUSTOMER CREATED: " + newCustomer.getID() + ":" + newCustomer.getFirstName());
                 } else {
-                    JOptionPane.showMessageDialog(MainFrame.this,"Phone number \"" + e.getPhoneNumber() + "\" is already in use.", "Phone # in use", JOptionPane.ERROR_MESSAGE); // if unknown phoneNumber show error message
+                    JOptionPane.showMessageDialog(MainFrame.this, "Phone number \"" + e.getPhoneNumber() + "\" is already in use.", "Phone # in use", JOptionPane.ERROR_MESSAGE); // if unknown phoneNumber show error message
                 }
 
             }
         });
-
 
 
         // employee home panel events
@@ -181,15 +184,15 @@ public class MainFrame extends JFrame {
         this.manageEmployeesDialog.setEmployeeListener(new ManageEmployeeListener() {
             @Override
             public void addEmployeeEvent(AddEmployeeEvent e) { // on add employee
-                if(!MainFrame.this.controller.existingEmployee(e.getID())) {
-                    Employee newHire = new Employee(e.isAdmin(), e.getID(), e.getFirstName(), e.getLastName(), e.getAge(), e.getRole(), e.getPhoneNumber(), e.getAddress());
-                    MainFrame.this.controller.addEmployee(newHire);
+                if (!MainFrame.this.controller.existingEmployee(e.getID())) { //  if there is not an existing employee
+                    Employee newHire = new Employee(e.isAdmin(), e.getID(), e.getFirstName(), e.getLastName(), e.getAge(), e.getRole(), e.getPhoneNumber(), e.getAddress()); // create new employee
+                    MainFrame.this.controller.addEmployee(newHire); // add to employee list
                     manageEmployeesDialog.displayEmployees(MainFrame.this.controller.getEmployees());
                     manageEmployeesDialog.setComboBox(MainFrame.this.controller.getEmployees());
 
                     System.out.println("EMPLOYEE CREATED: " + newHire.getID() + ":" + newHire.getFirstName());
                 } else {
-                    JOptionPane.showMessageDialog(MainFrame.this,"User ID \"" + e.getID() + "\" is already in use.", "User ID in use", JOptionPane.ERROR_MESSAGE); // if unknown phoneNumber show error message
+                    JOptionPane.showMessageDialog(MainFrame.this, "User ID \"" + e.getID() + "\" is already in use.", "User ID in use", JOptionPane.ERROR_MESSAGE); // if unknown phoneNumber show error message
 
                 }
 
@@ -197,9 +200,9 @@ public class MainFrame extends JFrame {
 
             @Override
             public void removeEmployeeEvent(String ID) {
-                if(ID == null) {
-                    JOptionPane.showMessageDialog(MainFrame.this,"Select an Employee.", "No Employee Selected", JOptionPane.ERROR_MESSAGE);
-                }else {
+                if (ID == null) {
+                    JOptionPane.showMessageDialog(MainFrame.this, "Select an Employee.", "No Employee Selected", JOptionPane.ERROR_MESSAGE);
+                } else {
                     MainFrame.this.controller.removeEmployee(ID);
                     manageEmployeesDialog.displayEmployees(MainFrame.this.controller.getEmployees());
                     manageEmployeesDialog.setComboBox(MainFrame.this.controller.getEmployees());
@@ -212,8 +215,6 @@ public class MainFrame extends JFrame {
                 manageEmployeesDialog.setVisible(false);
             }
         });
-
-
 
 
         setLayout(new BorderLayout()); // set layout to a border layout
@@ -258,10 +259,10 @@ public class MainFrame extends JFrame {
     public JPanel getContainerPanel() {
         return containerPanel;
     }
+
     public JPanel getLoginPanels() {
         return loginPanels;
     }
-
 
 
     public CustomerLoginPanel getCustomerLoginPanel() {

@@ -1,13 +1,10 @@
 package gui;
 
+import javax.swing.*;
+import javax.swing.text.Document;
 import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-
-import javax.swing.*;
-import javax.swing.text.Document;
 
 @SuppressWarnings("serial")
 
@@ -24,8 +21,7 @@ public class PlaceholderTextField extends JTextField {
     public PlaceholderTextField(
             final Document pDoc,
             final String pText,
-            final int pColumns)
-    {
+            final int pColumns) {
         super(pDoc, pText, pColumns);
     }
 
@@ -36,21 +32,26 @@ public class PlaceholderTextField extends JTextField {
     public PlaceholderTextField(final String pText) {
         super(pText);
         setPreferredSize(new Dimension(90, 24));
-        setBorder(BorderFactory.createEmptyBorder());
+        setBorder(BorderFactory.createLineBorder(Utils.getTextColor()));
+        setFont(Utils.getTextFont()); // set font
+
+
+        setForeground(Utils.getTextColor());
+        setBackground(Utils.getDefaultTextFieldColor());
 
         this.placeHolderText = pText;
 
         addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) { // if textField is selected, and the current text still = the placeholderText, set empty
-                if(getText().equals(pText)) {
+                if (getText().equals(pText)) {
                     setText("");
                 }
             }
 
             @Override
             public void focusLost(FocusEvent e) { // if textField is empty, when user clicks off, set to placeholderText
-                if(getText().equals("")) {
+                if (getText().equals("")) {
                     setText(pText);
                 }
 

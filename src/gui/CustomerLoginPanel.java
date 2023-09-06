@@ -1,48 +1,36 @@
 package gui;
 
+import org.json.simple.parser.ParseException;
+
 import javax.swing.*;
 import javax.swing.border.Border;
-import javax.swing.text.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 
 
-public class CustomerLoginPanel extends JPanel{
+public class CustomerLoginPanel extends JPanel {
 
+    private final Label idLabel; // id label
+    private final JTextField idField; // id text field
+    private final JButton newCustomerButton; // new customer button
+    private final Button submitButton; // form submit button
     private LoginListener loginListener; // event listener on login event
     private NewCustomerListener newCustomerListener; // event listener on login event
 
-    private JLabel idLabel; // id label
-
-    private JTextField idField; // id text field
-
-    private JButton newCustomerButton; // new customer button
-
-    private JButton submitButton; // form submit button
-
     public CustomerLoginPanel() {
 
-        idLabel = new JLabel("PHONE NUMBER"); // set text for idLabel
+        idLabel = new Label("PHONE NUMBER", 24); // set text for idLabel
 
         idField = new JTextField(); // idField
 
+        submitButton = new Button("LOGIN", Utils.getTextFont(20), Utils.getTextColor(), Utils.getButtonBackgroundColor(),
+                Utils.getButtonHoverColor(), Utils.getButtonBorder()); // submit button
+
         newCustomerButton = new JButton("NEW CUSTOMER?"); // new customer button
-
-        submitButton = new JButton("LOGIN"); // submit button
-
-
-
-        // new customer actionListener
-        newCustomerButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                CustomerLoginPanel.this.newCustomerListener.newCustomerEvent();
-
-            }
-        });
 
 
         // submit button action listener, runs when submit button is pressed
@@ -54,29 +42,30 @@ public class CustomerLoginPanel extends JPanel{
                     CustomerLoginPanel.this.idField.setText("");
                     LoginEvent event = new LoginEvent(e, ID); // create an employee login event with the ID
                     if (CustomerLoginPanel.this.loginListener != null) { // if there is a loginListener
-                        CustomerLoginPanel.this.loginListener.loginEvent(event);
+                        try {
+                            CustomerLoginPanel.this.loginListener.loginEvent(event);
+                        } catch (ParseException ex) {
+                            throw new RuntimeException(ex);
+                        } catch (IOException ex) {
+                            throw new RuntimeException(ex);
+                        }
 
                     }
                 }
             }
         });
 
-        // on mouse hover over change colors
-        submitButton.addMouseListener(new MouseAdapter() {
+        // new customer actionListener
+        newCustomerButton.addActionListener(new ActionListener() {
             @Override
-            public void mouseEntered(MouseEvent e) {
-                submitButton.setBackground(Utils.getButtonHoverColor());
-                submitButton.setForeground(Utils.getButtonBackgroundColor());
-            }
+            public void actionPerformed(ActionEvent e) {
+                CustomerLoginPanel.this.newCustomerListener.newCustomerEvent();
 
-            @Override
-            public void mouseExited(MouseEvent e) {
-                super.mouseExited(e);
-                submitButton.setBackground(Utils.getButtonBackgroundColor());
-                submitButton.setForeground(Utils.getTextColor());
             }
         });
 
+
+        // mouse listener for hover effects
         newCustomerButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
@@ -94,57 +83,48 @@ public class CustomerLoginPanel extends JPanel{
         styling();
     }
 
-    public void setLoginListener(LoginListener listener){
+    public void setLoginListener(LoginListener listener) {
         this.loginListener = listener;
     }
 
-    public void setNewCustomerListener(NewCustomerListener newCustomerListener) {
-        this.newCustomerListener = newCustomerListener;
+    public void setNewCustomerListener(NewCustomerListener listener) {
+        this.newCustomerListener = listener;
     }
 
     // component styling
     void styling() {
         setBackground(Utils.getBackgroundColor());
 
-        //idLabel
-        idLabel.setFont(Utils.getLoginFont());
-        idLabel.setForeground(Utils.getTextColor());
-
 
         // idField
         idField.setBorder(BorderFactory.createLineBorder(Color.BLACK)); // set  border to empty
         idField.setDocument(new JTextFieldLimit(10)); // using gui.JTextFieldLimit class set character limit to 6
-        idField.setPreferredSize(new Dimension(140,44)); // set  size
+        idField.setPreferredSize(new Dimension(140, 44)); // set  size
         idField.setHorizontalAlignment(JTextField.CENTER);
-        idField.setFont(Utils.getLoginFont()); // set font
+        idField.setFont(Utils.getTextFont()); // set font
 
         idField.setForeground(Utils.getTextColor());
         idField.setBackground(Utils.getDefaultTextFieldColor());
 
-        // submit/login button
+        // newCustomer button
         newCustomerButton.setFont(new Font(Utils.getFontString(), Font.BOLD, 14));
         newCustomerButton.setBackground(Utils.getBackgroundColor());
         newCustomerButton.setForeground(Color.WHITE);
-        newCustomerButton.setBorder(BorderFactory.createEmptyBorder(5,8,5,8));
+        newCustomerButton.setBorder(Utils.getButtonBorder());
 
-        // submit/login button
-        submitButton.setFont(new Font(Utils.getFontString(), Font.BOLD, 20));
-        submitButton.setBackground(Utils.getButtonBackgroundColor());
-        submitButton.setForeground(Utils.getTextColor());
-        submitButton.setBorder(BorderFactory.createEmptyBorder(5,8,5,8));
 
     }
 
     public void layoutComponents() {
-        Border border = BorderFactory.createEmptyBorder(0,10,200,10);
+        Border border = BorderFactory.createEmptyBorder(0, 10, 200, 10);
         this.setBorder(border);
 
         this.setLayout(new GridBagLayout());
         GridBagConstraints gc = new GridBagConstraints();
-        gc.insets = new Insets(0,0,10,0);
+        gc.insets = new Insets(0, 0, 10, 0);
         gc.gridy = 0;
         gc.gridx = 0;
-        add(idLabel,gc);
+        add(idLabel, gc);
         gc.gridy++;
         add(idField, gc);
         gc.gridy++;

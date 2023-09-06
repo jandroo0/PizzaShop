@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class MenuBar extends JMenuBar {
 
@@ -31,8 +33,36 @@ public class MenuBar extends JMenuBar {
 
         logoutItem = new JMenuItem("Logout"); // logout menu item
 
-    // employee items
+        // employee items
         manageEmployeesItem = new JMenuItem("Manage Employees");
+
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                super.mouseEntered(e);
+                viewMenu.setForeground(Utils.getTextColor());
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                super.mouseExited(e);
+                viewMenu.setForeground(Utils.getBackgroundColor());
+            }
+        });
+
+        viewMenu.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                super.mouseEntered(e);
+                viewMenu.setForeground(Utils.getTextColor());
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                super.mouseExited(e);
+                viewMenu.setForeground(Utils.getBackgroundColor());
+            }
+        });
 
 
         // when employee view is selected
@@ -110,24 +140,23 @@ public class MenuBar extends JMenuBar {
     }
 
     public void styling() {
-        setBorder(BorderFactory.createMatteBorder(0,0,2,0, Utils.getTextColor()));
         setBackground(Utils.getBackgroundColor());
-        setForeground(Utils.getTextColor());
+        setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Utils.getBackgroundColor()));
 
-        viewMenu.setForeground(Utils.getTextColor());
-        viewMenu.setFont(Utils.getDefaultFont());
+        viewMenu.setForeground(Utils.getBackgroundColor());
+        viewMenu.setFont(Utils.getTextFont());
 
         customerMenu.setForeground(Utils.getTextColor());
-        customerMenu.setFont(Utils.getDefaultFont());
+        customerMenu.setFont(Utils.getTextFont());
 
         employeeMenu.setForeground(Utils.getTextColor());
-        employeeMenu.setFont(Utils.getDefaultFont());
+        employeeMenu.setFont(Utils.getTextFont());
 
         employeeViewItem.setForeground(Utils.getTextColor());
-        employeeViewItem.setFont(Utils.getDefaultFont());
+        employeeViewItem.setFont(Utils.getTextFont());
 
         customerViewItem.setForeground(Utils.getTextColor());
-        customerViewItem.setFont(Utils.getDefaultFont());
+        customerViewItem.setFont(Utils.getTextFont());
     }
 
 
