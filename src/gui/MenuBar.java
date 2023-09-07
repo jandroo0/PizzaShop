@@ -1,5 +1,7 @@
 package gui;
 
+import gui.config.Utils;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;

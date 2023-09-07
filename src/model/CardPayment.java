@@ -1,6 +1,6 @@
 package model;
 
-public class CardPayment extends Payment{
+public class CardPayment extends Payment {
 
     private String cardName, cardNumber, expDate, CVC;
 

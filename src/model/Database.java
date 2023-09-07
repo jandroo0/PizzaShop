@@ -1,6 +1,6 @@
 package model;
 
-import gui.LoginEvent;
+import gui.login.event.LoginEvent;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -13,8 +13,12 @@ import java.util.LinkedList;
 
 
 public class Database {
+
+    // instance lists
     private final LinkedList<Employee> employees; // create list of employees
     private final LinkedList<Customer> customers; // create list of customer
+
+    // file paths
     private final String employeesFilePath = "employees.json";
     private final String customersFilePath = "customers.json";
     private final String paymentsFilePath = "payments.json";
@@ -67,7 +71,6 @@ public class Database {
 //    }
 
     // save payments to file
-    // save employees
     public void savePayments() throws IOException {
 
         fileWriter = new FileWriter(paymentsFilePath);
@@ -111,7 +114,7 @@ public class Database {
     public void loadPayments() throws ParseException, IOException {
 
         // clear all listed payments
-        for(Customer customer : customers) {
+        for (Customer customer : customers) {
             customer.getPayments().clear();
         }
 
@@ -136,8 +139,8 @@ public class Database {
                 String CVC = (String) payment.get("CVC");
 
                 Payment newPayment = new CardPayment(ID, cardName, cardNumber, expDate, CVC);
-                for(Customer customer : customers) {
-                    if(customer.getID().equals(ID.substring(0, ID.length() - 2))) {
+                for (Customer customer : customers) {
+                    if (customer.getID().equals(ID.substring(0, ID.length() - 2))) {
                         customer.getPayments().add(newPayment);
                     }
                 }

@@ -1,6 +1,6 @@
 package Controller;
 
-import gui.LoginEvent;
+import gui.login.event.LoginEvent;
 import model.Customer;
 import model.Database;
 import model.Employee;
@@ -73,7 +73,6 @@ public class Controller {
     public boolean existingEmployee(String ID) {
         return this.db.existingEmployee(ID);
     }
-
 
 
 }

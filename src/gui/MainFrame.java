@@ -1,19 +1,28 @@
 package gui;
 
 import Controller.Controller;
-import com.sun.tools.javac.Main;
+import gui.dialog.employee.management.ManageEmployeesDialog;
+import gui.dialog.employee.management.listener.ManageEmployeeListener;
+import gui.dialog.employee.management.event.AddEmployeeEvent;
+import gui.home.customer.CustomerHomePanel;
+import gui.home.employee.panel.EmployeeHomePanel;
+import gui.home.employee.event.EmployeeHomeEvent;
+import gui.home.employee.listener.EmployeeHomeListener;
+import gui.login.panel.CustomerLoginPanel;
+import gui.login.panel.EmployeeLoginPanel;
+import gui.login.createAccount.NewCustomerPanel;
+import gui.login.createAccount.event.CreateAccountEvent;
+import gui.login.createAccount.listener.CreateAccountListener;
+import gui.login.createAccount.listener.NewCustomerListener;
+import gui.login.event.LoginEvent;
+import gui.login.listener.LoginListener;
+import gui.title.TitlePanel;
 import model.Customer;
 import model.Employee;
 import org.json.simple.parser.ParseException;
 
 import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.text.AbstractDocument;
-import javax.swing.text.BadLocationException;
 import java.awt.*;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.io.IOException;
 
 public class MainFrame extends JFrame {
@@ -47,8 +56,6 @@ public class MainFrame extends JFrame {
 
     // employee menu dialogs
     private final ManageEmployeesDialog manageEmployeesDialog; // dialog box for managing employees
-
-
 
 
     // gui.MainFrame Constructor

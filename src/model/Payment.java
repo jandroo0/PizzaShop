@@ -3,9 +3,8 @@ package model;
 public class Payment {
 
     protected String ID;
-    private int paymentCounter;
-
     protected boolean firstPayment = true;
+    private int paymentCounter;
 
     public Payment(String ID) {
         this.ID = ID;

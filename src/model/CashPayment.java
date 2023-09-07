@@ -12,7 +12,6 @@ public class CashPayment extends Payment {
     }
 
 
-
     public float getCashAmount() {
         return cashAmount;
     }
