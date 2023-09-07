@@ -15,17 +15,16 @@ import java.util.LinkedList;
 public class Database {
     private final LinkedList<Employee> employees; // create list of employees
     private final LinkedList<Customer> customers; // create list of customer
-//    private final LinkedList<Payment> customers; // create list of payments
-
-
-    private FileWriter fileWriter;
     private final String employeesFilePath = "employees.json";
     private final String customersFilePath = "customers.json";
+    private final String paymentsFilePath = "payments.json";
+    private FileWriter fileWriter;
 
     public Database() {
 
         employees = new LinkedList<Employee>();
         customers = new LinkedList<Customer>();
+
     }
 
     // return employee list
@@ -53,6 +52,102 @@ public class Database {
     public void addCustomer(Customer customer) throws IOException {
         this.customers.add(customer);
         saveCustomers(); // save all customers
+    }
+
+    // payments
+
+    // add payment
+//    public void addPayment(Payment payment) {
+//        this.payments.add(payment);
+//    }
+
+    // remove payment
+//    public void removePayment(Payment payment) {
+//        this.payments.remove(payment);
+//    }
+
+    // save payments to file
+    // save employees
+    public void savePayments() throws IOException {
+
+        fileWriter = new FileWriter(paymentsFilePath);
+        StringBuilder sb = new StringBuilder();
+        sb.append("[");
+
+        // for each employee create json object and write to file
+        for (Customer customer : customers) { // for every customer
+            for (int i = 0; i < customer.getPayments().size(); i++) { // for every payment in customers payments list
+
+                Payment payment = customer.getPayments().get(i); // set payment to current iteration of customers payment
+
+                JSONObject paymentJSONObject = new JSONObject();
+                paymentJSONObject.put("ID", customer.generateID(payment)); // generate id of payment, id is xxxxxxxx_1, xxxxxxx_2, etc
+
+
+                // add values to json
+                CardPayment cardPayment = (CardPayment) payment;
+                paymentJSONObject.put("Card_Name", cardPayment.getCardName());
+                paymentJSONObject.put("Card_Number", cardPayment.getCardNumber());
+                paymentJSONObject.put("Exp_Date", cardPayment.getExpDate());
+                paymentJSONObject.put("CVC", cardPayment.getCVC());
+
+                sb.append(paymentJSONObject.toJSONString() + ",");
+
+            }
+        }
+
+        sb.deleteCharAt(sb.length() - 1); // delete last comma
+        sb.append("]"); // add bracket
+        try {
+            fileWriter.write(sb.toString());
+            System.out.println("PAYMENT JSON CREATED AND SAVED");
+            fileWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //  load payment
+    public void loadPayments() throws ParseException, IOException {
+
+        // clear all listed payments
+        for(Customer customer : customers) {
+            customer.getPayments().clear();
+        }
+
+        LinkedList<Payment> userPayments = new LinkedList<Payment>(); // temp list
+
+        // LOAD EMPLOYEES---------------------------------------------
+        JSONParser parser = new JSONParser(); //create JSON parser
+        JSONArray paymentsJSON = (JSONArray) parser.parse(new FileReader(paymentsFilePath)); // create array from all payments in file
+
+        try {
+            System.out.println("LOADING PAYMENTS --------------");
+
+            for (Object userPayment : paymentsJSON) { // for each employee JSON in employees file
+
+                JSONObject payment = (JSONObject) userPayment; // create employee object from json
+
+                String ID = (String) payment.get("ID");
+                // gather values
+                String cardName = (String) payment.get("Card_Name");
+                String cardNumber = (String) payment.get("Card_Number");
+                String expDate = (String) payment.get("Exp_Date");
+                String CVC = (String) payment.get("CVC");
+
+                Payment newPayment = new CardPayment(ID, cardName, cardNumber, expDate, CVC);
+                for(Customer customer : customers) {
+                    if(customer.getID().equals(ID.substring(0, ID.length() - 2))) {
+                        customer.getPayments().add(newPayment);
+                    }
+                }
+                System.out.println("PAYMENT METHOD LOADED : " + ID + " : " + newPayment.toString());
+            }
+
+            System.out.println("PAYMENTS LOADED --------------");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     //  checks if employee login id matches any id in employee list and returns employee or null
@@ -165,7 +260,6 @@ public class Database {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
     //save customers
@@ -222,8 +316,6 @@ public class Database {
                 String address = (String) customer.get("Address");
                 String details = (String) customer.get("Details");
 
-                // TODO load payments here
-
 
                 // add new employee to current employees list
 
@@ -240,6 +332,4 @@ public class Database {
         }
 
     }
-
-
 }

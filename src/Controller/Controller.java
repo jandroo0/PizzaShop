@@ -49,6 +49,15 @@ public class Controller {
         this.db.saveCustomers();
     }
 
+    public void savePayments() throws IOException {
+        this.db.savePayments();
+    }
+
+    public void loadPayments() throws IOException, ParseException {
+        this.db.loadPayments();
+    }
+
+
     public void loadEmployees() throws IOException, ParseException {
         this.db.loadEmployees();
     }
@@ -64,6 +73,7 @@ public class Controller {
     public boolean existingEmployee(String ID) {
         return this.db.existingEmployee(ID);
     }
+
 
 
 }

@@ -1,8 +1,13 @@
 package model;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+
 public class Customer {
 
     private String ID, phoneNumber, firstName, lastName, address, details;
+
+    private LinkedList<Payment> payments;
 
     public Customer(String phoneNumber, String firstName, String lastName, String address, String details) {
         this.ID = phoneNumber;
@@ -11,6 +16,16 @@ public class Customer {
         this.lastName = lastName;
         this.address = address;
         this.details = details;
+
+        payments = new LinkedList<>();
+    }
+
+    public LinkedList<Payment> getPayments() {
+        return payments;
+    }
+
+    public void setPayments(LinkedList<Payment> payments) {
+        this.payments = payments;
     }
 
     public String getPhoneNumber() {
@@ -59,6 +74,21 @@ public class Customer {
 
     public void setDetails(String details) {
         this.details = details;
+    }
+
+    public String generateID(Payment payment) {
+
+        // if not the FIRST payment method for the matched customer
+        if(payments.isEmpty()) {
+            payment.setPaymentCounter(1); // set payment counter to 1
+        }
+
+        int numOfPayments = payments.indexOf(payment); // get index of current payment
+        numOfPayments++;
+        payment.setPaymentCounter(numOfPayments); //set new payment counter +1
+
+        return payment.getPaymentID(); // return new paymentID i.e xxxxxxxxx_1, xxxxxxxx_2
+
     }
 
 }

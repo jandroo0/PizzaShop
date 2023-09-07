@@ -244,6 +244,7 @@ public class MainFrame extends JFrame {
     private void load() throws IOException, ParseException {
         MainFrame.this.controller.loadEmployees();
         MainFrame.this.controller.loadCustomers();
+        MainFrame.this.controller.loadPayments();
         manageEmployeesDialog.displayEmployees(MainFrame.this.controller.getEmployees());
         manageEmployeesDialog.setComboBox(MainFrame.this.controller.getEmployees());
     }
