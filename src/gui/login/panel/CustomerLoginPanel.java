@@ -6,7 +6,6 @@ import gui.login.createAccount.listener.NewCustomerListener;
 import gui.login.event.LoginEvent;
 import gui.login.listener.LoginListener;
 import gui.tools.Label;
-import gui.tools.MyIntFilter;
 import gui.tools.PlaceholderTextField;
 import org.json.simple.parser.ParseException;
 
@@ -107,7 +106,7 @@ public class CustomerLoginPanel extends JPanel {
 
         // idField
         PlainDocument doc = (PlainDocument) idField.getDocument();
-        doc.setDocumentFilter(new MyIntFilter(10));
+        doc.setDocumentFilter(new PlaceholderTextField.MyIntFilter(10));
 
         // newCustomer button
         newCustomerButton.setFont(new Font(Utils.getFontString(), Font.BOLD, 14));

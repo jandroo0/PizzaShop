@@ -79,6 +79,7 @@ public class Database {
 
         // for each employee create json object and write to file
         for (Customer customer : customers) { // for every customer
+//            for(Payment payment : customer.getPayments()) {
             for (int i = 0; i < customer.getPayments().size(); i++) { // for every payment in customers payments list
 
                 Payment payment = customer.getPayments().get(i); // set payment to current iteration of customers payment
@@ -138,9 +139,10 @@ public class Database {
                 String expDate = (String) payment.get("Exp_Date");
                 String CVC = (String) payment.get("CVC");
 
-                Payment newPayment = new CardPayment(ID, cardName, cardNumber, expDate, CVC);
+                String originalID = ID.substring(0, ID.length() - 2);
+                Payment newPayment = new CardPayment(originalID, cardName, cardNumber, expDate, CVC);
                 for (Customer customer : customers) {
-                    if (customer.getID().equals(ID.substring(0, ID.length() - 2))) {
+                    if (customer.getID().equals(originalID)) {
                         customer.getPayments().add(newPayment);
                     }
                 }

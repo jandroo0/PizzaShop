@@ -17,8 +17,6 @@ public class Utils {
     private static final Color buttonBackgroundColor = new Color(251, 251, 212);
     private static final Color borderColor = new Color(107, 116, 120);
     private static final Color textFieldColor = new Color(204, 222, 211);
-    private static final Color textFieldHighlight = new Color(180, 213, 254);
-
 
     // border
     private static final Border buttonBorder = BorderFactory.createEmptyBorder(6, 9, 6, 9);
@@ -30,10 +28,6 @@ public class Utils {
 
     public static String getFontString() {
         return fontString;
-    }
-
-    public static Color getTextFieldHighlight() {
-        return textFieldHighlight;
     }
 
     public static Color getTitleColor() {
@@ -69,21 +63,21 @@ public class Utils {
         return borderColor;
     }
 
-    public static Color getDefaultTextFieldColor() {
+    public static Color getTextFieldColor() {
         return textFieldColor;
     }
-
-    public static String getFileExtension(String name) {
-        int pointIndex = name.lastIndexOf(".");
-        if (pointIndex == -1) {
-            return null;
-        } else {
-            return pointIndex == name.length() - 1 ? null : name.substring(pointIndex + 1);
-        }
-    }
-
     public static Border getButtonBorder() {
         return buttonBorder;
     }
+
+
+//    public static String getFileExtension(String name) {
+//        int pointIndex = name.lastIndexOf(".");
+//        if (pointIndex == -1) {
+//            return null;
+//        } else {
+//            return pointIndex == name.length() - 1 ? null : name.substring(pointIndex + 1);
+//        }
+//    }
 
 }

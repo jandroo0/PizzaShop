@@ -178,17 +178,29 @@ public class MainFrame extends JFrame {
                     Customer newCustomer = new Customer(e.getPhoneNumber(), e.getFirstName(), e.getLastName(), e.getAddress(), e.getDetails());
                     MainFrame.this.controller.addCustomer(newCustomer);
 
+                    if(e.getPayment() != null){
+                        newCustomer.getPayments().add(e.getPayment());
+                        MainFrame.this.controller.savePayments();
+                        System.out.println("CUSTOMER CREATED: " + newCustomer.getID() + ":" + newCustomer.getFirstName() + " PAYMENT METHOD SAVED: " + e.getPayment().toString());
+                    } else System.out.println("CUSTOMER CREATED: " + newCustomer.getID() + ":" + newCustomer.getFirstName());
+
+
                     cl.show(containerPanel, "LOGIN"); //switch to loginPanel
 
 
                     // show confirm message
                     JOptionPane.showMessageDialog(MainFrame.this, "Phone Number Registered!", "Thank you!", JOptionPane.OK_OPTION);
 
-                    System.out.println("CUSTOMER CREATED: " + newCustomer.getID() + ":" + newCustomer.getFirstName());
                 } else {
+                    // TODO CREATE ACCOUNT? PROMPT
                     JOptionPane.showMessageDialog(MainFrame.this, "Phone number \"" + e.getPhoneNumber() + "\" is already in use.", "Phone # in use", JOptionPane.ERROR_MESSAGE); // if unknown phoneNumber show error message
                 }
 
+            }
+
+            @Override
+            public void cancelEvent() {
+                cl.show(containerPanel, "LOGIN");
             }
         });
 
@@ -252,6 +264,7 @@ public class MainFrame extends JFrame {
         MainFrame.this.controller.loadEmployees();
         MainFrame.this.controller.loadCustomers();
         MainFrame.this.controller.loadPayments();
+        MainFrame.this.controller.savePayments();
         manageEmployeesDialog.displayEmployees(MainFrame.this.controller.getEmployees());
         manageEmployeesDialog.setComboBox(MainFrame.this.controller.getEmployees());
     }

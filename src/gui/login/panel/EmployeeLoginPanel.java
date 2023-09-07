@@ -1,12 +1,11 @@
 package gui.login.panel;
 
-import gui.tools.Button;
+import gui.tools.*;
 import gui.config.Utils;
 import gui.login.event.LoginEvent;
 import gui.login.listener.LoginListener;
+import gui.tools.Button;
 import gui.tools.Label;
-import gui.tools.MyIntFilter;
-import gui.tools.PasswordField;
 import org.json.simple.parser.ParseException;
 
 import javax.swing.*;
@@ -69,11 +68,11 @@ public class EmployeeLoginPanel extends JPanel {
         // idField
 
         PlainDocument doc = (PlainDocument) idField.getDocument();
-        doc.setDocumentFilter(new MyIntFilter(6));
+        doc.setDocumentFilter(new PlaceholderTextField.MyIntFilter(6));
 
 
         idField.setForeground(Utils.getTextColor());
-        idField.setBackground(Utils.getDefaultTextFieldColor());
+        idField.setBackground(Utils.getTextFieldColor());
 
     }
 

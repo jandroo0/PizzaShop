@@ -3,7 +3,6 @@ package model;
 public class Payment {
 
     protected String ID;
-    protected boolean firstPayment = true;
     private int paymentCounter;
 
     public Payment(String ID) {
@@ -23,13 +22,6 @@ public class Payment {
         this.ID = ID;
     }
 
-    public boolean isFirstPayment() {
-        return firstPayment;
-    }
-
-    public void setFirstPayment(boolean firstPayment) {
-        this.firstPayment = firstPayment;
-    }
 
     public int getPaymentCounter() {
         return paymentCounter;

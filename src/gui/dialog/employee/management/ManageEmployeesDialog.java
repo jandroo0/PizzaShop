@@ -6,7 +6,6 @@ import gui.tools.PlaceholderTextField;
 import gui.config.Utils;
 import gui.dialog.employee.management.event.AddEmployeeEvent;
 import gui.tools.Label;
-import gui.tools.MyIntFilter;
 import model.Employee;
 
 import javax.swing.*;
@@ -223,7 +222,7 @@ public class ManageEmployeesDialog extends JDialog {
         add(buttonsPanel, BorderLayout.SOUTH);
     }
 
-    void setEmployeeListener(ManageEmployeeListener listener) {
+    public void setEmployeeListener(ManageEmployeeListener listener) {
         this.employeeListener = listener;
     }
 
@@ -241,7 +240,7 @@ public class ManageEmployeesDialog extends JDialog {
 
         // phone # field int only and 10-digit limit from doc filter
         PlainDocument phoneFieldDoc = (PlainDocument) phoneNumberField.getDocument();
-        phoneFieldDoc.setDocumentFilter(new MyIntFilter(10));
+        phoneFieldDoc.setDocumentFilter(new PlaceholderTextField.MyIntFilter(10));
 
         // is admin checkbox
         isAdminBox.setBackground(Utils.getBackgroundColor());

@@ -14,7 +14,7 @@ public class PasswordField extends JPasswordField {
 
         setHorizontalAlignment(JTextField.CENTER);
         setForeground(Utils.getTextColor());
-        setBackground(Utils.getDefaultTextFieldColor());
+        setBackground(Utils.getTextFieldColor());
         setFont(Utils.getTextFont(fontSize)); // set font with size
 
         setEchoChar('*');

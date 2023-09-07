@@ -1,12 +1,15 @@
 package gui.login.createAccount.event;
 
+import model.Payment;
+
 import java.util.EventObject;
 
 public class CreateAccountEvent extends EventObject {
 
     private String ID, phoneNumber, firstName, lastName, address, details;
+    private Payment payment;
 
-    public CreateAccountEvent(Object source, String phoneNumber, String firstName, String lastName, String address, String details) {
+    public CreateAccountEvent(Object source, String phoneNumber, String firstName, String lastName, String address, String details, Payment payment) {
         super(source);
         this.ID = phoneNumber;
         this.phoneNumber = phoneNumber;
@@ -14,6 +17,8 @@ public class CreateAccountEvent extends EventObject {
         this.lastName = lastName;
         this.address = address;
         this.details = details;
+
+        this.payment = payment;
     }
 
     public String getPhoneNumber() {
@@ -64,4 +69,11 @@ public class CreateAccountEvent extends EventObject {
         this.details = details;
     }
 
+    public Payment getPayment() {
+        return payment;
+    }
+
+    public void setPayment(Payment payment) {
+        this.payment = payment;
+    }
 }
