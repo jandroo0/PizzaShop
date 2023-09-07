@@ -11,17 +11,26 @@ import java.awt.event.FocusListener;
 public class PlaceholderTextField extends JTextField {
 
     private String placeholder;
+    private int fontSize;
 
-    private String placeHolderText;
 
-    public PlaceholderTextField() {
+    public PlaceholderTextField(int width, int height, int fontSize) {
+
+        setPreferredSize(new Dimension(width, height));
+        setBorder(BorderFactory.createLineBorder(Utils.getTextColor()));
+
+        setHorizontalAlignment(JTextField.CENTER);
+        setForeground(Utils.getTextColor());
+        setBackground(Utils.getDefaultTextFieldColor());
+        setFont(Utils.getTextFont(fontSize)); // set font with size
+        setDocument(new JTextFieldLimit(14));
+
+        this.fontSize = fontSize;
+
 
     }
 
-    public PlaceholderTextField(
-            final Document pDoc,
-            final String pText,
-            final int pColumns) {
+    public PlaceholderTextField(final Document pDoc, final String pText, final int pColumns) {
         super(pDoc, pText, pColumns);
     }
 
@@ -29,37 +38,11 @@ public class PlaceholderTextField extends JTextField {
         super(pColumns);
     }
 
-    public PlaceholderTextField(final String pText) {
-        super(pText);
-        setPreferredSize(new Dimension(90, 24));
-        setBorder(BorderFactory.createLineBorder(Utils.getTextColor()));
-        setFont(Utils.getTextFont()); // set font
+    public PlaceholderTextField(final String pText, int width, int height, int fontSize) {
+        this(width, height, fontSize);
 
-
-        setForeground(Utils.getTextColor());
-        setBackground(Utils.getDefaultTextFieldColor());
-
-        this.placeHolderText = pText;
-
-        addFocusListener(new FocusListener() {
-            @Override
-            public void focusGained(FocusEvent e) { // if textField is selected, and the current text still = the placeholderText, set empty
-                if (getText().equals(pText)) {
-                    setText("");
-                }
-            }
-
-            @Override
-            public void focusLost(FocusEvent e) { // if textField is empty, when user clicks off, set to placeholderText
-                if (getText().equals("")) {
-                    setText(pText);
-                }
-
-            }
-        });
-
-
-    }
+        this.placeholder = pText;
+        }
 
     public PlaceholderTextField(final String pText, final int pColumns) {
         super(pText, pColumns);
@@ -69,13 +52,6 @@ public class PlaceholderTextField extends JTextField {
         return placeholder;
     }
 
-    public String getPlaceHolderText() {
-        return placeHolderText;
-    }
-
-    public void setPlaceHolderText(String placeHolderText) {
-        this.placeHolderText = placeHolderText;
-    }
 
     @Override
     protected void paintComponent(final Graphics pG) {
@@ -89,7 +65,8 @@ public class PlaceholderTextField extends JTextField {
         g.setRenderingHint(
                 RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
-        g.setColor(getDisabledTextColor());
+        g.setColor(Utils.getTextColor());
+        g.setFont(Utils.getTextFont(fontSize));
         g.drawString(placeholder, getInsets().left, pG.getFontMetrics()
                 .getMaxAscent() + getInsets().top);
     }

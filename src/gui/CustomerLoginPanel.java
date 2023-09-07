@@ -4,6 +4,10 @@ import org.json.simple.parser.ParseException;
 
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.PlainDocument;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,7 +19,7 @@ import java.io.IOException;
 public class CustomerLoginPanel extends JPanel {
 
     private final Label idLabel; // id label
-    private final JTextField idField; // id text field
+    private final PlaceholderTextField idField; // id text field
     private final JButton newCustomerButton; // new customer button
     private final Button submitButton; // form submit button
     private LoginListener loginListener; // event listener on login event
@@ -25,7 +29,7 @@ public class CustomerLoginPanel extends JPanel {
 
         idLabel = new Label("PHONE NUMBER", 24); // set text for idLabel
 
-        idField = new JTextField(); // idField
+        idField = new PlaceholderTextField(140, 44, 24); // idField
 
         submitButton = new Button("LOGIN", Utils.getTextFont(20), Utils.getTextColor(), Utils.getButtonBackgroundColor(),
                 Utils.getButtonHoverColor(), Utils.getButtonBorder()); // submit button
@@ -33,20 +37,20 @@ public class CustomerLoginPanel extends JPanel {
         newCustomerButton = new JButton("NEW CUSTOMER?"); // new customer button
 
 
+
         // submit button action listener, runs when submit button is pressed
         submitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (CustomerLoginPanel.this.idField != null) { // if something is in the textfield
+                if (CustomerLoginPanel.this.idField.getText() != null) { // if something is in the textfield
                     String ID = CustomerLoginPanel.this.idField.getText(); // on submit, take idField contents
-                    CustomerLoginPanel.this.idField.setText("");
                     LoginEvent event = new LoginEvent(e, ID); // create an employee login event with the ID
                     if (CustomerLoginPanel.this.loginListener != null) { // if there is a loginListener
                         try {
                             CustomerLoginPanel.this.loginListener.loginEvent(event);
-                        } catch (ParseException ex) {
-                            throw new RuntimeException(ex);
-                        } catch (IOException ex) {
+                            idField.getDocument().remove(0, ID.length()); // clear textField doc after submit
+
+                        } catch (ParseException | BadLocationException | IOException ex) {
                             throw new RuntimeException(ex);
                         }
 
@@ -59,8 +63,7 @@ public class CustomerLoginPanel extends JPanel {
         newCustomerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                CustomerLoginPanel.this.newCustomerListener.newCustomerEvent();
-
+                    CustomerLoginPanel.this.newCustomerListener.newCustomerEvent();
             }
         });
 
@@ -91,20 +94,15 @@ public class CustomerLoginPanel extends JPanel {
         this.newCustomerListener = listener;
     }
 
+
     // component styling
     void styling() {
         setBackground(Utils.getBackgroundColor());
 
 
         // idField
-        idField.setBorder(BorderFactory.createLineBorder(Color.BLACK)); // set  border to empty
-        idField.setDocument(new JTextFieldLimit(10)); // using gui.JTextFieldLimit class set character limit to 6
-        idField.setPreferredSize(new Dimension(140, 44)); // set  size
-        idField.setHorizontalAlignment(JTextField.CENTER);
-        idField.setFont(Utils.getTextFont()); // set font
-
-        idField.setForeground(Utils.getTextColor());
-        idField.setBackground(Utils.getDefaultTextFieldColor());
+        PlainDocument doc = (PlainDocument) idField.getDocument();
+        doc.setDocumentFilter(new MyIntFilter(10));
 
         // newCustomer button
         newCustomerButton.setFont(new Font(Utils.getFontString(), Font.BOLD, 14));
@@ -132,5 +130,10 @@ public class CustomerLoginPanel extends JPanel {
         gc.gridy++;
         add(newCustomerButton, gc);
     }
+
+    public PlaceholderTextField getIdField() {
+        return idField;
+    }
+
 
 }

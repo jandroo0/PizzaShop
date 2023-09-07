@@ -4,6 +4,8 @@ import org.json.simple.parser.ParseException;
 
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.PlainDocument;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,14 +17,14 @@ public class EmployeeLoginPanel extends JPanel {
 
     private final Label idLabel; // id label
 
-    private final JPasswordField idField; // id text field
+    private final PasswordField idField; // id text field
 
     private final Button submitButton; // form submit button
 
     public EmployeeLoginPanel() {
         idLabel = new Label("EMPLOYEE ID", 24); // set text for idLabel
 
-        idField = new JPasswordField(); // idField
+        idField = new PasswordField(144, 44, 28); // idField
 
         submitButton = new Button("LOGIN", Utils.getTextFont(20), Utils.getTextColor(), Utils.getButtonBackgroundColor(),
                 Utils.getButtonHoverColor(), Utils.getButtonBorder()); // submit button
@@ -30,19 +32,18 @@ public class EmployeeLoginPanel extends JPanel {
         submitButton.addActionListener(new ActionListener() { // submit button action listener, runs when submit button is pressed
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (EmployeeLoginPanel.this.idField != null) { // if something is in the textfield
+                if (EmployeeLoginPanel.this.idField.getPassword() != null) { // if something is in the textfield
                     String ID = EmployeeLoginPanel.this.idField.getText(); // on submit, take idField contents
-                    EmployeeLoginPanel.this.idField.setText("");
+
                     LoginEvent event = new LoginEvent(e, ID); // create an employee login event with the ID
                     if (EmployeeLoginPanel.this.employeeLoginListener != null) { // if there is a loginListener
                         try {
                             EmployeeLoginPanel.this.employeeLoginListener.loginEvent(event);
-                        } catch (ParseException ex) {
-                            throw new RuntimeException(ex);
-                        } catch (IOException ex) {
+
+                            idField.getDocument().remove(0, ID.length()); // clear textField doc after submit
+                        } catch (ParseException | BadLocationException | IOException ex) {
                             throw new RuntimeException(ex);
                         }
-
                     }
                 }
             }
@@ -62,11 +63,9 @@ public class EmployeeLoginPanel extends JPanel {
         setBackground(Utils.getBackgroundColor());
 
         // idField
-        idField.setBorder(BorderFactory.createLineBorder(Color.BLACK)); // set  border to empty
-        idField.setDocument(new JTextFieldLimit(6)); // using gui.JTextFieldLimit class set character limit to 6
-        idField.setPreferredSize(new Dimension(114, 44)); // set  size
-        idField.setHorizontalAlignment(JTextField.CENTER); // center text
-        idField.setFont(Utils.getTextFont()); // set font
+
+        PlainDocument doc = (PlainDocument) idField.getDocument();
+        doc.setDocumentFilter(new MyIntFilter(6));
 
 
         idField.setForeground(Utils.getTextColor());

@@ -1,12 +1,19 @@
 package gui;
 
 import Controller.Controller;
+import com.sun.tools.javac.Main;
 import model.Customer;
 import model.Employee;
 import org.json.simple.parser.ParseException;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.BadLocationException;
 import java.awt.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.IOException;
 
 public class MainFrame extends JFrame {
@@ -35,13 +42,13 @@ public class MainFrame extends JFrame {
 
     private final EmployeeHomePanel employeeHomePanel;
     private final CustomerHomePanel customerHomePanel;
+    private final NewCustomerPanel newCustomerPanel;
 
 
     // employee menu dialogs
     private final ManageEmployeesDialog manageEmployeesDialog; // dialog box for managing employees
 
-    // new customer dialog
-    private final NewCustomerDialog newCustomerDialog;
+
 
 
     // gui.MainFrame Constructor
@@ -73,21 +80,22 @@ public class MainFrame extends JFrame {
         homePanels = new JPanel(new CardLayout());
         employeeHomePanel = new EmployeeHomePanel();
         customerHomePanel = new CustomerHomePanel();
+        newCustomerPanel = new NewCustomerPanel(this);
 
         homePanels.add(employeeHomePanel, "EMPLOYEE_HOME");
         homePanels.add(customerHomePanel, "CUSTOMER_HOME");
 
-        // container panel for home and login panels
+        // container panel for home panels, login panels, and the new customer form panel
         containerPanel = new JPanel(new CardLayout());
         containerPanel.add(homePanels, "HOME");
         containerPanel.add(loginPanels, "LOGIN");
+        containerPanel.add(newCustomerPanel, "NEW_CUSTOMER");
 
         CardLayout cl = (CardLayout) containerPanel.getLayout();
-        cl.show(containerPanel, "LOGIN");
+        cl.show(containerPanel, "LOGIN"); // set the default to the login
 
         // dialog
         manageEmployeesDialog = new ManageEmployeesDialog(this);
-        newCustomerDialog = new NewCustomerDialog(this);
 
         controller = new Controller(); // MVC
 
@@ -148,18 +156,26 @@ public class MainFrame extends JFrame {
         this.customerLoginPanel.setNewCustomerListener(new NewCustomerListener() {
             @Override
             public void newCustomerEvent() {
-                newCustomerDialog.setVisible(true);
+                cl.show(containerPanel, "NEW_CUSTOMER");
+                newCustomerPanel.setPhoneNumber(MainFrame.this.customerLoginPanel.getIdField().getText());
             }
         });
 
+        //
+
         // create customer event in newCustomerDialog
-        this.newCustomerDialog.setCreateAccountListener(new CreateAccountListener() {
+        this.newCustomerPanel.setCreateAccountListener(new CreateAccountListener() {
             @Override
             public void createAccount(CreateAccountEvent e) throws IOException {
                 if (!MainFrame.this.controller.existingCustomer(e.getPhoneNumber())) {
                     Customer newCustomer = new Customer(e.getPhoneNumber(), e.getFirstName(), e.getLastName(), e.getAddress(), e.getDetails());
                     MainFrame.this.controller.addCustomer(newCustomer);
-                    newCustomerDialog.setVisible(false);
+
+                    cl.show(containerPanel, "LOGIN"); //switch to loginPanel
+
+
+                    // show confirm message
+                    JOptionPane.showMessageDialog(MainFrame.this, "Phone Number Registered!", "Thank you!", JOptionPane.OK_OPTION);
 
                     System.out.println("CUSTOMER CREATED: " + newCustomer.getID() + ":" + newCustomer.getFirstName());
                 } else {

@@ -72,8 +72,8 @@ public class MenuBar extends JMenuBar {
                 System.out.println("EMPLOYEE VIEW");
                 CardLayout cl = (CardLayout) frame.getLoginPanels().getLayout(); // grab cardLayout from main frame
                 cl.show(frame.getLoginPanels(), "EMPLOYEE_LOGIN"); // switch to employeeLoginPanel using cardLayout
-                viewMenu.add(customerViewItem); // add the customer view item to the menu
                 viewMenu.remove(employeeViewItem); // remove the employee view item
+                viewMenu.add(customerViewItem); // add the customer view item to the menu
 
             }
         });
@@ -85,8 +85,8 @@ public class MenuBar extends JMenuBar {
                 System.out.println("CUSTOMER VIEW");
                 CardLayout cl = (CardLayout) frame.getLoginPanels().getLayout(); // grab cardLayout from main frame
                 cl.show(frame.getLoginPanels(), "CUSTOMER_LOGIN"); // switch to customerLoginPanel using cardLayout
-                viewMenu.add(employeeViewItem); // add the employee view item to the menu
                 viewMenu.remove(customerViewItem); // remove the customer view item
+                viewMenu.add(employeeViewItem); // add the employee view item to the menu
             }
         });
 

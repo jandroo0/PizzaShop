@@ -1,4 +1,4 @@
-package gui;
+package model;
 
 public class Payment {
 
@@ -11,7 +11,6 @@ public class Payment {
         this.cardNumber = cardNumber;
         this.expDate = expDate;
         this.CVC = CVC;
-        this.cashAmount = cashAmount;
     }
 
     public String getCashAmount() {

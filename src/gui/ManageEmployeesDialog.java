@@ -4,6 +4,7 @@ import model.Employee;
 
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.text.PlainDocument;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -60,20 +61,18 @@ public class ManageEmployeesDialog extends JDialog {
 
         titleLabel = new Label("MANAGEMENT", 28);
 
-        idField = new PlaceholderTextField(" ID");
-        firstNameField = new PlaceholderTextField(" First Name");
-        lastNameField = new PlaceholderTextField(" Last Name");
-        ageField = new PlaceholderTextField(" Age");
-        roleField = new PlaceholderTextField(" Job");
-        phoneNumberField = new PlaceholderTextField(" Phone #");
-        addressField = new PlaceholderTextField(" Address");
+        idField = new PlaceholderTextField(" ID", 80, 22, 14);
+        firstNameField = new PlaceholderTextField(" First Name", 80, 22, 14);
+        lastNameField = new PlaceholderTextField(" Last Name", 80, 22, 14);
+        ageField = new PlaceholderTextField(" Age", 80, 22, 14);
+        roleField = new PlaceholderTextField(" Job", 80, 22, 14);
+        phoneNumberField = new PlaceholderTextField(" Phone #", 80, 22, 14);
+        addressField = new PlaceholderTextField(" Address", 80, 22, 14);
 
         isAdminBox = new JCheckBox("Administrator");
 
-        addEmployeeButton = new Button("ADD", Utils.getTextFont(), Utils.getTextColor(), Utils.getButtonBackgroundColor(),
-                Utils.getButtonHoverColor(), Utils.getButtonBorder());
-        removeEmployeeButton = new Button("REMOVE", Utils.getTextFont(), Utils.getTextColor(), Utils.getButtonBackgroundColor(),
-                Utils.getButtonHoverColor(), Utils.getButtonBorder());
+        addEmployeeButton = new Button("ADD", Utils.getTextFont(), Utils.getTextColor(), Utils.getButtonBackgroundColor(), Utils.getButtonHoverColor(), Utils.getButtonBorder());
+        removeEmployeeButton = new Button("REMOVE", Utils.getTextFont(), Utils.getTextColor(), Utils.getButtonBackgroundColor(), Utils.getButtonHoverColor(), Utils.getButtonBorder());
 
         // remove student combo box
         removeEmployeeBox = new JComboBox<String>();
@@ -86,10 +85,8 @@ public class ManageEmployeesDialog extends JDialog {
         listRenderer.setHorizontalAlignment(DefaultListCellRenderer.CENTER);
         removeEmployeeBox.setRenderer(listRenderer);
 
-        saveButton = new Button("SAVE", Utils.getTextFont(), Utils.getTextColor(), Utils.getButtonBackgroundColor(),
-                Utils.getButtonHoverColor(), BorderFactory.createEmptyBorder(5, 8, 5, 8));
-        cancelButton = new Button("CANCEL", Utils.getTextFont(), Utils.getTextColor(), Utils.getButtonBackgroundColor(),
-                Utils.getButtonHoverColor(), BorderFactory.createEmptyBorder(5, 8, 5, 8));
+        saveButton = new Button("SAVE", Utils.getTextFont(), Utils.getTextColor(), Utils.getButtonBackgroundColor(), Utils.getButtonHoverColor(), BorderFactory.createEmptyBorder(5, 8, 5, 8));
+        cancelButton = new Button("CANCEL", Utils.getTextFont(), Utils.getTextColor(), Utils.getButtonBackgroundColor(), Utils.getButtonHoverColor(), BorderFactory.createEmptyBorder(5, 8, 5, 8));
 
 
         // handle events
@@ -231,6 +228,14 @@ public class ManageEmployeesDialog extends JDialog {
         buttonsPanel.setBackground(Utils.getBackgroundColor());
         titlePanel.setBackground(Utils.getBackgroundColor());
 
+        // id field int only and 6-digit limit from doc filter
+        PlainDocument idFieldDoc = (PlainDocument) idField.getDocument();
+//        idFieldDoc.setDocumentFilter(new MyIntFilter(6));
+
+        // phone # field int only and 10-digit limit from doc filter
+        PlainDocument phoneFieldDoc = (PlainDocument) phoneNumberField.getDocument();
+        phoneFieldDoc.setDocumentFilter(new MyIntFilter(10));
+
         // is admin checkbox
         isAdminBox.setBackground(Utils.getBackgroundColor());
         isAdminBox.setBorder(BorderFactory.createEmptyBorder());
@@ -258,20 +263,19 @@ public class ManageEmployeesDialog extends JDialog {
 
     // for each placeholder textField, check whether it still contains the placeholder, or nothing
     private boolean checkFields() {
-        if ((idField.getText().equals(idField.getPlaceHolderText()) || idField.getText().equals(""))) {
+        if (idField.getText().equals("")) {
             return false;
-        } else if ((firstNameField.getText().equals(firstNameField.getPlaceHolderText()) || firstNameField.getText().equals(""))) {
+        } else if (firstNameField.getText().equals("")) {
             return false;
-        } else if ((lastNameField.getText().equals(lastNameField.getPlaceHolderText()) || lastNameField.getText().equals(""))) {
+        } else if (lastNameField.getText().equals("")) {
             return false;
-        } else if ((ageField.getText().equals(ageField.getPlaceHolderText()) || ageField.getText().equals(""))) {
+        } else if (ageField.getText().equals("")) {
             return false;
-        } else if ((roleField.getText().equals(roleField.getPlaceHolderText()) || roleField.getText().equals(""))) {
+        } else if (roleField.getText().equals("")) {
             return false;
-        } else if ((phoneNumberField.getText().equals(phoneNumberField.getPlaceHolderText()) || phoneNumberField.getText().equals(""))) {
+        } else if (phoneNumberField.getText().equals("")) {
             return false;
-        } else
-            return !addressField.getText().equals(addressField.getPlaceHolderText()) && !addressField.getText().equals("");
+        } else return !addressField.getText().equals("");
     }
 
     // refreshes employees list on text panel

@@ -15,6 +15,7 @@ import java.util.LinkedList;
 public class Database {
     private final LinkedList<Employee> employees; // create list of employees
     private final LinkedList<Customer> customers; // create list of customer
+//    private final LinkedList<Payment> customers; // create list of payments
 
 
     private FileWriter fileWriter;
