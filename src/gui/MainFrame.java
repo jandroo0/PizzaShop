@@ -2,21 +2,22 @@ package gui;
 
 import Controller.Controller;
 import gui.dialog.employee.management.ManageEmployeesDialog;
-import gui.dialog.employee.management.listener.ManageEmployeeListener;
 import gui.dialog.employee.management.event.AddEmployeeEvent;
+import gui.dialog.employee.management.listener.ManageEmployeeListener;
 import gui.home.customer.CustomerHomePanel;
-import gui.home.employee.panel.EmployeeHomePanel;
 import gui.home.employee.event.EmployeeHomeEvent;
 import gui.home.employee.listener.EmployeeHomeListener;
-import gui.login.panel.CustomerLoginPanel;
-import gui.login.panel.EmployeeLoginPanel;
+import gui.home.employee.panel.EmployeeHomePanel;
 import gui.login.createAccount.NewCustomerPanel;
 import gui.login.createAccount.event.CreateAccountEvent;
 import gui.login.createAccount.listener.CreateAccountListener;
 import gui.login.createAccount.listener.NewCustomerListener;
 import gui.login.event.LoginEvent;
 import gui.login.listener.LoginListener;
+import gui.login.panel.CustomerLoginPanel;
+import gui.login.panel.EmployeeLoginPanel;
 import gui.title.TitlePanel;
+import gui.tools.CustomMessageDialog;
 import model.Customer;
 import model.Employee;
 import org.json.simple.parser.ParseException;
@@ -44,9 +45,6 @@ public class MainFrame extends JFrame {
     private final EmployeeLoginPanel employeeLoginPanel; // panel containing the employee login
     private final CustomerLoginPanel customerLoginPanel; // panel containing the employee login
 
-    // TODO
-//    private final NewCustomerPanel newCustomerPanel; // panel containing the new customer form
-
     private final JPanel homePanels;
 
     private final EmployeeHomePanel employeeHomePanel;
@@ -56,6 +54,9 @@ public class MainFrame extends JFrame {
 
     // employee menu dialogs
     private final ManageEmployeesDialog manageEmployeesDialog; // dialog box for managing employees
+
+    // option dialog
+    CustomMessageDialog customMessageDialog;
 
 
     // gui.MainFrame Constructor
@@ -80,6 +81,7 @@ public class MainFrame extends JFrame {
         employeeLoginPanel = new EmployeeLoginPanel();
         customerLoginPanel = new CustomerLoginPanel();
 
+        // add login panels to the loginPanels panel with cardLayout
         loginPanels.add(customerLoginPanel, "CUSTOMER_LOGIN");
         loginPanels.add(employeeLoginPanel, "EMPLOYEE_LOGIN");
 
@@ -89,6 +91,7 @@ public class MainFrame extends JFrame {
         customerHomePanel = new CustomerHomePanel();
         newCustomerPanel = new NewCustomerPanel(this);
 
+        // add home panels to the homePanel panel with cardLayout
         homePanels.add(employeeHomePanel, "EMPLOYEE_HOME");
         homePanels.add(customerHomePanel, "CUSTOMER_HOME");
 
@@ -103,6 +106,9 @@ public class MainFrame extends JFrame {
 
         // dialog
         manageEmployeesDialog = new ManageEmployeesDialog(this);
+
+        // custom option dialog
+        customMessageDialog = new CustomMessageDialog(this);
 
         controller = new Controller(); // MVC
 
@@ -132,7 +138,7 @@ public class MainFrame extends JFrame {
                     System.out.println("EMPLOYEE : " + employee.getID() + " : " + employee.getFirstName() + " | LOGGED IN"); // print log in messsage
 
                 } else {
-                    JOptionPane.showMessageDialog(MainFrame.this, "Invalid ID", "Invalid ID", JOptionPane.ERROR_MESSAGE); // if unknown ID show error message
+                    customMessageDialog.errorDialog("Invalid ID", "No employee linked to ID"); // if unknown ID show error message
                 }
             }
         });
@@ -154,7 +160,7 @@ public class MainFrame extends JFrame {
                     System.out.println("CUSTOMER : " + customer.getID() + " : " + customer.getFirstName() + " | LOGGED IN"); // print log in messsage
 
                 } else {
-                    JOptionPane.showMessageDialog(MainFrame.this, "No Account Found", "No Account", JOptionPane.ERROR_MESSAGE); // if unknown phoneNumber show error message
+                    customMessageDialog.errorDialog("Account not found", "No account linked to phone number"); // if unknown phoneNumber show error message
                 }
             }
         });
@@ -164,6 +170,7 @@ public class MainFrame extends JFrame {
             @Override
             public void newCustomerEvent() {
                 cl.show(containerPanel, "NEW_CUSTOMER");
+                menuBar.setVisible(false);
                 newCustomerPanel.setPhoneNumber(MainFrame.this.customerLoginPanel.getIdField().getText());
             }
         });
@@ -174,26 +181,28 @@ public class MainFrame extends JFrame {
         this.newCustomerPanel.setCreateAccountListener(new CreateAccountListener() {
             @Override
             public void createAccount(CreateAccountEvent e) throws IOException {
-                if (!MainFrame.this.controller.existingCustomer(e.getPhoneNumber())) {
+                if (!MainFrame.this.controller.existingCustomer(e.getPhoneNumber())) { // if there is a customer with this number already
                     Customer newCustomer = new Customer(e.getPhoneNumber(), e.getFirstName(), e.getLastName(), e.getAddress(), e.getDetails());
                     MainFrame.this.controller.addCustomer(newCustomer);
 
-                    if(e.getPayment() != null){
+                    if (e.getPayment() != null) {
                         newCustomer.getPayments().add(e.getPayment());
                         MainFrame.this.controller.savePayments();
                         System.out.println("CUSTOMER CREATED: " + newCustomer.getID() + ":" + newCustomer.getFirstName() + " PAYMENT METHOD SAVED: " + e.getPayment().toString());
-                    } else System.out.println("CUSTOMER CREATED: " + newCustomer.getID() + ":" + newCustomer.getFirstName());
+                    } else
+                        System.out.println("CUSTOMER CREATED: " + newCustomer.getID() + ":" + newCustomer.getFirstName());
 
 
                     cl.show(containerPanel, "LOGIN"); //switch to loginPanel
+                    menuBar.setVisible(true);
 
 
                     // show confirm message
-                    JOptionPane.showMessageDialog(MainFrame.this, "Phone Number Registered!", "Thank you!", JOptionPane.OK_OPTION);
+                    customMessageDialog.errorDialog("Account Registered", "New account registered!");
 
                 } else {
-                    // TODO CREATE ACCOUNT? PROMPT
-                    JOptionPane.showMessageDialog(MainFrame.this, "Phone number \"" + e.getPhoneNumber() + "\" is already in use.", "Phone # in use", JOptionPane.ERROR_MESSAGE); // if unknown phoneNumber show error message
+                    customMessageDialog.errorDialog("Phone # in use", "\"" + e.getPhoneNumber() + "\" is already in use.");
+                    cl.show(containerPanel, "LOGIN");
                 }
 
             }
@@ -201,6 +210,7 @@ public class MainFrame extends JFrame {
             @Override
             public void cancelEvent() {
                 cl.show(containerPanel, "LOGIN");
+                menuBar.setVisible(true);
             }
         });
 
@@ -264,7 +274,6 @@ public class MainFrame extends JFrame {
         MainFrame.this.controller.loadEmployees();
         MainFrame.this.controller.loadCustomers();
         MainFrame.this.controller.loadPayments();
-        MainFrame.this.controller.savePayments();
         manageEmployeesDialog.displayEmployees(MainFrame.this.controller.getEmployees());
         manageEmployeesDialog.setComboBox(MainFrame.this.controller.getEmployees());
     }

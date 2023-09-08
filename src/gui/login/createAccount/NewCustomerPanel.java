@@ -3,9 +3,9 @@ package gui.login.createAccount;
 import gui.config.Utils;
 import gui.login.createAccount.event.CreateAccountEvent;
 import gui.login.createAccount.listener.CreateAccountListener;
-import gui.tools.*;
 import gui.tools.Button;
 import gui.tools.Label;
+import gui.tools.PlaceholderTextField;
 import model.CardPayment;
 import model.Payment;
 
@@ -26,14 +26,12 @@ public class NewCustomerPanel extends JPanel {
     private final JPanel userInfoPanel;
     private final JPanel buttonPanel;
     private final Label titleLabel; // title label
-
     // user info fields
     private final PlaceholderTextField firstNameField;
     private final PlaceholderTextField lastNameField;
     private final PlaceholderTextField phoneNumberField;
     private final PlaceholderTextField addressField;
     private final PlaceholderTextField detailsField;
-
     // payment info fields
     private final PlaceholderTextField cardNameField;
     private final PlaceholderTextField cardNumberField;
@@ -43,6 +41,7 @@ public class NewCustomerPanel extends JPanel {
     private final Button createAccountButton;
     // cancel/return button
     private final Button cancelButton;
+
     // add payment checkBox
     private JCheckBox addPaymentBox;
     private CreateAccountListener createAccountListener;
@@ -66,15 +65,15 @@ public class NewCustomerPanel extends JPanel {
         //user info fields
         firstNameField = new PlaceholderTextField(" First", 140, 30, 20);
         lastNameField = new PlaceholderTextField(" Last", 140, 30, 20);
-        phoneNumberField = new PlaceholderTextField(" Phone", 140, 30, 20,true,10);
+        phoneNumberField = new PlaceholderTextField(" Phone", 140, 30, 20, true, 10);
         addressField = new PlaceholderTextField(" Address", 140, 30, 20);
-        detailsField = new PlaceholderTextField(" Other", 140, 30, 20,30);
+        detailsField = new PlaceholderTextField(" Other", 140, 30, 20, 30);
 
         //payment info fields
-        cardNameField = new PlaceholderTextField(" Name on Card ", 140, 30, 20);
-        cardNumberField = new PlaceholderTextField(" Number", 140, 30, 20,true,20);
-        cardExpDateField = new PlaceholderTextField(" Exp Date 00/00 ", 140, 30, 20);
-        CVCField = new PlaceholderTextField(" CVC", 140, 30, 20,true,3);
+        cardNameField = new PlaceholderTextField(" Name on Card ", 140, 30, 18);
+        cardNumberField = new PlaceholderTextField(" Number", 140, 30, 18, true, 20);
+        cardExpDateField = new PlaceholderTextField("MM/YY", 140, 30, 18);
+        CVCField = new PlaceholderTextField(" CVC", 140, 30, 18, true, 3);
 
 
         addPaymentBox = new JCheckBox("Add Payment");
@@ -100,7 +99,7 @@ public class NewCustomerPanel extends JPanel {
                     } else details = detailsField.getText();
 
                     CreateAccountEvent event;
-                    if(addPaymentBox.isSelected()) {
+                    if (addPaymentBox.isSelected()) {
                         Payment newPayment = new CardPayment(phoneNumberField.getText(), cardNameField.getText(), cardNumberField.getText(),
                                 cardExpDateField.getText(), CVCField.getText());
                         event = new CreateAccountEvent(e, phoneNumberField.getText(), firstNameField.getText(),
@@ -222,7 +221,6 @@ public class NewCustomerPanel extends JPanel {
         gc.gridx++;
         gc.insets = new Insets(0, 10, 10, 0);
         buttonPanel.add(createAccountButton, gc);
-
 
 
         // check box hover effect
