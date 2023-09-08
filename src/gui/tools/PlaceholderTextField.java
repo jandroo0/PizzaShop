@@ -14,7 +14,6 @@ public class PlaceholderTextField extends JTextField {
     private int fontSize;
 
 
-
     // textField with set width, height, and fontSize ---- DEFAULT
     public PlaceholderTextField(int width, int height, int fontSize) {
 
@@ -53,10 +52,10 @@ public class PlaceholderTextField extends JTextField {
         this.placeholder = pText;
     }
 
-//    int filter and limit
+    //    int filter and limit
     public PlaceholderTextField(int width, int height, int fontSize, boolean intFilter, int limit) {
         this(width, height, fontSize);
-        if(intFilter) {
+        if (intFilter) {
             PlainDocument doc = (PlainDocument) getDocument();
             doc.setDocumentFilter(new MyIntFilter(limit));
         }
@@ -64,9 +63,9 @@ public class PlaceholderTextField extends JTextField {
     }
 
     // placeholder, int filter, and limit
-    public PlaceholderTextField(final String pText, int width, int height, int fontSize,boolean intFilter, int limit ) {
+    public PlaceholderTextField(final String pText, int width, int height, int fontSize, boolean intFilter, int limit) {
         this(width, height, fontSize);
-        if(intFilter) {
+        if (intFilter) {
             PlainDocument doc = (PlainDocument) getDocument();
             doc.setDocumentFilter(new MyIntFilter(limit));
         }
@@ -74,8 +73,6 @@ public class PlaceholderTextField extends JTextField {
         this.placeholder = pText;
 
     }
-
-
 
 
     public String getPlaceholder() {

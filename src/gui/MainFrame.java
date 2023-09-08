@@ -102,7 +102,9 @@ public class MainFrame extends JFrame {
         containerPanel.add(newCustomerPanel, "NEW_CUSTOMER");
 
         CardLayout cl = (CardLayout) containerPanel.getLayout();
-        cl.show(containerPanel, "LOGIN"); // set the default to the login
+        cl.show(containerPanel, "HOME"); // set the default to the login
+        CardLayout hl = (CardLayout) employeeHomePanel.getContainerPanel().getLayout();
+        hl.show(employeeHomePanel.getContainerPanel(), "EDIT_MENU");
 
         // dialog
         manageEmployeesDialog = new ManageEmployeesDialog(this);
