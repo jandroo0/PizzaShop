@@ -19,7 +19,9 @@ import gui.login.panel.EmployeeLoginPanel;
 import gui.title.TitlePanel;
 import gui.tools.CustomMessageDialog;
 import model.Customer;
+import model.Drink;
 import model.Employee;
+import model.Size;
 import org.json.simple.parser.ParseException;
 
 import javax.swing.*;
@@ -102,9 +104,9 @@ public class MainFrame extends JFrame {
         containerPanel.add(newCustomerPanel, "NEW_CUSTOMER");
 
         CardLayout cl = (CardLayout) containerPanel.getLayout();
-        cl.show(containerPanel, "HOME"); // set the default to the login
-        CardLayout hl = (CardLayout) employeeHomePanel.getContainerPanel().getLayout();
-        hl.show(employeeHomePanel.getContainerPanel(), "EDIT_MENU");
+        cl.show(containerPanel, "LOGIN"); // set the default to the login
+//        CardLayout hl = (CardLayout) employeeHomePanel.getContainerPanel().getLayout();
+//        hl.show(employeeHomePanel.getContainerPanel(), "EDIT_MENU");
 
         // dialog
         manageEmployeesDialog = new ManageEmployeesDialog(this);
@@ -276,6 +278,10 @@ public class MainFrame extends JFrame {
         MainFrame.this.controller.loadEmployees();
         MainFrame.this.controller.loadCustomers();
         MainFrame.this.controller.loadPayments();
+
+
+        MainFrame.this.controller.addMenuItem(new Drink("Fanta", 6.99f, Size.Medium));
+
         manageEmployeesDialog.displayEmployees(MainFrame.this.controller.getEmployees());
         manageEmployeesDialog.setComboBox(MainFrame.this.controller.getEmployees());
     }

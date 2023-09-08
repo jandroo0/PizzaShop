@@ -18,6 +18,8 @@ public class Database {
     private final LinkedList<Employee> employees; // create list of employees
     private final LinkedList<Customer> customers; // create list of customer
 
+    private final LinkedList<MenuItem> menu;
+
     // file paths
     private final String employeesFilePath = "employees.json";
     private final String customersFilePath = "customers.json";
@@ -28,7 +30,19 @@ public class Database {
 
         employees = new LinkedList<Employee>();
         customers = new LinkedList<Customer>();
+        menu = new LinkedList<MenuItem>();
 
+    }
+
+    // return all menu items
+    public LinkedList<MenuItem> getMenu() {
+        return menu;
+    }
+
+    // add menu item
+    public void addMenuItem(MenuItem menuItem) {
+        this.menu.add(menuItem);
+        System.out.println("ADDED ITEM" + menuItem);
     }
 
     // return employee list
@@ -58,17 +72,6 @@ public class Database {
         saveCustomers(); // save all customers
     }
 
-    // payments
-
-    // add payment
-//    public void addPayment(Payment payment) {
-//        this.payments.add(payment);
-//    }
-
-    // remove payment
-//    public void removePayment(Payment payment) {
-//        this.payments.remove(payment);
-//    }
 
     // save payments to file
     public void savePayments() throws IOException {
@@ -79,7 +82,6 @@ public class Database {
 
         // for each employee create json object and write to file
         for (Customer customer : customers) { // for every customer
-//            for(Payment payment : customer.getPayments()) {
             for (int i = 0; i < customer.getPayments().size(); i++) { // for every payment in customers payments list
 
                 Payment payment = customer.getPayments().get(i); // set payment to current iteration of customers payment

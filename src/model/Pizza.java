@@ -6,14 +6,14 @@ import java.util.LinkedList;
 
 public class Pizza {
 
-    private String size;
+    private Size size;
     private String cheeseAmt;
     private String sauceAmt;
     private String crustType;
 
     private LinkedList<String> toppings;
 
-    public Pizza(String size, String cheeseAmt, String sauceAmt, String crustType, LinkedList<String> toppings) {
+    public Pizza(Size size, String cheeseAmt, String sauceAmt, String crustType, LinkedList<String> toppings) {
         this.size = size;
         this.cheeseAmt = cheeseAmt;
         this.sauceAmt = sauceAmt;
@@ -21,11 +21,11 @@ public class Pizza {
         this.toppings = toppings;
     }
 
-    public String getSize() {
+    public Size getSize() {
         return size;
     }
 
-    public void setSize(String size) {
+    public void setSize(Size size) {
         this.size = size;
     }
 
@@ -60,4 +60,6 @@ public class Pizza {
     public void setToppings(LinkedList<String> toppings) {
         this.toppings = toppings;
     }
+
+
 }

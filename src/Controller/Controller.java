@@ -4,6 +4,7 @@ import gui.login.event.LoginEvent;
 import model.Customer;
 import model.Database;
 import model.Employee;
+import model.MenuItem;
 import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
@@ -14,6 +15,10 @@ public class Controller {
 
     public Controller() {
 
+    }
+
+    public void addMenuItem(MenuItem e) {
+        this.db.addMenuItem(e);
     }
 
     public void addEmployee(Employee e) {

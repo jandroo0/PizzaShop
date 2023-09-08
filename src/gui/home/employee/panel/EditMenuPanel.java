@@ -15,10 +15,18 @@ public class EditMenuPanel extends JPanel {
     private final JPanel crustContentsPanel;
     private final JPanel crustButtonsPanel;
 
+
     // toppings panels
-    private final JPanel toppingsPanel;
-    private final JPanel toppingsTitlePanel;
-    private final JPanel toppingsContentsPanel;
+    private final JPanel meatsPanel;
+    private final JPanel meatsTitlePanel;
+    private final JPanel meatsContentsPanel;
+
+    private final JPanel veggiesPanel;
+    private final JPanel veggiesTitlePanel;
+    private final JPanel veggiesContentsPanel;
+
+    // pizza options panel contains crust and toppings
+    private final JPanel pizzaPanel;
 
     // other panels
     private final JPanel otherPanel;
@@ -27,7 +35,8 @@ public class EditMenuPanel extends JPanel {
 
 
     private final JLabel crustLabel;
-    private final JLabel toppingsLabel;
+    private final JLabel meatsLabel;
+    private final JLabel veggiesLabel;
     private final JLabel otherLabel;
     private final PlaceholderTextField crustField;
     private final PlaceholderTextField meatsField;
@@ -58,8 +67,14 @@ public class EditMenuPanel extends JPanel {
     private final JPanel editMenuContentPanel;
     // cancel / save button panel
     private final JPanel buttonsPanel;
+
+    // nav panel
+
+    private JPanel navButtonsPanel;
     // title label
     private JLabel titleLabel;
+
+    private Button pizzaMenuButton;
 
 
     public EditMenuPanel() {
@@ -67,11 +82,17 @@ public class EditMenuPanel extends JPanel {
         // main title panel
         titlePanel = new JPanel();
 
+        // switch tab buttons
+        pizzaMenuButton = new Button("PIZZA OPTIONS", Utils.getTextFont(18), Utils.getTextColor(),
+                Utils.getButtonBackgroundColor(), Utils.getButtonHoverColor(), BorderFactory.createEmptyBorder(5, 8, 5, 8));
+
+
         // edit menu panels container panel
-        editMenuContentPanel = new JPanel();
+        editMenuContentPanel = new JPanel(new CardLayout());
 
         //buttons panel
         buttonsPanel = new JPanel();
+        navButtonsPanel = new JPanel();
 
 
         // crust panels
@@ -81,9 +102,16 @@ public class EditMenuPanel extends JPanel {
         crustButtonsPanel = new JPanel();
 
         // toppings panel
-        toppingsPanel = new JPanel();
-        toppingsTitlePanel = new JPanel();
-        toppingsContentsPanel = new JPanel();
+        meatsPanel = new JPanel();
+        meatsTitlePanel = new JPanel();
+        meatsContentsPanel = new JPanel();
+
+        veggiesPanel = new JPanel();
+        veggiesTitlePanel = new JPanel();
+        veggiesContentsPanel = new JPanel();
+
+        // pizzaPanel
+        pizzaPanel = new JPanel();
 
         // other panels
         otherPanel = new JPanel();
@@ -95,7 +123,8 @@ public class EditMenuPanel extends JPanel {
 
         crustLabel = new JLabel("CRUST");
 
-        toppingsLabel = new JLabel("TOPPINGS");
+        meatsLabel = new JLabel("MEATS");
+        veggiesLabel = new JLabel("VEGGIES");
 
         otherLabel = new JLabel("MISC");
 
@@ -116,29 +145,29 @@ public class EditMenuPanel extends JPanel {
         dessertBox = new JComboBox<String>();
 
         // buttons
-        addCrustButton = new Button("ADD", Utils.getTextFont(18), Utils.getTextColor(),
+        addCrustButton = new Button("ADD", Utils.getTextFont(16), Utils.getTextColor(),
                 Utils.getButtonBackgroundColor(), Utils.getButtonHoverColor(), BorderFactory.createEmptyBorder(5, 8, 5, 8));
-        removeCrustButton = new Button("REMOVE", Utils.getTextFont(18), Utils.getTextColor(),
-                Utils.getButtonBackgroundColor(), Utils.getButtonHoverColor(), BorderFactory.createEmptyBorder(5, 8, 5, 8));
-
-        addMeatsButton = new Button("ADD", Utils.getTextFont(18), Utils.getTextColor(),
-                Utils.getButtonBackgroundColor(), Utils.getButtonHoverColor(), BorderFactory.createEmptyBorder(5, 8, 5, 8));
-        removeMeatsButton = new Button("REMOVE", Utils.getTextFont(18), Utils.getTextColor(),
+        removeCrustButton = new Button("REMOVE", Utils.getTextFont(16), Utils.getTextColor(),
                 Utils.getButtonBackgroundColor(), Utils.getButtonHoverColor(), BorderFactory.createEmptyBorder(5, 8, 5, 8));
 
-        addVeggiesButton = new Button("ADD", Utils.getTextFont(18), Utils.getTextColor(),
+        addMeatsButton = new Button("ADD", Utils.getTextFont(16), Utils.getTextColor(),
                 Utils.getButtonBackgroundColor(), Utils.getButtonHoverColor(), BorderFactory.createEmptyBorder(5, 8, 5, 8));
-        removeVeggiesButton = new Button("REMOVE", Utils.getTextFont(18), Utils.getTextColor(),
-                Utils.getButtonBackgroundColor(), Utils.getButtonHoverColor(), BorderFactory.createEmptyBorder(5, 8, 5, 8));
-
-        addBevButton = new Button("ADD", Utils.getTextFont(18), Utils.getTextColor(),
-                Utils.getButtonBackgroundColor(), Utils.getButtonHoverColor(), BorderFactory.createEmptyBorder(5, 8, 5, 8));
-        removeBevButton = new Button("REMOVE", Utils.getTextFont(18), Utils.getTextColor(),
+        removeMeatsButton = new Button("REMOVE", Utils.getTextFont(16), Utils.getTextColor(),
                 Utils.getButtonBackgroundColor(), Utils.getButtonHoverColor(), BorderFactory.createEmptyBorder(5, 8, 5, 8));
 
-        addDessertButton = new Button("ADD", Utils.getTextFont(18), Utils.getTextColor(),
+        addVeggiesButton = new Button("ADD", Utils.getTextFont(16), Utils.getTextColor(),
                 Utils.getButtonBackgroundColor(), Utils.getButtonHoverColor(), BorderFactory.createEmptyBorder(5, 8, 5, 8));
-        removeDessertButton = new Button("REMOVE", Utils.getTextFont(18), Utils.getTextColor(),
+        removeVeggiesButton = new Button("REMOVE", Utils.getTextFont(16), Utils.getTextColor(),
+                Utils.getButtonBackgroundColor(), Utils.getButtonHoverColor(), BorderFactory.createEmptyBorder(5, 8, 5, 8));
+
+        addBevButton = new Button("ADD", Utils.getTextFont(16), Utils.getTextColor(),
+                Utils.getButtonBackgroundColor(), Utils.getButtonHoverColor(), BorderFactory.createEmptyBorder(5, 8, 5, 8));
+        removeBevButton = new Button("REMOVE", Utils.getTextFont(16), Utils.getTextColor(),
+                Utils.getButtonBackgroundColor(), Utils.getButtonHoverColor(), BorderFactory.createEmptyBorder(5, 8, 5, 8));
+
+        addDessertButton = new Button("ADD", Utils.getTextFont(16), Utils.getTextColor(),
+                Utils.getButtonBackgroundColor(), Utils.getButtonHoverColor(), BorderFactory.createEmptyBorder(5, 8, 5, 8));
+        removeDessertButton = new Button("REMOVE", Utils.getTextFont(16), Utils.getTextColor(),
                 Utils.getButtonBackgroundColor(), Utils.getButtonHoverColor(), BorderFactory.createEmptyBorder(5, 8, 5, 8));
 
         saveMenuButton = new Button("SAVE", Utils.getTextFont(20), Utils.getTextColor(),
@@ -157,16 +186,32 @@ public class EditMenuPanel extends JPanel {
     }
 
     private void layoutComponents() {
-        editMenuContentPanel.setLayout(new GridLayout(2, 2));
-        editMenuContentPanel.setBorder(BorderFactory.createEmptyBorder());
 
-        editMenuContentPanel.add(crustPanel);
-        editMenuContentPanel.add(toppingsPanel);
-        editMenuContentPanel.add(otherPanel);
-
-        titlePanel.add(titleLabel);
+        // title panel
+        titlePanel.setLayout(new BorderLayout());
+        titlePanel.add(navButtonsPanel, BorderLayout.CENTER);
 
         GridBagConstraints gc = new GridBagConstraints();
+        navButtonsPanel.setLayout(new GridBagLayout());
+        navButtonsPanel.setBorder(BorderFactory.createEmptyBorder());
+        gc.gridx = 0;
+        gc.gridy = 0;
+        gc.insets = new Insets(0, 0, 0, 10);
+        navButtonsPanel.add(pizzaMenuButton, gc);
+
+        editMenuContentPanel.setBorder(BorderFactory.createEmptyBorder());
+
+//        editMenuContentPanel.add(toppingsPanel, "CURRENT_MENU");
+        editMenuContentPanel.add(pizzaPanel, "PIZZA_PANEL");
+        editMenuContentPanel.add(otherPanel, "OTHER_PANEL");
+
+        //pizza panel
+        pizzaPanel.setLayout(new GridLayout(2, 2));
+        pizzaPanel.setBorder(BorderFactory.createEmptyBorder());
+        pizzaPanel.add(crustPanel);
+        pizzaPanel.add(meatsPanel);
+        pizzaPanel.add(veggiesPanel);
+
 
         // crust panel
         crustPanel.setLayout(new BorderLayout());
@@ -206,48 +251,64 @@ public class EditMenuPanel extends JPanel {
 
 
         // toppings panels
-        toppingsPanel.setLayout(new BorderLayout());
-        toppingsPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(5, 5, 5, 10),
+
+        // meats panel
+        meatsPanel.setLayout(new BorderLayout());
+        meatsPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(5, 5, 5, 10),
                 BorderFactory.createLineBorder(Utils.getTextColor(), 2, true)));
-        toppingsPanel.add(toppingsTitlePanel, BorderLayout.NORTH);
-        toppingsPanel.add(toppingsContentsPanel, BorderLayout.CENTER);
+        meatsPanel.add(meatsTitlePanel, BorderLayout.NORTH);
+        meatsPanel.add(meatsContentsPanel, BorderLayout.CENTER);
 
 
-        // toppings title panel
-        toppingsTitlePanel.add(toppingsLabel);
-        toppingsTitlePanel.setBorder(BorderFactory.createEmptyBorder(20, 0, 0, 0));
+        // meats title panel
+        meatsTitlePanel.add(meatsLabel);
+        meatsTitlePanel.setBorder(BorderFactory.createEmptyBorder(20, 0, 0, 0));
 
 
-        // toppings content panel
-        toppingsContentsPanel.setLayout(new GridBagLayout());
+        // meats content panel
+        meatsContentsPanel.setLayout(new GridBagLayout());
         gc.gridx = 0;
         gc.gridy = 0;
         gc.insets = new Insets(0, 0, 10, 10);
-        toppingsContentsPanel.add(meatsBox, gc);
+        meatsContentsPanel.add(meatsBox, gc);
         gc.gridx++;
         gc.insets = new Insets(0, 10, 10, 0);
-        toppingsContentsPanel.add(meatsField, gc);
+        meatsContentsPanel.add(meatsField, gc);
         gc.gridy++;
         gc.gridx = 0;
         gc.insets = new Insets(0, 0, 0, 10);
-        toppingsContentsPanel.add(removeMeatsButton, gc);
+        meatsContentsPanel.add(removeMeatsButton, gc);
         gc.gridx++;
         gc.insets = new Insets(0, 10, 0, 0);
-        toppingsContentsPanel.add(addMeatsButton, gc);
+        meatsContentsPanel.add(addMeatsButton, gc);
+
+        // veggies panel
+        veggiesPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(5, 5, 5, 10),
+                BorderFactory.createLineBorder(Utils.getTextColor(), 2, true)));
+        veggiesPanel.add(veggiesTitlePanel, BorderLayout.NORTH);
+        veggiesPanel.add(veggiesContentsPanel, BorderLayout.CENTER);
+
+
+        // veggies title panel
+        veggiesTitlePanel.add(veggiesLabel);
+        veggiesTitlePanel.setBorder(BorderFactory.createEmptyBorder(20, 0, 0, 0));
+
+        // veggies content panel
+        veggiesContentsPanel.setLayout(new GridBagLayout());
+        gc.gridx = 0;
+        gc.gridy = 0;
+        gc.insets = new Insets(0, 0, 0, 10);
+        veggiesContentsPanel.add(veggiesBox, gc);
+        gc.gridx++;
+        gc.insets = new Insets(0, 10, 0, 0);
+        veggiesContentsPanel.add(veggiesField, gc);
         gc.gridx = 0;
         gc.gridy++;
         gc.insets = new Insets(10, 0, 0, 10);
-        toppingsContentsPanel.add(veggiesBox, gc);
+        veggiesContentsPanel.add(removeVeggiesButton, gc);
         gc.gridx++;
         gc.insets = new Insets(10, 10, 0, 0);
-        toppingsContentsPanel.add(veggiesField, gc);
-        gc.gridx = 0;
-        gc.gridy++;
-        gc.insets = new Insets(10, 0, 0, 10);
-        toppingsContentsPanel.add(removeVeggiesButton, gc);
-        gc.gridx++;
-        gc.insets = new Insets(10, 10, 0, 0);
-        toppingsContentsPanel.add(addVeggiesButton, gc);
+        veggiesContentsPanel.add(addVeggiesButton, gc);
 
 
         // other panels
@@ -316,6 +377,9 @@ public class EditMenuPanel extends JPanel {
         titlePanel.setBackground(Utils.getBackgroundColor());
         editMenuContentPanel.setBackground(Utils.getBackgroundColor());
 
+        // navbar panel
+        navButtonsPanel.setBackground(Utils.getBackgroundColor());
+
         //title label
         titleLabel.setForeground(Utils.getTextColor());
         titleLabel.setFont(Utils.getTextFont(24));
@@ -333,13 +397,26 @@ public class EditMenuPanel extends JPanel {
 
 
         // toppings panels
-        toppingsPanel.setBackground(Utils.getBackgroundColor());
-        toppingsTitlePanel.setBackground(Utils.getBackgroundColor());
-        toppingsContentsPanel.setBackground(Utils.getBackgroundColor());
+
+        pizzaPanel.setBackground(Utils.getBackgroundColor());
+
+        // meats panel
+        meatsPanel.setBackground(Utils.getBackgroundColor());
+        meatsTitlePanel.setBackground(Utils.getBackgroundColor());
+        meatsContentsPanel.setBackground(Utils.getBackgroundColor());
 
         // toppings panel components
-        toppingsLabel.setForeground(Utils.getTextColor());
-        toppingsLabel.setFont(Utils.getTextFont(18));
+        meatsLabel.setForeground(Utils.getTextColor());
+        meatsLabel.setFont(Utils.getTextFont(18));
+
+        // toppings panels
+        veggiesPanel.setBackground(Utils.getBackgroundColor());
+        veggiesTitlePanel.setBackground(Utils.getBackgroundColor());
+        veggiesContentsPanel.setBackground(Utils.getBackgroundColor());
+
+        // toppings panel components
+        veggiesLabel.setForeground(Utils.getTextColor());
+        veggiesLabel.setFont(Utils.getTextFont(18));
 
         // otherPanel
         otherPanel.setBackground(Utils.getBackgroundColor());
