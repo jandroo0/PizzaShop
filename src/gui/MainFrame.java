@@ -115,6 +115,9 @@ public class MainFrame extends JFrame {
         controller = new Controller(); // MVC
 
 
+//        manageEmployeesDialog.setVisible(true); // set manage employees dialog visible
+
+
         // set employee login panel invisible by default
         // menu bar
         setJMenuBar(menuBar);
@@ -235,7 +238,6 @@ public class MainFrame extends JFrame {
                     Employee newHire = new Employee(e.isAdmin(), e.getID(), e.getFirstName(), e.getLastName(), e.getAge(), e.getRole(), e.getPhoneNumber(), e.getAddress()); // create new employee
                     MainFrame.this.controller.addEmployee(newHire); // add to employee list
                     manageEmployeesDialog.displayEmployees(MainFrame.this.controller.getEmployees());
-                    manageEmployeesDialog.setComboBox(MainFrame.this.controller.getEmployees());
 
                     System.out.println("EMPLOYEE CREATED: " + newHire.getID() + ":" + newHire.getFirstName());
                 } else {
@@ -252,7 +254,6 @@ public class MainFrame extends JFrame {
                 } else {
                     MainFrame.this.controller.removeEmployee(ID);
                     manageEmployeesDialog.displayEmployees(MainFrame.this.controller.getEmployees());
-                    manageEmployeesDialog.setComboBox(MainFrame.this.controller.getEmployees());
                 }
             }
 
@@ -260,6 +261,18 @@ public class MainFrame extends JFrame {
             public void saveEmployeesEvent() throws IOException {// on save click
                 MainFrame.this.controller.saveEmployees();
                 manageEmployeesDialog.setVisible(false);
+            }
+
+            @Override
+            public void cancelEmployeesEvent() {
+                manageEmployeesDialog.setVisible(false); // on cancel click set dialog visible to false
+                try {
+                    MainFrame.this.controller.loadEmployees(); // load employees from file since the current list is different from the file
+                    manageEmployeesDialog.displayEmployees(MainFrame.this.controller.getEmployees()); // display the employees
+                } catch (ParseException | IOException e) {
+                    e.printStackTrace();
+                }
+
             }
         });
 
@@ -280,7 +293,6 @@ public class MainFrame extends JFrame {
         MainFrame.this.controller.loadInventory();
 
         manageEmployeesDialog.displayEmployees(MainFrame.this.controller.getEmployees());
-        manageEmployeesDialog.setComboBox(MainFrame.this.controller.getEmployees());
     }
 
 

@@ -1,11 +1,12 @@
 package gui.dialog.employee.management;
 
-import gui.tools.Button;
-import gui.dialog.employee.management.listener.ManageEmployeeListener;
-import gui.tools.PlaceholderTextField;
 import gui.config.Utils;
 import gui.dialog.employee.management.event.AddEmployeeEvent;
+import gui.dialog.employee.management.listener.ManageEmployeeListener;
+import gui.tools.Button;
+import gui.tools.CustomList;
 import gui.tools.Label;
+import gui.tools.PlaceholderTextField;
 import model.Employee;
 
 import javax.swing.*;
@@ -23,8 +24,8 @@ public class ManageEmployeesDialog extends JDialog {
     private final Label titleLabel;
 
     private final JPanel titlePanel;
+    private final JPanel contentsPanel;
     private final JPanel employeeDisplayPanel;
-    private final EmployeesTextPanel employeeTextPane;
     private final JPanel employeeFieldsPanel;
     private final JPanel buttonsPanel;
 
@@ -37,10 +38,6 @@ public class ManageEmployeesDialog extends JDialog {
     private final PlaceholderTextField addressField;
     private final JCheckBox isAdminBox;
 
-    //remove employee combo box
-    private final JComboBox<String> removeEmployeeBox;
-    private final DefaultComboBoxModel<String> employeeModel;
-
     // manage employee buttons
     private final Button addEmployeeButton;
     private final Button removeEmployeeButton;
@@ -49,7 +46,7 @@ public class ManageEmployeesDialog extends JDialog {
     // lower buttons
     private final Button saveButton;
     private final Button cancelButton;
-
+    private final CustomList<String> employeeList;
     private ManageEmployeeListener employeeListener;
 
     public ManageEmployeesDialog(Frame frame) {
@@ -60,7 +57,7 @@ public class ManageEmployeesDialog extends JDialog {
 
         // components
         titlePanel = new JPanel();
-        employeeTextPane = new EmployeesTextPanel();
+        contentsPanel = new JPanel();
         employeeFieldsPanel = new JPanel();
         employeeDisplayPanel = new JPanel();
         buttonsPanel = new JPanel();
@@ -80,23 +77,17 @@ public class ManageEmployeesDialog extends JDialog {
         addEmployeeButton = new Button("ADD", Utils.getTextFont(), Utils.getTextColor(), Utils.getButtonBackgroundColor(), Utils.getButtonHoverColor(), Utils.getButtonBorder());
         removeEmployeeButton = new Button("REMOVE", Utils.getTextFont(), Utils.getTextColor(), Utils.getButtonBackgroundColor(), Utils.getButtonHoverColor(), Utils.getButtonBorder());
 
-        // remove student combo box
-        removeEmployeeBox = new JComboBox<String>();
-        // remove student combo box model
-        employeeModel = new DefaultComboBoxModel<String>();
-        removeEmployeeBox.setModel(employeeModel);
-
-        //list renderer for combo box
         listRenderer = new DefaultListCellRenderer();
         listRenderer.setHorizontalAlignment(DefaultListCellRenderer.CENTER);
-        removeEmployeeBox.setRenderer(listRenderer);
 
         saveButton = new Button("SAVE", Utils.getTextFont(), Utils.getTextColor(), Utils.getButtonBackgroundColor(), Utils.getButtonHoverColor(), BorderFactory.createEmptyBorder(5, 8, 5, 8));
         cancelButton = new Button("CANCEL", Utils.getTextFont(), Utils.getTextColor(), Utils.getButtonBackgroundColor(), Utils.getButtonHoverColor(), BorderFactory.createEmptyBorder(5, 8, 5, 8));
 
+        employeeList = new CustomList<String>(14, new Dimension(80, 150));
+
+        employeeList.setPreferredSize(new Dimension(80, 150));
 
         // handle events
-
         // add employee listener
         addEmployeeButton.addActionListener(new ActionListener() {
             @Override
@@ -126,16 +117,15 @@ public class ManageEmployeesDialog extends JDialog {
                     }
                 } else {
                     JOptionPane.showMessageDialog(frame, "Info fields can not be left empty", "Empty Fields", JOptionPane.ERROR_MESSAGE);
-
                 }
             }
         });
 
-        //remove employee button
+        // remove employee button
         removeEmployeeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String ID = (String) removeEmployeeBox.getSelectedItem();
+                String ID = employeeList.getSelectedValue();
 
                 if (employeeListener != null) {
                     employeeListener.removeEmployeeEvent(ID);
@@ -154,7 +144,14 @@ public class ManageEmployeesDialog extends JDialog {
                         ex1.printStackTrace();
                     }
                 }
+            }
+        });
 
+        // cancel button listener
+        cancelButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ManageEmployeesDialog.this.employeeListener.cancelEmployeesEvent();
             }
         });
 
@@ -166,14 +163,18 @@ public class ManageEmployeesDialog extends JDialog {
         titlePanel.add(titleLabel);
         titlePanel.setBorder(BorderFactory.createEmptyBorder(20, 30, 0, 0));
 
+        // contents panel
+        contentsPanel.setLayout(new GridLayout(1, 2));
+        contentsPanel.setBorder(BorderFactory.createEmptyBorder());
+        contentsPanel.add(employeeDisplayPanel);
+        contentsPanel.add(employeeFieldsPanel);
+
         employeeDisplayPanel.setLayout(new GridBagLayout());
         GridBagConstraints gc = (new GridBagConstraints());
         gc.gridx = 0;
         gc.gridy = 0;
-        employeeDisplayPanel.add(employeeTextPane, gc); // add display text pane to the pane
+        employeeDisplayPanel.add(employeeList, gc); // add display list to the panel
         gc.insets = new Insets(10, 0, 0, 0);
-        gc.gridy++;
-        employeeDisplayPanel.add(removeEmployeeBox, gc);
         gc.gridy++;
         employeeDisplayPanel.add(removeEmployeeButton, gc);
 
@@ -203,7 +204,6 @@ public class ManageEmployeesDialog extends JDialog {
         gc.insets = new Insets(10, 0, 0, 0);
         employeeFieldsPanel.add(addEmployeeButton, gc);
 
-
         Border buttonsBorder = BorderFactory.createEmptyBorder(10, 0, 0, 0);
         buttonsPanel.setLayout(new GridBagLayout());
         buttonsPanel.setBorder(buttonsBorder);
@@ -217,8 +217,7 @@ public class ManageEmployeesDialog extends JDialog {
 
         setLayout(new BorderLayout());
         add(titlePanel, BorderLayout.NORTH);
-        add(employeeDisplayPanel, BorderLayout.WEST);
-        add(employeeFieldsPanel, BorderLayout.CENTER);
+        add(contentsPanel, BorderLayout.CENTER);
         add(buttonsPanel, BorderLayout.SOUTH);
     }
 
@@ -264,7 +263,6 @@ public class ManageEmployeesDialog extends JDialog {
                 }
             }
         });
-
     }
 
     // for each placeholder textField, check whether it still contains the placeholder, or nothing
@@ -286,14 +284,10 @@ public class ManageEmployeesDialog extends JDialog {
 
     // refreshes employees list on text panel
     public void displayEmployees(LinkedList<Employee> employees) {
-        employeeTextPane.displayEmployees(employees);
-    }
-
-    public void setComboBox(LinkedList<Employee> employees) {
-        employeeModel.removeAllElements();
+        DefaultListModel<String> listModel = new DefaultListModel<>();
         for (Employee employee : employees) {
-            employeeModel.addElement(employee.getID());
+            listModel.addElement(employee.getID());
         }
+        employeeList.setModel(listModel);
     }
-
 }

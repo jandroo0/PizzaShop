@@ -1,9 +1,10 @@
 package gui.home.employee.panel;
 
-import gui.tools.Button;
 import gui.config.Utils;
 import gui.home.employee.event.EmployeeHomeEvent;
 import gui.home.employee.listener.EmployeeHomeListener;
+import gui.home.employee.panel.editMenu.EditMenuPanel;
+import gui.tools.Button;
 import model.Employee;
 
 import javax.swing.*;

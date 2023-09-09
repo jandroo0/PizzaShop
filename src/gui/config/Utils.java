@@ -15,6 +15,7 @@ public class Utils {
     private static final Color backgroundColor = new Color(189, 174, 134);
     private static final Color buttonHoverColor = new Color(232, 191, 139);
     private static final Color buttonBackgroundColor = new Color(251, 251, 212);
+    private static final Color navButtonSelectedColor = new Color(232, 191, 139);
     private static final Color borderColor = new Color(107, 116, 120);
     private static final Color textFieldColor = new Color(204, 222, 211);
 
@@ -59,6 +60,10 @@ public class Utils {
         return buttonBackgroundColor;
     }
 
+    public static Color getNavButtonSelectedColor() {
+        return navButtonSelectedColor;
+    }
+
     public static Color getDefaultBorderColor() {
         return borderColor;
     }
@@ -66,6 +71,7 @@ public class Utils {
     public static Color getTextFieldColor() {
         return textFieldColor;
     }
+
     public static Border getButtonBorder() {
         return buttonBorder;
     }

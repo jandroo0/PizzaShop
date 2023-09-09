@@ -1,45 +1,42 @@
-package gui.home.employee.panel;
+package gui.home.employee.panel.editMenu;
 
 
 import gui.config.Utils;
 import gui.tools.Button;
+import gui.tools.CustomList;
 import gui.tools.PlaceholderTextField;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.LinkedList;
 
 public class EditMenuComponentPanel extends JPanel {
 
     private final JLabel label;
-    private final JList<String> itemList;
+    private final CustomList<String> itemList;
     private final DefaultListModel<String> listModel;
     private final PlaceholderTextField textField;
     private final Button addButton;
     private final Button removeButton;
 
-    public EditMenuComponentPanel(String labelText, String placeholderText) {
+    public EditMenuComponentPanel(String label, String placeholderText) {
         setLayout(new BorderLayout());
         setBackground(Utils.getBackgroundColor());
 
         setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(5, 10, 5, 5),
                 BorderFactory.createLineBorder(Utils.getTextColor(), 2, true)));
 
-        label = new JLabel(labelText);
-        label.setForeground(Utils.getTextColor());
-        label.setFont(Utils.getTextFont(18));
-        label.setHorizontalAlignment(JLabel.CENTER);
-        label.setBorder(BorderFactory.createEmptyBorder(20, 0, 0, 0));
+        this.label = new JLabel(label);
+        this.label.setForeground(Utils.getTextColor());
+        this.label.setFont(Utils.getTextFont(20));
+        this.label.setHorizontalAlignment(JLabel.CENTER);
+        this.label.setBorder(BorderFactory.createEmptyBorder(20, 0, 0, 0));
 
         listModel = new DefaultListModel<>();
-        itemList = new JList<>(listModel);
-        itemList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-        itemList.setBackground(Utils.getButtonBackgroundColor());
-        itemList.setForeground(Utils.getTextColor());
-        itemList.setFont(Utils.getTextFont(16));
+        itemList = new CustomList<String>(18, new Dimension(100, 100));
         itemList.setBorder(BorderFactory.createLineBorder(Utils.getButtonBackgroundColor(), 2, true));
-        itemList.setPreferredSize(new Dimension(100, 100));
 
         JPanel contentPanel = new JPanel(new GridBagLayout());
         contentPanel.setBackground(Utils.getBackgroundColor());
@@ -49,7 +46,7 @@ public class EditMenuComponentPanel extends JPanel {
         gc.gridy = 0;
         gc.insets = new Insets(0, 0, 10, 0);
 
-        textField = new PlaceholderTextField(placeholderText, 100, 28, 20);
+        textField = new PlaceholderTextField(placeholderText, 100, 28, 18);
         contentPanel.add(itemList, gc);
 
         gc.gridy++;
@@ -69,7 +66,7 @@ public class EditMenuComponentPanel extends JPanel {
                 BorderFactory.createEmptyBorder(5, 8, 5, 8));
         buttonsPanel.add(addButton);
 
-        add(label, BorderLayout.NORTH);
+        add(this.label, BorderLayout.NORTH);
         add(contentPanel, BorderLayout.CENTER);
         add(buttonsPanel, BorderLayout.SOUTH);
 
@@ -98,7 +95,12 @@ public class EditMenuComponentPanel extends JPanel {
         applyStyling(); // Apply styling immediately
     }
 
-    // ... Rest of the class remains the same
+    public void setItems(LinkedList<String> items) {
+        for (String item : items) {
+//            itemList;
+        }
+    }
+
 
     // Apply styling
     private void applyStyling() {
@@ -108,13 +110,17 @@ public class EditMenuComponentPanel extends JPanel {
         textField.setBackground(Utils.getTextFieldColor());
         textField.setForeground(Utils.getTextColor());
         textField.setFont(Utils.getTextFont(16));
-        
+
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         applyStyling();
+    }
+
+    public String getID() {
+        return label.getText();
     }
 }
 

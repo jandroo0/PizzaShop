@@ -8,6 +8,8 @@ import java.awt.event.MouseEvent;
 
 public class Button extends JButton {
 
+    private MouseAdapter customMouseListener;
+
 
     public Button(String text, Font font, Color textColor, Color backgroundColor, Color hoverColor, Border borderType) {
         super(text);
@@ -17,7 +19,7 @@ public class Button extends JButton {
         setForeground(textColor);
         setBorder(borderType);
 
-        addMouseListener(new MouseAdapter() {
+        customMouseListener = new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
                 setBackground(hoverColor);
@@ -30,7 +32,18 @@ public class Button extends JButton {
                 setBackground(backgroundColor);
                 setForeground(textColor);
             }
-        });
+        };
+
+        addMouseListener(customMouseListener);
+
+    }
+
+    public void setCustomMouseListener(MouseAdapter mouseListener) {
+        if (this.customMouseListener != null) {
+            removeMouseListener(this.customMouseListener);
+        }
+        this.customMouseListener = mouseListener;
+        addMouseListener(mouseListener);
     }
 
     @Override

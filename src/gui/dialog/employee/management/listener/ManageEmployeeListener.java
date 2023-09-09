@@ -11,4 +11,6 @@ public interface ManageEmployeeListener extends EventListener {
     void removeEmployeeEvent(String ID);
 
     void saveEmployeesEvent() throws IOException;
+
+    void cancelEmployeesEvent();
 }
