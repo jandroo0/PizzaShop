@@ -74,20 +74,6 @@ public class Customer {
     public void setDetails(String details) {
         this.details = details;
     }
-
-    public String generateID(Payment payment) {
-
-        // if not the FIRST payment method for the matched customer
-        if (payments.isEmpty()) {
-            payment.setPaymentCounter(1); // set payment counter to 1
-        }
-
-        int numOfPayments = payments.indexOf(payment); // get index of current payment
-        numOfPayments++;
-        payment.setPaymentCounter(numOfPayments); //set new payment counter +1
-
-        return payment.getPaymentID(); // return new paymentID i.e xxxxxxxxx_1, xxxxxxxx_2
-
-    }
+    
 
 }

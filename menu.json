@@ -1,0 +1,36 @@
+{
+  "Pizza": [
+    {
+      "Crust": "Garlic",
+      "Category": "Pizza",
+      "Chz": "LT",
+      "Price": 10.99,
+      "Item_Name": "Onion Pizza",
+      "Size": "Medium",
+      "Sauce": "Normal",
+      "Toppings": "Topping,Topping"
+    },
+    {
+      "Crust": "Garlic",
+      "Category": "Pizza",
+      "Chz": "LT",
+      "Price": 10.99,
+      "Item_Name": "Pepperoni Pizza",
+      "Size": "Medium",
+      "Sauce": "Normal",
+      "Toppings": "Topping"
+    }
+  ],
+  "Drink": [
+    {
+      "Category": "Drink",
+      "Price": 5.65,
+      "Item_Name": "Fanta"
+    },
+    {
+      "Category": "Drink",
+      "Price": 5.65,
+      "Item_Name": "Coke"
+    }
+  ]
+}

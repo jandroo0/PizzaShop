@@ -1,1 +1,23 @@
-[{"First_Name":"Morgan","Details":"peanut allrgy","Address":"238 Corkly Rd","Last_Name":"Reed","Phone_Number":"4045491408"}]
+[
+  {
+    "First_Name": "Morgan",
+    "Details": "",
+    "Address": "123 Main St",
+    "Last_Name": "Reed",
+    "Phone_Number": "1234567890"
+  },
+  {
+    "First_Name": "Alex",
+    "Details": "",
+    "Address": "123 Main St",
+    "Last_Name": "Savon",
+    "Phone_Number": "1234567891"
+  },
+  {
+    "First_Name": "Arnold",
+    "Details": "",
+    "Address": "093 orly ct",
+    "Last_Name": "Morns",
+    "Phone_Number": "6784591407"
+  }
+]

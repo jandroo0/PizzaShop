@@ -108,14 +108,7 @@ public class EditMenuComponentPanel extends JPanel {
         textField.setBackground(Utils.getTextFieldColor());
         textField.setForeground(Utils.getTextColor());
         textField.setFont(Utils.getTextFont(16));
-
-        addButton.setBackground(Utils.getButtonBackgroundColor());
-        addButton.setForeground(Utils.getTextColor());
-        addButton.setFont(Utils.getTextFont(16));
-
-        removeButton.setBackground(Utils.getButtonBackgroundColor());
-        removeButton.setForeground(Utils.getTextColor());
-        removeButton.setFont(Utils.getTextFont(16));
+        
     }
 
     @Override

@@ -19,9 +19,7 @@ import gui.login.panel.EmployeeLoginPanel;
 import gui.title.TitlePanel;
 import gui.tools.CustomMessageDialog;
 import model.Customer;
-import model.Drink;
 import model.Employee;
-import model.Size;
 import org.json.simple.parser.ParseException;
 
 import javax.swing.*;
@@ -278,9 +276,8 @@ public class MainFrame extends JFrame {
         MainFrame.this.controller.loadEmployees();
         MainFrame.this.controller.loadCustomers();
         MainFrame.this.controller.loadPayments();
-
-
-        MainFrame.this.controller.addMenuItem(new Drink("Fanta", 6.99f, Size.Medium));
+        MainFrame.this.controller.loadMenu();
+        MainFrame.this.controller.loadInventory();
 
         manageEmployeesDialog.displayEmployees(MainFrame.this.controller.getEmployees());
         manageEmployeesDialog.setComboBox(MainFrame.this.controller.getEmployees());

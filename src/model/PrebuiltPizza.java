@@ -4,16 +4,17 @@ import java.util.LinkedList;
 
 /*Pizza class which will hold the different options for each pizza*/
 
-public class Pizza {
+public class PrebuiltPizza extends MenuItem {
 
     private Size size;
     private String cheeseAmt;
     private String sauceAmt;
     private String crustType;
 
-    private LinkedList<String> toppings;
+    private LinkedList<Ingredient> toppings;
 
-    public Pizza(Size size, String cheeseAmt, String sauceAmt, String crustType, LinkedList<String> toppings) {
+    public PrebuiltPizza(String category, String name, float price, Size size, String cheeseAmt, String sauceAmt, String crustType, LinkedList<Ingredient> toppings) {
+        super(category, name, price);
         this.size = size;
         this.cheeseAmt = cheeseAmt;
         this.sauceAmt = sauceAmt;
@@ -53,11 +54,11 @@ public class Pizza {
         this.crustType = crustType;
     }
 
-    public LinkedList<String> getToppings() {
+    public LinkedList<Ingredient> getToppings() {
         return toppings;
     }
 
-    public void setToppings(LinkedList<String> toppings) {
+    public void setToppings(LinkedList<Ingredient> toppings) {
         this.toppings = toppings;
     }
 

@@ -34,4 +34,133 @@ MANAGE RETURNS AND REFUNDS, AS WELL AS MANAGE EMPLOYEES
 
 
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.List;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
+public class Database {
+    // ... (existing code)
+
+    // Add a method to load data from JSON to SQL for employees
+    public void loadEmployeesToSQL(Connection connection) throws SQLException {
+        String insertQuery = "INSERT INTO employees (Is_Admin, ID, First_Name, Last_Name, Age, Role, Phone_Number, Address) " +
+                             "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
+            for (Employee employee : employees) {
+                preparedStatement.setBoolean(1, employee.isAdmin());
+                preparedStatement.setString(2, employee.getID());
+                preparedStatement.setString(3, employee.getFirstName());
+                preparedStatement.setString(4, employee.getLastName());
+                preparedStatement.setString(5, employee.getAge());
+                preparedStatement.setString(6, employee.getRole());
+                preparedStatement.setString(7, employee.getPhoneNumber());
+                preparedStatement.setString(8, employee.getAddress());
+
+                preparedStatement.addBatch();
+            }
+
+            preparedStatement.executeBatch();
+            System.out.println("Employees loaded into SQL database.");
+        }
+    }
+
+    // Add a method to load data from JSON to SQL for customers
+    public void loadCustomersToSQL(Connection connection) throws SQLException {
+        String insertQuery = "INSERT INTO customers (Phone_Number, First_Name, Last_Name, Address, Details) " +
+                             "VALUES (?, ?, ?, ?, ?)";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
+            for (Customer customer : customers) {
+                preparedStatement.setString(1, customer.getPhoneNumber());
+                preparedStatement.setString(2, customer.getFirstName());
+                preparedStatement.setString(3, customer.getLastName());
+                preparedStatement.setString(4, customer.getAddress());
+                preparedStatement.setString(5, customer.getDetails());
+
+                preparedStatement.addBatch();
+            }
+
+            preparedStatement.executeBatch();
+            System.out.println("Customers loaded into SQL database.");
+        }
+    }
+
+    // Add a method to load data from SQL to JSON for employees
+    public void loadEmployeesFromSQL(Connection connection) throws SQLException {
+        // Assuming you have a SELECT query to retrieve employees data
+        String selectQuery = "SELECT * FROM employees";
+
+        // Execute the query and process the results
+        try (PreparedStatement preparedStatement = connection.prepareStatement(selectQuery);
+             ResultSet resultSet = preparedStatement.executeQuery()) {
+            while (resultSet.next()) {
+                boolean isAdmin = resultSet.getBoolean("Is_Admin");
+                String ID = resultSet.getString("ID");
+                String firstName = resultSet.getString("First_Name");
+                String lastName = resultSet.getString("Last_Name");
+                String age = resultSet.getString("Age");
+                String role = resultSet.getString("Role");
+                String phoneNumber = resultSet.getString("Phone_Number");
+                String address = resultSet.getString("Address");
+
+                // Create Employee objects and add them to the list
+                Employee employee = new Employee(isAdmin, ID, firstName, lastName, age, role, phoneNumber, address);
+                employees.add(employee);
+            }
+
+            System.out.println("Employees loaded from SQL database.");
+        }
+    }
+
+    // Add a method to load data from SQL to JSON for customers
+    public void loadCustomersFromSQL(Connection connection) throws SQLException {
+        // Assuming you have a SELECT query to retrieve customers data
+        String selectQuery = "SELECT * FROM customers";
+
+        // Execute the query and process the results
+        try (PreparedStatement preparedStatement = connection.prepareStatement(selectQuery);
+             ResultSet resultSet = preparedStatement.executeQuery()) {
+            while (resultSet.next()) {
+                String phoneNumber = resultSet.getString("Phone_Number");
+                String firstName = resultSet.getString("First_Name");
+                String lastName = resultSet.getString("Last_Name");
+                String address = resultSet.getString("Address");
+                String details = resultSet.getString("Details");
+
+                // Create Customer objects and add them to the list
+                Customer customer = new Customer(phoneNumber, firstName, lastName, address, details);
+                customers.add(customer);
+            }
+
+            System.out.println("Customers loaded from SQL database.");
+        }
+    }
+
+    // ... (other methods)
+
+    // Example usage:
+    public static void main(String[] args) {
+        Database database = new Database();
+
+        // Establish a connection to your SQL database
+        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/yourdatabase", "username", "password")) {
+            // Load employees and customers from JSON to SQL
+            database.loadEmployeesToSQL(connection);
+            database.loadCustomersToSQL(connection);
+
+            // Load employees and customers from SQL to JSON
+            database.loadEmployeesFromSQL(connection);
+            database.loadCustomersFromSQL(connection);
+
+            // Now you have your data loaded from both JSON and SQL
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+}
 

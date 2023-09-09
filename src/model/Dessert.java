@@ -4,8 +4,8 @@ public class Dessert extends MenuItem {
 
     private Size size;
 
-    public Dessert(String itemName, float price, Size size) {
-        super(itemName, price);
+    public Dessert(String category, String itemName, float price, Size size) {
+        super(category, itemName, price);
         this.size = size;
     }
 

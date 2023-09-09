@@ -18,13 +18,16 @@ public class Database {
     private final LinkedList<Employee> employees; // create list of employees
     private final LinkedList<Customer> customers; // create list of customer
 
-    private final LinkedList<MenuItem> menu;
+    private final LinkedList<MenuItem> menu; // create list of menu items
+
+    private final LinkedList<Ingredient> ingredients; // create list of ingredients
 
     // file paths
     private final String employeesFilePath = "employees.json";
     private final String customersFilePath = "customers.json";
     private final String paymentsFilePath = "payments.json";
     private final String menuFilePath = "menu.json";
+    private final String inventoryFilePath = "inventory.json";
     private FileWriter fileWriter;
 
     public Database() {
@@ -32,23 +35,220 @@ public class Database {
         employees = new LinkedList<Employee>();
         customers = new LinkedList<Customer>();
         menu = new LinkedList<MenuItem>();
+        ingredients = new LinkedList<Ingredient>();
+
+
+        /// TESTS ________________________________________
+
+//        menu.add(new MenuItem("Drink", "Fanta", 5.65f));
+//        menu.add(new MenuItem("Drink", "Coke", 5.65f));
+//
+//        LinkedList<Ingredient> testToppings = new LinkedList<Ingredient>();
+//        testToppings.add(new Ingredient("Garlic", "Topping", 0));
+//        testToppings.add(new Ingredient("Onion", "Topping", 0));
+//
+//        LinkedList<Ingredient> testToppings2 = new LinkedList<Ingredient>();
+//        testToppings2.add(new Ingredient("Pepperoni", "Topping", 0));
+//
+//
+//        menu.add(new PrebuiltPizza("Pizza", "Onion Pizza", 10.99f, Size.Medium, "LT", "Normal", "Garlic", testToppings));
+//        menu.add(new PrebuiltPizza("Pizza", "Pepperoni Pizza", 10.99f, Size.Medium, "LT", "Normal", "Garlic", testToppings2));
+
+
+//        ingredients.add(new Ingredient("Veggies", "Green Pepper", 0));
+//        ingredients.add(new Ingredient("Meats", "Pepperoni", 0));
+//        ingredients.add(new Ingredient("Meats", "Sausage", 0));
+
+
+//        customers.add(new Customer("1234567890", "John", "Gornell", "123 Main Street", "1234567890"));
+//        customers.add(new Customer("0987654321", "Jane", "Gornell", "123 Main Street", "1234567890"));
+
+//        customers.get(0).getPayments().add(new CardPayment("1234567890", "1234567890", "123sad456", "11/23", "123"));
+//        customers.get(0).getPayments().add(new CardPayment("1234567890", "1234567890", "123sad456", "11/23", "123"));
+
 
     }
 
-    // return all menu items
-    public LinkedList<MenuItem> getMenu() {
-        return menu;
+
+    // MENU
+
+    // Save menu to file
+    public void saveMenu() throws IOException {
+        fileWriter = new FileWriter(menuFilePath);
+
+        JSONObject categoriesJSON = new JSONObject();
+
+        // Group menu items by category
+        for (MenuItem menuItem : menu) {
+            JSONObject menuItemJSON = new JSONObject();
+
+            menuItemJSON.put("Category", menuItem.getCategory());
+            menuItemJSON.put("Item_Name", menuItem.getItemName());
+            menuItemJSON.put("Price", menuItem.getPrice());
+
+            // Check if the item is a Pizza
+            if (menuItem.getCategory().equals("Pizza")) {
+                PrebuiltPizza prebuiltPizza = (PrebuiltPizza) menuItem;
+
+                menuItemJSON.put("Size", prebuiltPizza.getSize().toString());
+                menuItemJSON.put("Chz", prebuiltPizza.getCheeseAmt());
+                menuItemJSON.put("Sauce", prebuiltPizza.getSauceAmt());
+                menuItemJSON.put("Crust", prebuiltPizza.getCrustType());
+
+                StringBuilder toppingsString = new StringBuilder();
+                for (Ingredient topping : prebuiltPizza.getToppings()) {
+                    toppingsString.append(topping.getName() + ",");
+                }
+                toppingsString.deleteCharAt(toppingsString.length() - 1); // delete last comma
+                menuItemJSON.put("Toppings", toppingsString.toString());
+            }
+
+            String category = menuItem.getCategory();
+
+            JSONArray categoryArray = (categoriesJSON.containsKey(category))
+                    ? (JSONArray) categoriesJSON.get(category)
+                    : new JSONArray();
+            categoryArray.add(menuItemJSON);
+            categoriesJSON.put(category, categoryArray);
+        }
+
+        // Write categories JSON to file
+        fileWriter.write(categoriesJSON.toJSONString());
+        System.out.println("MENU JSON CREATED AND SAVED");
+        fileWriter.close();
     }
 
-    // add menu item
+    // load menu
+    public void loadMenu() throws ParseException, IOException {
+        menu.clear(); // Clear the current menu list
+
+        JSONParser parser = new JSONParser(); // Create JSON parser
+        JSONObject categoriesJSON = (JSONObject) parser.parse(new FileReader(menuFilePath)); // Create JSON object from file
+
+        try {
+            System.out.println("LOADING MENU --------------");
+
+            for (Object categoryKey : categoriesJSON.keySet()) { // For each category
+                String category = (String) categoryKey;
+                JSONArray categoryArray = (JSONArray) categoriesJSON.get(category);
+
+                for (Object menuItemJSON : categoryArray) { // For each menu item JSON in category
+                    JSONObject menuItemObj = (JSONObject) menuItemJSON; // Create menu item object from JSON
+
+                    String itemName = (String) menuItemObj.get("Item_Name");
+                    float price = Float.parseFloat(menuItemObj.get("Price").toString());
+
+                    // Check if the item is a Pizza
+                    if (category.equals("Pizza")) {
+                        // Handle PrebuiltPizza properties
+                        // ...
+                    }
+
+                    MenuItem menuItem = new MenuItem(category, itemName, price);
+                    menu.add(menuItem);
+
+                    System.out.println("MENU ITEM : " + category + " : " + itemName + " : $" + price);
+                }
+            }
+
+            System.out.println("MENU LOADED --------------");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // INGREDIENTS
+
+    // save ingredients
+// Save ingredients to file
+    public void saveIngredients() throws IOException {
+        fileWriter = new FileWriter(inventoryFilePath);
+
+        JSONObject categoriesJSON = new JSONObject();
+
+        // Group ingredients by category
+        for (Ingredient ingredient : ingredients) {
+            JSONObject ingredientJSON = new JSONObject();
+            ingredientJSON.put("Category", ingredient.getCategory());
+            ingredientJSON.put("Item_Name", ingredient.getName());
+            ingredientJSON.put("Price", ingredient.getPrice());
+
+            String category = ingredient.getCategory();
+            JSONArray categoryArray = (categoriesJSON.containsKey(category))
+                    ? (JSONArray) categoriesJSON.get(category)
+                    : new JSONArray();
+            categoryArray.add(ingredientJSON);
+            categoriesJSON.put(category, categoryArray);
+        }
+
+        // Write categories JSON to file
+        fileWriter.write(categoriesJSON.toJSONString());
+        System.out.println("INVENTORY JSON CREATED AND SAVED");
+        fileWriter.close();
+    }
+
+    // Load ingredients from file
+    public void loadIngredients() throws ParseException, IOException {
+        ingredients.clear(); // Clear the current inventory list
+
+        JSONParser parser = new JSONParser(); // Create JSON parser
+        JSONObject categoriesJSON = (JSONObject) parser.parse(new FileReader(inventoryFilePath)); // Create JSON object from file
+
+        try {
+            System.out.println("LOADING INVENTORY --------------");
+            for (Object categoryKey : categoriesJSON.keySet()) {
+                String category = (String) categoryKey;
+                JSONArray ingredientsJSON = (JSONArray) categoriesJSON.get(category);
+
+                for (Object ingredientItemJSON : ingredientsJSON) {
+                    JSONObject ingredientObj = (JSONObject) ingredientItemJSON;
+                    String itemName = (String) ingredientObj.get("Item_Name");
+                    float price = Float.parseFloat(ingredientObj.get("Price").toString());
+
+                    Ingredient ingredient = new Ingredient(category, itemName, price);
+                    ingredients.add(ingredient);
+
+                    System.out.println("INVENTORY ITEM : " + category + " : " + itemName + " : $" + price);
+                }
+            }
+            System.out.println("INVENTORY LOADED --------------");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    // Add menu item (Pizza, Drink, Dessert, etc.)
     public void addMenuItem(MenuItem menuItem) {
         this.menu.add(menuItem);
-        System.out.println("ADDED ITEM" + menuItem);
+        System.out.println("ADDED ITEM: " + menuItem);
     }
 
-    // return employee list
-    public LinkedList<Employee> getEmployees() { // return employees
-        return employees;
+    // Remove menu item (Pizza, Drink, Dessert, etc.)
+    public void removeMenuItem(MenuItem menuItem) {
+        this.menu.remove(menuItem);
+        System.out.println("REMOVED ITEM: " + menuItem);
+    }
+
+    // EMPLOYEES
+
+    // check if there given ID is already in use for employees
+    public boolean existingEmployee(String ID) {
+        for (Employee employee : employees) {
+            if (employee.getID().equals(ID)) return true;
+        }
+        return false;
+    }
+
+    //  checks if employee login id matches any id in employee list and returns employee or null
+    public Employee employeeLogin(LoginEvent event) throws ParseException, IOException {
+        loadEmployees(); // refresh list
+        for (Employee employee : employees) {
+            if (event.getID().equals(employee.getID())) {
+                return employee;
+            }
+        }
+        return null;
     }
 
     // add employee
@@ -65,135 +265,6 @@ public class Database {
         }
         System.out.println(e.toString());
         employees.remove(e);
-    }
-
-    // add customer
-    public void addCustomer(Customer customer) throws IOException {
-        this.customers.add(customer);
-        saveCustomers(); // save all customers
-    }
-
-
-    // save payments to file
-    public void savePayments() throws IOException {
-
-        fileWriter = new FileWriter(paymentsFilePath);
-        StringBuilder sb = new StringBuilder();
-        sb.append("[");
-
-        // for each employee create json object and write to file
-        for (Customer customer : customers) { // for every customer
-            for (int i = 0; i < customer.getPayments().size(); i++) { // for every payment in customers payments list
-
-                Payment payment = customer.getPayments().get(i); // set payment to current iteration of customers payment
-
-                JSONObject paymentJSONObject = new JSONObject();
-                paymentJSONObject.put("ID", customer.generateID(payment)); // generate id of payment, id is xxxxxxxx_1, xxxxxxx_2, etc
-
-
-                // add values to json
-                CardPayment cardPayment = (CardPayment) payment;
-                paymentJSONObject.put("Card_Name", cardPayment.getCardName());
-                paymentJSONObject.put("Card_Number", cardPayment.getCardNumber());
-                paymentJSONObject.put("Exp_Date", cardPayment.getExpDate());
-                paymentJSONObject.put("CVC", cardPayment.getCVC());
-
-                sb.append(paymentJSONObject.toJSONString() + ",");
-
-            }
-        }
-
-        sb.deleteCharAt(sb.length() - 1); // delete last comma
-        sb.append("]"); // add bracket
-        try {
-            fileWriter.write(sb.toString());
-            System.out.println("PAYMENT JSON CREATED AND SAVED");
-            fileWriter.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    //  load payment
-    public void loadPayments() throws ParseException, IOException {
-
-        // clear all listed payments
-        for (Customer customer : customers) {
-            customer.getPayments().clear();
-        }
-
-        LinkedList<Payment> userPayments = new LinkedList<Payment>(); // temp list
-
-        // LOAD EMPLOYEES---------------------------------------------
-        JSONParser parser = new JSONParser(); //create JSON parser
-        JSONArray paymentsJSON = (JSONArray) parser.parse(new FileReader(paymentsFilePath)); // create array from all payments in file
-
-        try {
-            System.out.println("LOADING PAYMENTS --------------");
-
-            for (Object userPayment : paymentsJSON) { // for each employee JSON in employees file
-
-                JSONObject payment = (JSONObject) userPayment; // create employee object from json
-
-                String ID = (String) payment.get("ID");
-                // gather values
-                String cardName = (String) payment.get("Card_Name");
-                String cardNumber = (String) payment.get("Card_Number");
-                String expDate = (String) payment.get("Exp_Date");
-                String CVC = (String) payment.get("CVC");
-
-                String originalID = ID.substring(0, ID.length() - 2);
-                Payment newPayment = new CardPayment(originalID, cardName, cardNumber, expDate, CVC);
-                for (Customer customer : customers) {
-                    if (customer.getID().equals(originalID)) {
-                        customer.getPayments().add(newPayment);
-                    }
-                }
-                System.out.println("PAYMENT METHOD LOADED : " + ID + " : " + newPayment.toString());
-            }
-
-            System.out.println("PAYMENTS LOADED --------------");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    //  checks if employee login id matches any id in employee list and returns employee or null
-    public Employee employeeLogin(LoginEvent event) throws ParseException, IOException {
-        loadEmployees(); // refresh list
-        for (Employee employee : employees) {
-            if (event.getID().equals(employee.getID())) {
-                return employee;
-            }
-        }
-        return null;
-    }
-
-    //  checks if customer login id matches any id in customer list and returns customer or null
-    public Customer customerLogin(LoginEvent event) throws ParseException, IOException {
-        loadCustomers(); // refresh list
-        for (Customer customer : customers) {
-            if (event.getID().equals(customer.getID())) {
-                return customer;
-            }
-        }
-        return null;
-    }
-
-    // check if given phoneNumber is already in use
-    public boolean existingCustomer(String phoneNumber) {
-        for (Customer customer : customers) {
-            if (customer.getID().equals(phoneNumber)) return true;
-        }
-        return false;
-    }
-
-    // check if there given ID is already in use for employees
-    public boolean existingEmployee(String ID) {
-        for (Employee employee : employees) {
-            if (employee.getID().equals(ID)) return true;
-        }
-        return false;
     }
 
     // save employees
@@ -270,6 +341,33 @@ public class Database {
         }
     }
 
+    // CUSTOMERS
+
+    // add customer
+    public void addCustomer(Customer customer) throws IOException {
+        this.customers.add(customer);
+        saveCustomers(); // save all customers
+    }
+
+    // check if given phoneNumber is already in use
+    public boolean existingCustomer(String phoneNumber) {
+        for (Customer customer : customers) {
+            if (customer.getID().equals(phoneNumber)) return true;
+        }
+        return false;
+    }
+
+    //  checks if customer login id matches any id in customer list and returns customer or null
+    public Customer customerLogin(LoginEvent event) throws ParseException, IOException {
+        loadCustomers(); // refresh list
+        for (Customer customer : customers) {
+            if (event.getID().equals(customer.getID())) {
+                return customer;
+            }
+        }
+        return null;
+    }
+
     //save customers
     public void saveCustomers() throws IOException {
 
@@ -339,5 +437,99 @@ public class Database {
             e.printStackTrace();
         }
 
+    }
+
+
+    // PAYMENTS
+
+    // save payments to file
+    public void savePayments() throws IOException {
+        fileWriter = new FileWriter(paymentsFilePath);
+
+        JSONObject categoriesJSON = new JSONObject();
+
+        // Group payments by category (payment ID)
+        for (Customer customer : customers) {
+            for (int i = 0; i < customer.getPayments().size(); i++) {
+                Payment payment = customer.getPayments().get(i);
+
+                JSONObject paymentJSONObject = new JSONObject();
+                paymentJSONObject.put("ID", payment.getID());
+                paymentJSONObject.put("Card_Name", ((CardPayment) payment).getCardName());
+                paymentJSONObject.put("Card_Number", ((CardPayment) payment).getCardNumber());
+                paymentJSONObject.put("Exp_Date", ((CardPayment) payment).getExpDate());
+                paymentJSONObject.put("CVC", ((CardPayment) payment).getCVC());
+
+                String category = customer.getID(); // Use customer ID as the category (payment ID)
+
+                JSONArray categoryArray = (categoriesJSON.containsKey(category))
+                        ? (JSONArray) categoriesJSON.get(category)
+                        : new JSONArray();
+                categoryArray.add(paymentJSONObject);
+                categoriesJSON.put(category, categoryArray);
+            }
+        }
+
+        // Write categories JSON to file
+        fileWriter.write(categoriesJSON.toJSONString());
+        System.out.println("PAYMENT JSON CREATED AND SAVED");
+        fileWriter.close();
+    }
+
+    //  load payment
+    public void loadPayments() throws ParseException, IOException {
+        // Clear all listed payments
+        for (Customer customer : customers) {
+            customer.getPayments().clear();
+        }
+
+        // LOAD PAYMENTS---------------------------------------------
+        JSONParser parser = new JSONParser(); // Create JSON parser
+        JSONObject categoriesJSON = (JSONObject) parser.parse(new FileReader(paymentsFilePath)); // Create JSON object from file
+
+        try {
+            System.out.println("LOADING PAYMENTS --------------");
+
+            for (Object categoryKey : categoriesJSON.keySet()) { // For each category (customer ID)
+                String category = (String) categoryKey;
+                JSONArray paymentsArray = (JSONArray) categoriesJSON.get(category); // Get payments array
+
+                for (Object paymentJSON : paymentsArray) { // For each payment JSON in category
+                    JSONObject paymentObj = (JSONObject) paymentJSON; // Create payment object from JSON
+
+                    String ID = (String) paymentObj.get("ID"); // In this case, the category is the ID
+                    String cardName = (String) paymentObj.get("Card_Name");
+                    String cardNumber = (String) paymentObj.get("Card_Number");
+                    String expDate = (String) paymentObj.get("Exp_Date");
+                    String CVC = (String) paymentObj.get("CVC");
+
+                    Payment newPayment = new CardPayment(ID, cardName, cardNumber, expDate, CVC);
+                    for (Customer customer : customers) {
+                        if (customer.getID().equals(ID)) {
+                            customer.getPayments().add(newPayment);
+                        }
+                    }
+
+                    System.out.println("PAYMENT METHOD LOADED : " + ID + " : " + newPayment);
+                }
+            }
+
+            System.out.println("PAYMENTS LOADED --------------");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    // getters
+
+    // return all menu items
+    public LinkedList<MenuItem> getMenu() {
+        return menu;
+    }
+
+    // return employee list
+    public LinkedList<Employee> getEmployees() { // return employees
+        return employees;
     }
 }

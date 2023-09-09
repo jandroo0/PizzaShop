@@ -17,6 +17,18 @@ public class Controller {
 
     }
 
+    public void saveInventory() throws IOException {
+        this.db.saveIngredients();
+    }
+
+    public void loadInventory() throws ParseException, IOException {
+        this.db.loadIngredients();
+    }
+
+    public void saveMenu() throws IOException {
+        this.db.saveMenu();
+    }
+
     public void addMenuItem(MenuItem e) {
         this.db.addMenuItem(e);
     }
@@ -60,6 +72,10 @@ public class Controller {
 
     public void loadPayments() throws IOException, ParseException {
         this.db.loadPayments();
+    }
+
+    public void loadMenu() throws IOException, ParseException {
+        this.db.loadMenu();
     }
 
 

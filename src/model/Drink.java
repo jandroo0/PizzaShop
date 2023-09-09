@@ -4,8 +4,8 @@ public class Drink extends MenuItem {
 
     private Size size;
 
-    public Drink(String itemName, float price, Size size) {
-        super(itemName, price);
+    public Drink(String category, String itemName, float price, Size size) {
+        super(category, itemName, price);
         this.size = size;
     }
 

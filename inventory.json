@@ -1,0 +1,18 @@
+{
+  "Meats": [
+    {
+      "Price": 1.5,
+      "Item_Name": "Pepperoni"
+    },
+    {
+      "Price": 2.5,
+      "Item_Name": "Sausage"
+    }
+  ],
+  "Veggies": [
+    {
+      "Price": 0.75,
+      "Item_Name": "Green Pepper"
+    }
+  ]
+}
