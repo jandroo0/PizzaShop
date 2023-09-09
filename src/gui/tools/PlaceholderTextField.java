@@ -97,7 +97,7 @@ public class PlaceholderTextField extends JTextField {
                 RenderingHints.VALUE_ANTIALIAS_ON);
         g.setColor(Utils.getTextColor());
         g.setFont(Utils.getTextFont(fontSize));
-        g.drawString(placeholder, getInsets().left, pG.getFontMetrics()
+        g.drawString(placeholder, getWidth() / 2 - g.getFontMetrics().stringWidth(placeholder) / 2, pG.getFontMetrics()
                 .getMaxAscent() + getInsets().top);
     }
 

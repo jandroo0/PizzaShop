@@ -31,6 +31,10 @@ public class Button extends JButton {
                 setForeground(textColor);
             }
         });
+    }
 
+    @Override
+    public String getText() {
+        return super.getText();
     }
 }

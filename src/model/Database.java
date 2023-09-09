@@ -24,6 +24,7 @@ public class Database {
     private final String employeesFilePath = "employees.json";
     private final String customersFilePath = "customers.json";
     private final String paymentsFilePath = "payments.json";
+    private final String menuFilePath = "menu.json";
     private FileWriter fileWriter;
 
     public Database() {
