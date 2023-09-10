@@ -17,13 +17,13 @@ public class Controller {
 
     }
 
-    public void saveInventory() throws IOException {
-        this.db.saveIngredients();
-    }
-
-    public void loadInventory() throws ParseException, IOException {
-        this.db.loadIngredients();
-    }
+//    public void saveInventory() throws IOException {
+//        this.db.saveIngredients();
+//    }
+//
+//    public void loadInventory() throws ParseException, IOException {
+//        this.db.loadIngredients();
+//    }
 
     public void saveMenu() throws IOException {
         this.db.saveMenu();
@@ -94,6 +94,14 @@ public class Controller {
     public boolean existingEmployee(String ID) {
         return this.db.existingEmployee(ID);
     }
+
+    public LinkedList<MenuItem> getMenu() {
+        return this.db.getMenu();
+    }
+
+//    public LinkedList<Ingredient> getInventory() {
+//        return this.db.getInventory();
+//    }
 
 
 }

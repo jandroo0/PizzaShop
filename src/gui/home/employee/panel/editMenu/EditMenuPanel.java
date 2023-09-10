@@ -1,13 +1,18 @@
 package gui.home.employee.panel.editMenu;
 
 import gui.config.Utils;
+import gui.home.employee.listener.EditMenuListener;
 import gui.home.employee.panel.NavbarPanel;
 import gui.home.employee.panel.editMenu.listener.NavbarListener;
 import gui.tools.Button;
-import model.Ingredient;
+import model.MenuItem;
+import org.json.simple.parser.ParseException;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.LinkedList;
 
 public class EditMenuPanel extends JPanel {
@@ -21,6 +26,7 @@ public class EditMenuPanel extends JPanel {
     // buttons
     private final Button saveMenuButton;
     private final Button revertMenuButton;
+    private LinkedList<EditMenuContainerPanel> containerPanels;
     private String currentMenuName;
     private LinkedList<String> menuNames;
 
@@ -32,6 +38,9 @@ public class EditMenuPanel extends JPanel {
     private NavbarPanel navButtonsPanel;
     // title label
     private JLabel titleLabel;
+
+    // editMenu listener
+    private EditMenuListener editMenuListener;
 
 
     // container panels list to contain the container panels (i.e pizzaPanel)
@@ -45,6 +54,7 @@ public class EditMenuPanel extends JPanel {
         // edit menu panels container panel
         currentMenuPanel = new JPanel(new CardLayout());
         menuNames = new LinkedList<String>();
+        containerPanels = new LinkedList<EditMenuContainerPanel>();
 
         // pizzaPanel
         pizzaPanelMenuComponents = new LinkedList<String>();
@@ -83,7 +93,34 @@ public class EditMenuPanel extends JPanel {
             }
         });
 
-        // navbar button actionListeners
+
+        saveMenuButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                resetFields();
+                try {
+                    editMenuListener.saveMenuEvent();
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+
+            }
+        });
+
+        revertMenuButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                try {
+                    resetFields();
+                    editMenuListener.editMenuCancelEvent();
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                } catch (ParseException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
 
 
         newContainerPanel("PIZZA", pizzaPanelMenuComponents);
@@ -98,9 +135,30 @@ public class EditMenuPanel extends JPanel {
         styling();
     }
 
-    public void refreshInventory(LinkedList<Ingredient> ingredients, LinkedList<MenuItem> menuItems) {
-        for (Ingredient ingredient : ingredients) {
-//            for()
+    public void resetFields() {
+        for (EditMenuContainerPanel panel : containerPanels) {
+            panel.resetFields();
+        }
+    }
+
+    public void clearItems() {
+        for (EditMenuContainerPanel panel : containerPanels) {
+            panel.clearItems();
+        }
+    }
+
+    public void setItems(LinkedList<MenuItem> items) {
+        for (EditMenuContainerPanel panel : containerPanels) {
+            panel.setListItems(items);
+        }
+
+    }
+
+
+    public void setEditMenuListener(EditMenuListener listener) {
+        this.editMenuListener = listener;
+        for (EditMenuContainerPanel panel : containerPanels) {
+            panel.setEditMenuListener(listener);
         }
     }
 
@@ -127,10 +185,10 @@ public class EditMenuPanel extends JPanel {
         buttonsPanel.setLayout(new GridBagLayout());
         gc.gridx = 0;
         gc.gridy = 0;
-        gc.insets = new Insets(0, 0, 0, 10);
+        gc.insets = new Insets(0, 0, 0, 5);
         buttonsPanel.add(revertMenuButton, gc);
         gc.gridx++;
-        gc.insets = new Insets(0, 10, 0, 0);
+        gc.insets = new Insets(0, 5, 0, 0);
         buttonsPanel.add(saveMenuButton, gc);
 
     }
@@ -159,19 +217,19 @@ public class EditMenuPanel extends JPanel {
     }
 
     public void setCurrentMenuPanel(String panelName) {
-        CardLayout cl = (CardLayout) currentMenuPanel.getLayout();
-        cl.show(currentMenuPanel, panelName);
-        currentMenuName = panelName;
-        navButtonsPanel.setButtonHoverEffect(panelName);
-        navButtonsPanel.setButtonColors(panelName);
+        CardLayout cl = (CardLayout) currentMenuPanel.getLayout(); // get current card/panel
+        cl.show(currentMenuPanel, panelName); // show new card/panel
+        currentMenuName = panelName; // set current card/panel name
+        navButtonsPanel.setButtonHoverEffect(panelName); // set button hover effect for nav buttons
+        navButtonsPanel.setButtonColors(panelName); // set button colors for nav buttons
     }
 
     public void newContainerPanel(String panelName, LinkedList<String> subPanels) {
-        EditMenuContainerPanel panel = new EditMenuContainerPanel(panelName, subPanels);
-        currentMenuPanel.add(panel, panel.getID());
-        menuNames.add(panelName);
-        navButtonsPanel.addButton(panel.getID());
-
+        EditMenuContainerPanel panel = new EditMenuContainerPanel(panelName, subPanels); // create new container panel with list of sub panels
+        containerPanels.add(panel); // add new panel to container panels list
+        currentMenuPanel.add(panel, panel.getID()); // add panel to current card/panel
+        menuNames.add(panelName); // add panel name to menu names list
+        navButtonsPanel.addButton(panel.getID()); // add button to nav buttons panel
     }
 
     public void removeContainerPanel(EditMenuComponentPanel panel) {

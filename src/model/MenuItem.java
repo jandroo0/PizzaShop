@@ -35,4 +35,8 @@ public class MenuItem {
     public void setCategory(String category) {
         this.category = category;
     }
+
+    public String toString() {
+        return itemName + " $" + price;
+    }
 }

@@ -6,6 +6,7 @@ import gui.dialog.employee.management.event.AddEmployeeEvent;
 import gui.dialog.employee.management.listener.ManageEmployeeListener;
 import gui.home.customer.CustomerHomePanel;
 import gui.home.employee.event.EmployeeHomeEvent;
+import gui.home.employee.listener.EditMenuListener;
 import gui.home.employee.listener.EmployeeHomeListener;
 import gui.home.employee.panel.EmployeeHomePanel;
 import gui.login.createAccount.NewCustomerPanel;
@@ -20,6 +21,7 @@ import gui.title.TitlePanel;
 import gui.tools.CustomMessageDialog;
 import model.Customer;
 import model.Employee;
+import model.MenuItem;
 import org.json.simple.parser.ParseException;
 
 import javax.swing.*;
@@ -102,9 +104,9 @@ public class MainFrame extends JFrame {
         containerPanel.add(newCustomerPanel, "NEW_CUSTOMER");
 
         CardLayout cl = (CardLayout) containerPanel.getLayout();
-        cl.show(containerPanel, "HOME"); // set the default to the login
-        CardLayout hl = (CardLayout) employeeHomePanel.getContainerPanel().getLayout();
-        hl.show(employeeHomePanel.getContainerPanel(), "EDIT_MENU");
+        cl.show(containerPanel, "LOGIN"); // set the default to the login
+//        CardLayout hl = (CardLayout) employeeHomePanel.getContainerPanel().getLayout();
+//        hl.show(employeeHomePanel.getContainerPanel(), "EDIT_MENU");
 
         // dialog
         manageEmployeesDialog = new ManageEmployeesDialog(this);
@@ -132,7 +134,7 @@ public class MainFrame extends JFrame {
                     Employee employee = MainFrame.this.controller.employeeLogin(e); // set employee to logged in employee
                     if (employee.isAdmin())
                         menuBar.isAdmin();//if logged in employee is admin, call isAdmin in menu bar to add manage employee menuItem for ADMIN ACCESS
-                    menuBar.employeeView(); // set menuBar to employee view
+                    menuBar.employeeHomeView(); // set menuBar to employee view
                     employeeHomePanel.setEmployee(employee); // set the employeeHomePanel employee
 
                     cl.show(containerPanel, "HOME"); // switch to the homePanels
@@ -154,7 +156,7 @@ public class MainFrame extends JFrame {
             public void loginEvent(LoginEvent e) throws ParseException, IOException { // login event
                 if (MainFrame.this.controller.customerLogin(e) != null) { // if the returned customer is not null
                     Customer customer = MainFrame.this.controller.customerLogin(e); // set customer to logged in customer
-                    menuBar.customerView(); // set menuBar to customer view
+                    menuBar.customerHomeView(); // set menuBar to customer view
                     customerHomePanel.setCustomer(customer); // set the employeeHomePanel employee
 
                     cl.show(containerPanel, "HOME"); // switch to the homePanels
@@ -227,6 +229,31 @@ public class MainFrame extends JFrame {
             public void editMenuEvent(EmployeeHomeEvent e) {
                 CardLayout hl = (CardLayout) employeeHomePanel.getContainerPanel().getLayout(); // set hl to the employee home panel container layout
                 hl.show(employeeHomePanel.getContainerPanel(), "EDIT_MENU"); // change the cardPanel in the container layout to display the editMenuPanel
+                menuBar.employeeEditMenuView(); // set the menuBar to the employee edit menu view
+            }
+        });
+
+        // handles the employee edit menu panel events
+        this.employeeHomePanel.setEditMenuListener(new EditMenuListener() {
+            @Override
+            public void saveMenuEvent() throws IOException {
+                MainFrame.this.controller.saveMenu(); // save the menu to the database
+                CardLayout hl = (CardLayout) employeeHomePanel.getContainerPanel().getLayout(); // set hl to the employee home panel container layout
+                hl.show(employeeHomePanel.getContainerPanel(), "HOME"); // change the cardPanel in the container layout to display the homePanel
+            }
+
+            @Override
+            public void addMenuItemEvent(MenuItem menuItem) throws IOException {
+                MainFrame.this.controller.addMenuItem(menuItem); // add the menuItem to the database
+            }
+
+            @Override
+            public void editMenuCancelEvent() throws IOException, ParseException {
+                CardLayout hl = (CardLayout) employeeHomePanel.getContainerPanel().getLayout(); // set hl to the employee home panel container layout
+                hl.show(employeeHomePanel.getContainerPanel(), "HOME"); // change the cardPanel in the container layout to display the homePanel
+                MainFrame.this.controller.loadMenu(); // load the menu from the database;
+                employeeHomePanel.clearEditMenuItems(); // clear the edit menu items
+                employeeHomePanel.setEditMenuItems(MainFrame.this.controller.getMenu()); // set the edit menu items
             }
         });
 
@@ -290,9 +317,10 @@ public class MainFrame extends JFrame {
         MainFrame.this.controller.loadCustomers();
         MainFrame.this.controller.loadPayments();
         MainFrame.this.controller.loadMenu();
-        MainFrame.this.controller.loadInventory();
+//        MainFrame.this.controller.loadInventory();
 
         manageEmployeesDialog.displayEmployees(MainFrame.this.controller.getEmployees());
+        employeeHomePanel.setEditMenuItems(MainFrame.this.controller.getMenu());
     }
 
 

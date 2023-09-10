@@ -117,24 +117,30 @@ public class MenuBar extends JMenuBar {
         styling();
     }
 
+    // set to log in view
+    public void loginPanelView() {
+        removeAll();
+        employeeMenu.removeAll();
+        add(viewMenu);
+    }
+
     // if logged in employee is admin, display manage employee menu item
-    public void employeeView() {
+    public void employeeHomeView() {
+        removeAll();
         add(employeeMenu);
-        remove(viewMenu);
         employeeMenu.add(logoutItem);
     }
 
-    public void customerView() {
-        add(customerMenu);
-        remove(viewMenu);
-        customerMenu.add(logoutItem);
+    public void employeeEditMenuView() {
+        removeAll();
+        add(employeeMenu);
+        employeeMenu.add(logoutItem);
     }
 
-    public void loginPanelView() {
-        remove(employeeMenu);
-        remove(customerMenu);
-        employeeMenu.remove(manageEmployeesItem);
-        add(viewMenu);
+    public void customerHomeView() {
+        removeAll();
+        add(customerMenu);
+        customerMenu.add(logoutItem);
     }
 
     public void isAdmin() {

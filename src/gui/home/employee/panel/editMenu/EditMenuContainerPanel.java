@@ -1,6 +1,8 @@
 package gui.home.employee.panel.editMenu;
 
 import gui.config.Utils;
+import gui.home.employee.listener.EditMenuListener;
+import model.MenuItem;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,6 +12,7 @@ public class EditMenuContainerPanel extends JPanel {
 
     String ID;
     private LinkedList<EditMenuComponentPanel> componentPanels;
+    private EditMenuListener listener;
 
     public EditMenuContainerPanel(String ID, LinkedList<String> subPanels) {
         this.ID = ID;
@@ -32,9 +35,21 @@ public class EditMenuContainerPanel extends JPanel {
         // ...
     }
 
+    public void setListItems(LinkedList<MenuItem> items) {
+        for (EditMenuComponentPanel panel : componentPanels) {
+            for (MenuItem item : items) {
+                if (panel.getID().equalsIgnoreCase(item.getCategory())) {
+                    panel.addItem(item);
+
+                }
+            }
+        }
+    }
+
     public void addComponentPanel(String panelName) {
-        EditMenuComponentPanel panel = new EditMenuComponentPanel(panelName.toUpperCase(), panelName.toUpperCase());
+        EditMenuComponentPanel panel = new EditMenuComponentPanel(panelName.toUpperCase(), panelName.toUpperCase()); // Create a new EditMenuComponentPanel
         if (!componentPanels.contains(panel)) {
+            componentPanels.add(panel);
             add(panel);
             revalidate();
             repaint();
@@ -54,18 +69,6 @@ public class EditMenuContainerPanel extends JPanel {
         }
     }
 
-    public LinkedList<EditMenuComponentPanel> getComponentPanels() {
-        return componentPanels;
-    }
-
-    public EditMenuComponentPanel getComponentPanel(String ID) {
-        for (EditMenuComponentPanel panel : componentPanels) {
-            if (panel.getID().equals(ID)) {
-                return panel;
-            }
-        }
-        return null;
-    }
 
     public String getID() {
         return ID;
@@ -76,4 +79,21 @@ public class EditMenuContainerPanel extends JPanel {
     }
 
 
+    public void setEditMenuListener(EditMenuListener listener) {
+        for (EditMenuComponentPanel panel : componentPanels) {
+            panel.setEditMenuListener(listener);
+        }
+    }
+
+    public void resetFields() {
+        for (EditMenuComponentPanel panel : componentPanels) {
+            panel.resetFields();
+        }
+    }
+
+    public void clearItems() {
+        for (EditMenuComponentPanel panel : componentPanels) {
+            panel.clearList();
+        }
+    }
 }

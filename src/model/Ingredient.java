@@ -1,6 +1,6 @@
 package model;
 
-public class Ingredient {
+public class Ingredient extends MenuItem {
 
     private String name;
     private String category;
@@ -8,6 +8,7 @@ public class Ingredient {
     private float price;
 
     public Ingredient(String category, String name, float price) {
+        super(category, name, price);
         this.category = category;
         this.name = name;
         this.price = price;

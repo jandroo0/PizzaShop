@@ -1,10 +1,16 @@
 package gui.home.employee.listener;
 
-import gui.home.employee.event.EditMenuEvent;
+import model.MenuItem;
+import org.json.simple.parser.ParseException;
 
+import java.io.IOException;
 import java.util.EventListener;
 
 public interface EditMenuListener extends EventListener {
 
-    void onEditMenu(EditMenuEvent event);
+    void saveMenuEvent() throws IOException;
+
+    void addMenuItemEvent(MenuItem menuItem) throws IOException;
+
+    void editMenuCancelEvent() throws IOException, ParseException;
 }

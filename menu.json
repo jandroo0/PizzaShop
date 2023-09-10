@@ -1,36 +1,144 @@
 {
-  "Pizza": [
+  "CRUST": [
     {
-      "Crust": "Garlic",
-      "Category": "Pizza",
-      "Chz": "LT",
-      "Price": 10.99,
-      "Item_Name": "Onion Pizza",
-      "Size": "Medium",
-      "Sauce": "Normal",
-      "Toppings": "Topping,Topping"
+      "Category": "CRUST",
+      "Price": 1.0,
+      "Item_Name": "Garlic"
     },
     {
-      "Crust": "Garlic",
-      "Category": "Pizza",
-      "Chz": "LT",
-      "Price": 10.99,
-      "Item_Name": "Pepperoni Pizza",
-      "Size": "Medium",
-      "Sauce": "Normal",
-      "Toppings": "Topping"
+      "Category": "CRUST",
+      "Price": 3.0,
+      "Item_Name": "Cheese Stuffed"
+    },
+    {
+      "Category": "CRUST",
+      "Price": 1.0,
+      "Item_Name": "Parmesan"
+    },
+    {
+      "Category": "CRUST",
+      "Price": 2.0,
+      "Item_Name": "Spicy Chipotle"
     }
   ],
-  "Drink": [
+  "MEATS": [
     {
-      "Category": "Drink",
+      "Category": "MEATS",
+      "Price": 1.5,
+      "Item_Name": "Pepperoni"
+    },
+    {
+      "Category": "MEATS",
+      "Price": 2.5,
+      "Item_Name": "Sausage"
+    },
+    {
+      "Category": "MEATS",
+      "Price": 2.5,
+      "Item_Name": "Ham"
+    },
+    {
+      "Category": "MEATS",
+      "Price": 2.5,
+      "Item_Name": "Ground Beef"
+    },
+    {
+      "Category": "MEATS",
+      "Price": 2.0,
+      "Item_Name": "Bacon"
+    }
+  ],
+  "VEGGIES": [
+    {
+      "Category": "VEGGIES",
+      "Price": 0.75,
+      "Item_Name": "Green Pepper"
+    },
+    {
+      "Category": "VEGGIES",
+      "Price": 0.5,
+      "Item_Name": "Onion"
+    },
+    {
+      "Category": "VEGGIES",
+      "Price": 0.5,
+      "Item_Name": "Black Olive"
+    },
+    {
+      "Category": "VEGGIES",
+      "Price": 0.5,
+      "Item_Name": "Green Olive"
+    },
+    {
+      "Category": "VEGGIES",
+      "Price": 1.0,
+      "Item_Name": "Pineapple"
+    }
+  ],
+  "DESSERT": [
+    {
+      "Category": "DESSERT",
+      "Price": 6.0,
+      "Item_Name": "Brownie Cake"
+    },
+    {
+      "Category": "DESSERT",
+      "Price": 2.0,
+      "Item_Name": "Cookie"
+    },
+    {
+      "Category": "DESSERT",
+      "Price": 3.0,
+      "Item_Name": "Ice Cream"
+    }
+  ],
+  "SAUCE": [
+    {
+      "Category": "SAUCE",
+      "Price": 2.0,
+      "Item_Name": "White Alfredo"
+    },
+    {
+      "Category": "SAUCE",
+      "Price": 0.0,
+      "Item_Name": "Marinara"
+    },
+    {
+      "Category": "SAUCE",
+      "Price": 1.0,
+      "Item_Name": "BBQ"
+    }
+  ],
+  "DRINK": [
+    {
+      "Category": "DRINK",
       "Price": 5.65,
       "Item_Name": "Fanta"
     },
     {
-      "Category": "Drink",
+      "Category": "DRINK",
       "Price": 5.65,
       "Item_Name": "Coke"
+    },
+    {
+      "Category": "DRINK",
+      "Price": 5.65,
+      "Item_Name": "Sprite"
+    },
+    {
+      "Category": "DRINK",
+      "Price": 4.0,
+      "Item_Name": "Minute Maid"
+    },
+    {
+      "Category": "DRINK",
+      "Price": 3.5,
+      "Item_Name": "Fruit Punch"
+    },
+    {
+      "Category": "DRINK",
+      "Price": 3.0,
+      "Item_Name": "Peach"
     }
   ]
 }

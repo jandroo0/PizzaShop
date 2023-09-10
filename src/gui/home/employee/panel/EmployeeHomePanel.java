@@ -2,16 +2,19 @@ package gui.home.employee.panel;
 
 import gui.config.Utils;
 import gui.home.employee.event.EmployeeHomeEvent;
+import gui.home.employee.listener.EditMenuListener;
 import gui.home.employee.listener.EmployeeHomeListener;
 import gui.home.employee.panel.editMenu.EditMenuPanel;
 import gui.tools.Button;
 import model.Employee;
+import model.MenuItem;
 
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.LinkedList;
 
 
 public class EmployeeHomePanel extends JPanel {
@@ -90,8 +93,20 @@ public class EmployeeHomePanel extends JPanel {
 
     }
 
+    public void clearEditMenuItems() {
+        editMenuPanel.clearItems();
+    }
+
+    public void setEditMenuItems(LinkedList<MenuItem> items) {
+        editMenuPanel.setItems(items);
+    }
+
     public void setEmployeeHomeListener(EmployeeHomeListener listener) {
         this.employeeHomeListener = listener;
+    }
+
+    public void setEditMenuListener(EditMenuListener listener) {
+        editMenuPanel.setEditMenuListener(listener);
     }
 
     public void setEmployee(Employee e) {
