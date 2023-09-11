@@ -1,7 +1,7 @@
-package gui.home.employee.panel.editMenu;
+package gui.editMenu.panel;
 
 import gui.config.Utils;
-import gui.home.employee.listener.EditMenuListener;
+import gui.editMenu.listener.EditMenuListener;
 import model.MenuItem;
 
 import javax.swing.*;
@@ -10,11 +10,13 @@ import java.util.LinkedList;
 
 public class EditMenuContainerPanel extends JPanel {
 
+    String type;
     String ID;
     private LinkedList<EditMenuComponentPanel> componentPanels;
     private EditMenuListener listener;
 
-    public EditMenuContainerPanel(String ID, LinkedList<String> subPanels) {
+    public EditMenuContainerPanel(String type, String ID, LinkedList<String> subPanels) {
+        this.type = type;
         this.ID = ID;
 
         setBackground(Utils.getBackgroundColor());
@@ -35,19 +37,17 @@ public class EditMenuContainerPanel extends JPanel {
         // ...
     }
 
-    public void setListItems(LinkedList<MenuItem> items) {
-        for (EditMenuComponentPanel panel : componentPanels) {
-            for (MenuItem item : items) {
-                if (panel.getID().equalsIgnoreCase(item.getCategory())) {
-                    panel.addItem(item);
 
-                }
+    public void addMenuItem(MenuItem menuItem) {
+        for (EditMenuComponentPanel panel : componentPanels) {
+            if (panel.getID().equals(menuItem.getCategory())) {
+                panel.addItem(menuItem);
             }
         }
     }
 
     public void addComponentPanel(String panelName) {
-        EditMenuComponentPanel panel = new EditMenuComponentPanel(panelName.toUpperCase(), panelName.toUpperCase()); // Create a new EditMenuComponentPanel
+        EditMenuComponentPanel panel = new EditMenuComponentPanel(this, panelName.toUpperCase(), panelName.toUpperCase()); // Create a new EditMenuComponentPanel
         if (!componentPanels.contains(panel)) {
             componentPanels.add(panel);
             add(panel);
@@ -76,6 +76,14 @@ public class EditMenuContainerPanel extends JPanel {
 
     public void setID(String ID) {
         this.ID = ID;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
 

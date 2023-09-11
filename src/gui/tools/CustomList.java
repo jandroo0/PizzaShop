@@ -5,13 +5,13 @@ import gui.config.Utils;
 import javax.swing.*;
 import java.awt.*;
 
-public class EmployeeCustomList extends JPanel {
+public class CustomList extends JPanel {
 
     private JList<Object> list;
     private DefaultListModel<Object> model;
     private JScrollPane scrollPane;
 
-    public EmployeeCustomList(int fontSize, Dimension preferredSize) {
+    public CustomList(int fontSize, Dimension preferredSize) {
         setLayout(new BorderLayout());
         setPreferredSize(preferredSize);
 

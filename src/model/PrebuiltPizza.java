@@ -13,8 +13,8 @@ public class PrebuiltPizza extends MenuItem {
 
     private LinkedList<Ingredient> toppings;
 
-    public PrebuiltPizza(String category, String name, float price, Size size, String cheeseAmt, String sauceAmt, String crustType, LinkedList<Ingredient> toppings) {
-        super(category, name, price);
+    public PrebuiltPizza(String type, String category, String name, float price, Size size, String cheeseAmt, String sauceAmt, String crustType, LinkedList<Ingredient> toppings) {
+        super(type, category, name, price);
         this.size = size;
         this.cheeseAmt = cheeseAmt;
         this.sauceAmt = sauceAmt;

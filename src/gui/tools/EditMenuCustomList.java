@@ -5,6 +5,7 @@ import model.MenuItem;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.LinkedList;
 
 public class EditMenuCustomList extends JPanel {
 
@@ -41,6 +42,26 @@ public class EditMenuCustomList extends JPanel {
     public void addItem(MenuItem item) {
         DefaultListModel<MenuItem> model = (DefaultListModel<MenuItem>) list.getModel();
         model.addElement(item);
+    }
+
+    // get selected item from list
+    public MenuItem getSelectedItem() {
+        int selectedIndex = list.getSelectedIndex();
+        if (selectedIndex != -1) {
+            DefaultListModel<MenuItem> model = (DefaultListModel<MenuItem>) list.getModel();
+            return model.getElementAt(selectedIndex);
+        }
+        return null;
+    }
+
+    // get the list model items as a menu item linked list
+    public LinkedList<MenuItem> getList() {
+        DefaultListModel<MenuItem> model = (DefaultListModel<MenuItem>) list.getModel();
+        LinkedList<MenuItem> items = new LinkedList<>();
+        for (int i = 0; i < model.getSize(); i++) {
+            items.add(model.getElementAt(i));
+        }
+        return items;
     }
 
 

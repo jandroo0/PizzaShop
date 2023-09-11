@@ -1,7 +1,7 @@
-package gui.home.employee.panel;
+package gui.editMenu.navbar;
 
 import gui.config.Utils;
-import gui.home.employee.panel.editMenu.listener.NavbarListener;
+import gui.editMenu.listener.NavbarListener;
 import gui.tools.Button;
 
 import javax.swing.*;

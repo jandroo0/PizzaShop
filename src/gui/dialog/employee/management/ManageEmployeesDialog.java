@@ -4,7 +4,7 @@ import gui.config.Utils;
 import gui.dialog.employee.management.event.AddEmployeeEvent;
 import gui.dialog.employee.management.listener.ManageEmployeeListener;
 import gui.tools.Button;
-import gui.tools.EmployeeCustomList;
+import gui.tools.CustomList;
 import gui.tools.Label;
 import gui.tools.PlaceholderTextField;
 import model.Employee;
@@ -46,7 +46,7 @@ public class ManageEmployeesDialog extends JDialog {
     // lower buttons
     private final Button saveButton;
     private final Button cancelButton;
-    private final EmployeeCustomList employeeList;
+    private final CustomList employeeList;
     private ManageEmployeeListener employeeListener;
 
     public ManageEmployeesDialog(Frame frame) {
@@ -83,7 +83,7 @@ public class ManageEmployeesDialog extends JDialog {
         saveButton = new Button("SAVE", Utils.getTextFont(), Utils.getTextColor(), Utils.getButtonBackgroundColor(), Utils.getButtonHoverColor(), BorderFactory.createEmptyBorder(5, 8, 5, 8));
         cancelButton = new Button("CANCEL", Utils.getTextFont(), Utils.getTextColor(), Utils.getButtonBackgroundColor(), Utils.getButtonHoverColor(), BorderFactory.createEmptyBorder(5, 8, 5, 8));
 
-        employeeList = new EmployeeCustomList(14, new Dimension(80, 150));
+        employeeList = new CustomList(14, new Dimension(80, 150));
 
         employeeList.setPreferredSize(new Dimension(80, 150));
 

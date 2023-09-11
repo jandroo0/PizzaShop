@@ -1,10 +1,7 @@
 package Controller;
 
 import gui.login.event.LoginEvent;
-import model.Customer;
-import model.Database;
-import model.Employee;
-import model.MenuItem;
+import model.*;
 import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
@@ -17,13 +14,17 @@ public class Controller {
 
     }
 
-//    public void saveInventory() throws IOException {
-//        this.db.saveIngredients();
-//    }
-//
-//    public void loadInventory() throws ParseException, IOException {
-//        this.db.loadIngredients();
-//    }
+    public void saveInventory() throws IOException {
+        this.db.saveIngredients();
+    }
+
+    public void addIngredient(Ingredient ingredient) {
+        this.db.addIngredient(ingredient);
+    }
+
+    public void loadInventory() throws ParseException, IOException {
+        this.db.loadIngredients();
+    }
 
     public void saveMenu() throws IOException {
         this.db.saveMenu();
@@ -99,9 +100,9 @@ public class Controller {
         return this.db.getMenu();
     }
 
-//    public LinkedList<Ingredient> getInventory() {
-//        return this.db.getInventory();
-//    }
+    public LinkedList<Ingredient> getInventory() {
+        return this.db.getInventory();
+    }
 
 
 }

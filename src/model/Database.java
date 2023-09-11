@@ -82,6 +82,7 @@ public class Database {
         for (MenuItem menuItem : menu) {
             JSONObject menuItemJSON = new JSONObject();
 
+            menuItemJSON.put("Type", menuItem.getTypeID());
             menuItemJSON.put("Category", menuItem.getCategory());
             menuItemJSON.put("Item_Name", menuItem.getItemName());
             menuItemJSON.put("Price", menuItem.getPrice());
@@ -135,6 +136,7 @@ public class Database {
                 for (Object menuItemJSON : categoryArray) { // For each menu item JSON in category
                     JSONObject menuItemObj = (JSONObject) menuItemJSON; // Create menu item object from JSON
 
+                    String typeID = (String) menuItemObj.get("Type");
                     String itemName = (String) menuItemObj.get("Item_Name");
                     float price = Float.parseFloat(menuItemObj.get("Price").toString());
 
@@ -144,7 +146,7 @@ public class Database {
                         // ...
                     }
 
-                    MenuItem menuItem = new MenuItem(category, itemName, price);
+                    MenuItem menuItem = new MenuItem(typeID, category, itemName, price);
                     menu.add(menuItem);
 
                     System.out.println("MENU ITEM : " + category + " : " + itemName + " : $" + price);
@@ -157,64 +159,72 @@ public class Database {
         }
     }
 
-    // INGREDIENTS
-//
-//    // Save ingredients to file
-//    public void saveIngredients() throws IOException {
-//        fileWriter = new FileWriter(inventoryFilePath);
-//
-//        JSONObject categoriesJSON = new JSONObject();
-//
-//        // Group ingredients by category
-//        for (Ingredient ingredient : ingredients) {
-//            JSONObject ingredientJSON = new JSONObject();
-//            ingredientJSON.put("Category", ingredient.getCategory());
-//            ingredientJSON.put("Item_Name", ingredient.getName());
-//            ingredientJSON.put("Price", ingredient.getPrice());
-//
-//            String category = ingredient.getCategory();
-//            JSONArray categoryArray = (categoriesJSON.containsKey(category))
-//                    ? (JSONArray) categoriesJSON.get(category)
-//                    : new JSONArray();
-//            categoryArray.add(ingredientJSON);
-//            categoriesJSON.put(category, categoryArray);
-//        }
-//
-//        // Write categories JSON to file
-//        fileWriter.write(categoriesJSON.toJSONString());
-//        System.out.println("INVENTORY JSON CREATED AND SAVED");
-//        fileWriter.close();
-//    }
-//
-//    // Load ingredients from file
-//    public void loadIngredients() throws ParseException, IOException {
-//        ingredients.clear(); // Clear the current inventory list
-//
-//        JSONParser parser = new JSONParser(); // Create JSON parser
-//        JSONObject categoriesJSON = (JSONObject) parser.parse(new FileReader(inventoryFilePath)); // Create JSON object from file
-//
-//        try {
-//            System.out.println("LOADING INVENTORY --------------");
-//            for (Object categoryKey : categoriesJSON.keySet()) {
-//                String category = (String) categoryKey;
-//                JSONArray ingredientsJSON = (JSONArray) categoriesJSON.get(category);
-//
-//                for (Object ingredientItemJSON : ingredientsJSON) {
-//                    JSONObject ingredientObj = (JSONObject) ingredientItemJSON;
-//                    String itemName = (String) ingredientObj.get("Item_Name");
-//                    float price = Float.parseFloat(ingredientObj.get("Price").toString());
-//
-//                    Ingredient ingredient = new Ingredient(category, itemName, price);
-//                    ingredients.add(ingredient);
-//
-//                    System.out.println("INVENTORY ITEM : " + category + " : " + itemName + " : $" + price);
-//                }
-//            }
-//            System.out.println("INVENTORY LOADED --------------");
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
+//     INGREDIENTS
+
+    // Save ingredients to file
+    public void saveIngredients() throws IOException {
+        fileWriter = new FileWriter(inventoryFilePath);
+
+        JSONObject categoriesJSON = new JSONObject();
+
+        // Group ingredients by category
+        for (Ingredient ingredient : ingredients) {
+            JSONObject ingredientJSON = new JSONObject();
+            ingredientJSON.put("Type", ingredient.getTypeID());
+            ingredientJSON.put("Category", ingredient.getCategory());
+            ingredientJSON.put("Item_Name", ingredient.getName());
+            ingredientJSON.put("Price", ingredient.getPrice());
+
+            String category = ingredient.getCategory();
+            JSONArray categoryArray = (categoriesJSON.containsKey(category))
+                    ? (JSONArray) categoriesJSON.get(category)
+                    : new JSONArray();
+            categoryArray.add(ingredientJSON);
+            categoriesJSON.put(category, categoryArray);
+        }
+
+        // Write categories JSON to file
+        fileWriter.write(categoriesJSON.toJSONString());
+        System.out.println("INVENTORY JSON CREATED AND SAVED");
+        fileWriter.close();
+    }
+
+    // Load ingredients from file
+    public void loadIngredients() throws ParseException, IOException {
+        ingredients.clear(); // Clear the current inventory list
+
+        JSONParser parser = new JSONParser(); // Create JSON parser
+        JSONObject categoriesJSON = (JSONObject) parser.parse(new FileReader(inventoryFilePath)); // Create JSON object from file
+
+        try {
+            System.out.println("LOADING INVENTORY --------------");
+            for (Object categoryKey : categoriesJSON.keySet()) {
+                String category = (String) categoryKey;
+                JSONArray ingredientsJSON = (JSONArray) categoriesJSON.get(category);
+
+                for (Object ingredientItemJSON : ingredientsJSON) {
+                    JSONObject ingredientObj = (JSONObject) ingredientItemJSON;
+                    String typeID = (String) ingredientObj.get("Type");
+                    String itemName = (String) ingredientObj.get("Item_Name");
+                    float price = Float.parseFloat(ingredientObj.get("Price").toString());
+
+                    Ingredient ingredient = new Ingredient(typeID, category, itemName, price);
+                    ingredients.add(ingredient);
+
+                    System.out.println("INVENTORY ITEM : " + category + " : " + itemName + " : $" + price);
+                }
+            }
+            System.out.println("INVENTORY LOADED --------------");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // add ingredient
+    public void addIngredient(Ingredient ingredient) {
+        this.ingredients.add(ingredient);
+        System.out.println("ADDED INGREDIENT: " + ingredient);
+    }
 
 
     // Add menu item (Pizza, Drink, Dessert, etc.)

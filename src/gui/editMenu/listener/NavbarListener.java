@@ -1,4 +1,4 @@
-package gui.home.employee.panel.editMenu.listener;
+package gui.editMenu.listener;
 
 import java.util.EventListener;
 

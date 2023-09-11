@@ -1,10 +1,11 @@
-package gui.home.employee.panel.editMenu;
+package gui.editMenu.panel;
 
 import gui.config.Utils;
-import gui.home.employee.listener.EditMenuListener;
-import gui.home.employee.panel.NavbarPanel;
-import gui.home.employee.panel.editMenu.listener.NavbarListener;
+import gui.editMenu.listener.EditMenuListener;
+import gui.editMenu.listener.NavbarListener;
+import gui.editMenu.navbar.NavbarPanel;
 import gui.tools.Button;
+import model.Ingredient;
 import model.MenuItem;
 import org.json.simple.parser.ParseException;
 
@@ -32,6 +33,8 @@ public class EditMenuPanel extends JPanel {
 
 
     // DEFAULT PANEL COMPONENTS
+
+    private PizzaBuilderPanel pizzaBuilderPanel;
     private LinkedList<String> pizzaPanelMenuComponents;
     private LinkedList<String> otherPanelMenuComponents;
     // nav panel
@@ -56,7 +59,11 @@ public class EditMenuPanel extends JPanel {
         menuNames = new LinkedList<String>();
         containerPanels = new LinkedList<EditMenuContainerPanel>();
 
-        // pizzaPanel
+        //pizza builder panel
+        pizzaBuilderPanel = new PizzaBuilderPanel();
+
+
+        // pizza ingredients
         pizzaPanelMenuComponents = new LinkedList<String>();
 
         pizzaPanelMenuComponents.add("MEATS");
@@ -122,9 +129,9 @@ public class EditMenuPanel extends JPanel {
             }
         });
 
-
-        newContainerPanel("PIZZA", pizzaPanelMenuComponents);
-        newContainerPanel("MISC", otherPanelMenuComponents);
+        addPizzaBuilderPanel();
+        newContainerPanel("INGREDIENT", "PIZZA", pizzaPanelMenuComponents);
+        newContainerPanel("MENU_ITEM", "MISC", otherPanelMenuComponents);
 
         layoutComponents();
         setLayout(new BorderLayout());
@@ -147,11 +154,23 @@ public class EditMenuPanel extends JPanel {
         }
     }
 
-    public void setItems(LinkedList<MenuItem> items) {
+    public void setItems(LinkedList<MenuItem> items, LinkedList<Ingredient> ingredients) {
+        pizzaBuilderPanel.setAvailableIngredients(ingredients);
         for (EditMenuContainerPanel panel : containerPanels) {
-            panel.setListItems(items);
-        }
 
+            for (MenuItem item : items) {
+                if (panel.getType().equals("MENU_ITEM")) {
+                    panel.addMenuItem(item);
+                }
+            }
+
+            for (Ingredient ingredient : ingredients) {
+                if (panel.getType().equals("INGREDIENT")) {
+                    panel.addMenuItem(ingredient);
+                }
+            }
+
+        }
     }
 
 
@@ -224,12 +243,18 @@ public class EditMenuPanel extends JPanel {
         navButtonsPanel.setButtonColors(panelName); // set button colors for nav buttons
     }
 
-    public void newContainerPanel(String panelName, LinkedList<String> subPanels) {
-        EditMenuContainerPanel panel = new EditMenuContainerPanel(panelName, subPanels); // create new container panel with list of sub panels
+    public void newContainerPanel(String panelType, String panelName, LinkedList<String> subPanels) {
+        EditMenuContainerPanel panel = new EditMenuContainerPanel(panelType, panelName, subPanels); // create new container panel with list of sub panels
         containerPanels.add(panel); // add new panel to container panels list
         currentMenuPanel.add(panel, panel.getID()); // add panel to current card/panel
         menuNames.add(panelName); // add panel name to menu names list
         navButtonsPanel.addButton(panel.getID()); // add button to nav buttons panel
+    }
+
+    public void addPizzaBuilderPanel() {
+        currentMenuPanel.add(pizzaBuilderPanel, "BUILDER");
+        menuNames.add("BUILDER");
+        navButtonsPanel.addButton("BUILDER");
     }
 
     public void removeContainerPanel(EditMenuComponentPanel panel) {

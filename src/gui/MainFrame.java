@@ -4,9 +4,9 @@ import Controller.Controller;
 import gui.dialog.employee.management.ManageEmployeesDialog;
 import gui.dialog.employee.management.event.AddEmployeeEvent;
 import gui.dialog.employee.management.listener.ManageEmployeeListener;
+import gui.editMenu.listener.EditMenuListener;
 import gui.home.customer.CustomerHomePanel;
 import gui.home.employee.event.EmployeeHomeEvent;
-import gui.home.employee.listener.EditMenuListener;
 import gui.home.employee.listener.EmployeeHomeListener;
 import gui.home.employee.panel.EmployeeHomePanel;
 import gui.login.createAccount.NewCustomerPanel;
@@ -21,6 +21,7 @@ import gui.title.TitlePanel;
 import gui.tools.CustomMessageDialog;
 import model.Customer;
 import model.Employee;
+import model.Ingredient;
 import model.MenuItem;
 import org.json.simple.parser.ParseException;
 
@@ -104,9 +105,9 @@ public class MainFrame extends JFrame {
         containerPanel.add(newCustomerPanel, "NEW_CUSTOMER");
 
         CardLayout cl = (CardLayout) containerPanel.getLayout();
-        cl.show(containerPanel, "LOGIN"); // set the default to the login
-//        CardLayout hl = (CardLayout) employeeHomePanel.getContainerPanel().getLayout();
-//        hl.show(employeeHomePanel.getContainerPanel(), "EDIT_MENU");
+        cl.show(containerPanel, "HOME"); // set the default to the login
+        CardLayout hl = (CardLayout) employeeHomePanel.getContainerPanel().getLayout();
+        hl.show(employeeHomePanel.getContainerPanel(), "EDIT_MENU");
 
         // dialog
         manageEmployeesDialog = new ManageEmployeesDialog(this);
@@ -238,8 +239,14 @@ public class MainFrame extends JFrame {
             @Override
             public void saveMenuEvent() throws IOException {
                 MainFrame.this.controller.saveMenu(); // save the menu to the database
+                MainFrame.this.controller.saveInventory(); // save the inventory to the database
                 CardLayout hl = (CardLayout) employeeHomePanel.getContainerPanel().getLayout(); // set hl to the employee home panel container layout
                 hl.show(employeeHomePanel.getContainerPanel(), "HOME"); // change the cardPanel in the container layout to display the homePanel
+            }
+
+            @Override
+            public void addIngredientEvent(Ingredient ingredient) {
+                MainFrame.this.controller.addIngredient(ingredient); // add the ingredient to the database
             }
 
             @Override
@@ -253,7 +260,7 @@ public class MainFrame extends JFrame {
                 hl.show(employeeHomePanel.getContainerPanel(), "HOME"); // change the cardPanel in the container layout to display the homePanel
                 MainFrame.this.controller.loadMenu(); // load the menu from the database;
                 employeeHomePanel.clearEditMenuItems(); // clear the edit menu items
-                employeeHomePanel.setEditMenuItems(MainFrame.this.controller.getMenu()); // set the edit menu items
+                employeeHomePanel.setEditMenuItems(MainFrame.this.controller.getMenu(), MainFrame.this.controller.getInventory()); // set the edit menu items
             }
         });
 
@@ -317,10 +324,10 @@ public class MainFrame extends JFrame {
         MainFrame.this.controller.loadCustomers();
         MainFrame.this.controller.loadPayments();
         MainFrame.this.controller.loadMenu();
-//        MainFrame.this.controller.loadInventory();
+        MainFrame.this.controller.loadInventory();
 
         manageEmployeesDialog.displayEmployees(MainFrame.this.controller.getEmployees());
-        employeeHomePanel.setEditMenuItems(MainFrame.this.controller.getMenu());
+        employeeHomePanel.setEditMenuItems(MainFrame.this.controller.getMenu(), MainFrame.this.controller.getInventory());
     }
 
 

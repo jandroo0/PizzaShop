@@ -1,11 +1,12 @@
-package gui.home.employee.panel.editMenu;
+package gui.editMenu.panel;
 
 
 import gui.config.Utils;
-import gui.home.employee.listener.EditMenuListener;
+import gui.editMenu.listener.EditMenuListener;
 import gui.tools.Button;
 import gui.tools.EditMenuCustomList;
 import gui.tools.PlaceholderTextField;
+import model.Ingredient;
 import model.MenuItem;
 
 import javax.swing.*;
@@ -15,6 +16,8 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 
 public class EditMenuComponentPanel extends JPanel {
+
+    private EditMenuContainerPanel containerPanel;
 
     private final JLabel label;
     private final String category;
@@ -26,7 +29,8 @@ public class EditMenuComponentPanel extends JPanel {
     private final Button removeButton;
     private EditMenuListener listener;
 
-    public EditMenuComponentPanel(String label, String placeholderText) {
+    public EditMenuComponentPanel(EditMenuContainerPanel containerPanel, String label, String placeholderText) {
+        this.containerPanel = containerPanel;
         setLayout(new BorderLayout());
         setBackground(Utils.getBackgroundColor());
 
@@ -41,7 +45,6 @@ public class EditMenuComponentPanel extends JPanel {
         this.label.setBorder(BorderFactory.createEmptyBorder(20, 0, 0, 0));
 
         itemList = new EditMenuCustomList(13, new Dimension(140, 100));
-        itemList.setBorder(BorderFactory.createLineBorder(Utils.getButtonBackgroundColor(), 2, true));
 
 
         textField = new PlaceholderTextField(placeholderText, 88, 26, 16);
@@ -94,18 +97,26 @@ public class EditMenuComponentPanel extends JPanel {
                 if (!item.isEmpty()) {
                     try {
                         float price = Float.parseFloat(priceText);
-                        MenuItem itemToAdd = new MenuItem(category, item, price);
-
-
-                        itemList.addItem(itemToAdd);
+                        if (containerPanel.getType().equals("INGREDIENT")) {
+                            Ingredient itemToAdd = new Ingredient("INGREDIENT", category, item, price);
+                            itemList.addItem(itemToAdd);
+                            try {
+                                listener.addIngredientEvent(itemToAdd);
+                            } catch (IOException ex) {
+                                throw new RuntimeException(ex);
+                            }
+                        } else if (containerPanel.getType().equals("MENU_ITEM")) {
+                            MenuItem itemToAdd = new MenuItem("MENU_ITEM", category, item, price);
+                            itemList.addItem(itemToAdd);
+                            try {
+                                listener.addMenuItemEvent(itemToAdd);
+                            } catch (IOException ex) {
+                                throw new RuntimeException(ex);
+                            }
+                        }
                         textField.setText("");
                         priceTextField.setText("");
 
-                        try {
-                            listener.addMenuItemEvent(itemToAdd);
-                        } catch (IOException ex) {
-                            throw new RuntimeException(ex);
-                        }
 
                     } catch (NumberFormatException ex) {
                         // Handle the case where the input is not a valid float

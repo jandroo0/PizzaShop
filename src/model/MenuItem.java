@@ -3,10 +3,12 @@ package model;
 public class MenuItem {
 
     private String category;
+    private String typeID;
     private String itemName;
     private float price;
 
-    public MenuItem(String category, String itemName, float price) {
+    public MenuItem(String typeID, String category, String itemName, float price) {
+        this.typeID = typeID;
         this.category = category;
         this.itemName = itemName;
         this.price = price;
@@ -26,6 +28,10 @@ public class MenuItem {
 
     public void setPrice(float price) {
         this.price = price;
+    }
+
+    public String getTypeID() {
+        return typeID;
     }
 
     public String getCategory() {
