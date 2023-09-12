@@ -3,7 +3,6 @@ package gui.home.employee.panel;
 import gui.config.Utils;
 import gui.editMenu.listener.EditMenuListener;
 import gui.editMenu.panel.EditMenuPanel;
-import gui.home.employee.event.EmployeeHomeEvent;
 import gui.home.employee.listener.EmployeeHomeListener;
 import gui.tools.Button;
 import model.Employee;
@@ -51,18 +50,31 @@ public class EmployeeHomePanel extends JPanel {
 
         //panels
         homePanel = new JPanel();
+        newOrderPanel = new NewOrderPanel();
         editMenuPanel = new EditMenuPanel();
 
         containerPanel = new JPanel(new CardLayout());
         containerPanel.add(homePanel, "HOME");
+        containerPanel.add(newOrderPanel, "NEW_ORDER");
         containerPanel.add(editMenuPanel, "EDIT_MENU");
+
+        // new order button event listener
+        newOrderButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    EmployeeHomePanel.this.employeeHomeListener.newOrderEvent(currentEmployee);
+                } catch (IOException | ParseException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
 
         editMenuButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                EmployeeHomeEvent event = new EmployeeHomeEvent(e, currentEmployee);
                 try {
-                    EmployeeHomePanel.this.employeeHomeListener.editMenuEvent(event);
+                    EmployeeHomePanel.this.employeeHomeListener.editMenuEvent(currentEmployee);
                 } catch (ParseException | IOException ex) {
                     throw new RuntimeException(ex);
                 }
@@ -108,6 +120,14 @@ public class EmployeeHomePanel extends JPanel {
     public void setEditMenuItems(LinkedList<MenuItem> items, LinkedList<Ingredient> ingredients, LinkedList<PrebuiltPizza> pizzas) {
         editMenuPanel.clearItems();
         editMenuPanel.setItems(items, ingredients, pizzas);
+    }
+
+    public void setNewOrderMenuItems(LinkedList<MenuItem> items, LinkedList<PrebuiltPizza> pizzas) {
+        LinkedList<MenuItem> menu = new LinkedList<>();
+        menu.addAll(items);
+        menu.addAll(pizzas);
+
+        newOrderPanel.setItems(menu);
     }
 
     public void setEmployeeHomeListener(EmployeeHomeListener listener) {

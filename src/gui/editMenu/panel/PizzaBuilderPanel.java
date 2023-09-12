@@ -3,7 +3,7 @@ package gui.editMenu.panel;
 import gui.config.Utils;
 import gui.editMenu.listener.EditMenuListener;
 import gui.tools.Button;
-import gui.tools.EditMenuCustomList;
+import gui.tools.MenuCustomList;
 import gui.tools.PlaceholderTextField;
 import model.Ingredient;
 import model.MenuItem;
@@ -17,10 +17,10 @@ import java.util.LinkedList;
 
 public class PizzaBuilderPanel extends JPanel {
 
-    private final EditMenuCustomList availableIngredientsList;
-    private final EditMenuCustomList selectedIngredientsList;
+    private final MenuCustomList availableIngredientsList;
+    private final MenuCustomList selectedIngredientsList;
     private final Button removePizzaButton;
-    private final EditMenuCustomList pizzasList;
+    private final MenuCustomList pizzasList;
     private final PlaceholderTextField pizzaNameField;
     private final PlaceholderTextField pizzaPriceField;
     private final Button addButton;
@@ -49,16 +49,16 @@ public class PizzaBuilderPanel extends JPanel {
 
         titleLabel = new JLabel("Pizza Builder", SwingConstants.CENTER);
 
-        availableIngredientsList = new EditMenuCustomList(13, new Dimension(220, 160));
+        availableIngredientsList = new MenuCustomList(13, new Dimension(220, 160));
         availableIngredientsList.setBorder(BorderFactory.createLineBorder(Utils.getButtonBackgroundColor(), 2, true));
 
-        selectedIngredientsList = new EditMenuCustomList(13, new Dimension(220, 160));
+        selectedIngredientsList = new MenuCustomList(13, new Dimension(220, 160));
         selectedIngredientsList.setBorder(BorderFactory.createLineBorder(Utils.getButtonBackgroundColor(), 2, true));
 
         availableIngredientsList.setDisplayInSpecialFormat(true);
         selectedIngredientsList.setDisplayInSpecialFormat(true);
 
-        pizzasList = new EditMenuCustomList(13, new Dimension(150, 100));
+        pizzasList = new MenuCustomList(13, new Dimension(150, 100));
         pizzasList.setBorder(BorderFactory.createLineBorder(Utils.getButtonBackgroundColor(), 2, true));
 
         addButton = new Button("Add", Utils.getTextFont(16), Utils.getTextColor(),

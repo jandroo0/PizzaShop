@@ -7,22 +7,12 @@
       "Item_Name": "Ceaser"
     }
   ],
-  "Prebuilt": [
+  "SOUP": [
     {
       "Type": "MENU_ITEM",
-      "Crust": "Garlic",
-      "Category": "Prebuilt",
-      "Price": 10.99,
-      "Item_Name": "Pepperoni",
-      "Toppings": "MEATS-Pepperoni"
-    },
-    {
-      "Type": "MENU_ITEM",
-      "Crust": "Garlic",
-      "Category": "Prebuilt",
-      "Price": 15.99,
-      "Item_Name": "Meat Lovers",
-      "Toppings": "MEATS-Pepperoni,MEATS-Sausage,MEATS-Ham,MEATS-Bacon"
+      "Category": "SOUP",
+      "Price": 5.99,
+      "Item_Name": "French Onion"
     }
   ],
   "DESSERT": [
@@ -43,6 +33,34 @@
       "Category": "DESSERT",
       "Price": 3.0,
       "Item_Name": "Ice Cream"
+    }
+  ],
+  "BREADS": [
+    {
+      "Type": "MENU_ITEM",
+      "Category": "BREADS",
+      "Price": 8.0,
+      "Item_Name": "Cheesy Bread"
+    },
+    {
+      "Type": "MENU_ITEM",
+      "Category": "BREADS",
+      "Price": 10.0,
+      "Item_Name": "Cheesy Bacon"
+    }
+  ],
+  "FRIES": [
+    {
+      "Type": "MENU_ITEM",
+      "Category": "FRIES",
+      "Price": 3.99,
+      "Item_Name": "Seasoned"
+    },
+    {
+      "Type": "MENU_ITEM",
+      "Category": "FRIES",
+      "Price": 4.99,
+      "Item_Name": "Cheesy"
     }
   ],
   "DRINK": [
@@ -81,6 +99,24 @@
       "Category": "DRINK",
       "Price": 3.0,
       "Item_Name": "Peach"
+    }
+  ],
+  "PREBUILT": [
+    {
+      "Type": "MENU_ITEM",
+      "Crust": "Garlic",
+      "Category": "PREBUILT",
+      "Price": 15.99,
+      "Item_Name": "Meat Lovers",
+      "Toppings": "MEATS-Pepperoni,MEATS-Sausage,MEATS-Ham,MEATS-Bacon"
+    },
+    {
+      "Type": "MENU_ITEM",
+      "Crust": "Garlic",
+      "Category": "PREBUILT",
+      "Price": 10.99,
+      "Item_Name": "Pepperoni",
+      "Toppings": "MEATS-Pepperoni"
     }
   ]
 }

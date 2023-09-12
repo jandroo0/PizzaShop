@@ -198,7 +198,7 @@ public class Database {
             toppings.add(topping);
         }
 
-        return new PrebuiltPizza(typeID, "Prebuilt", itemName, price, crustType, toppings);
+        return new PrebuiltPizza(typeID, "PREBUILT", itemName, price, crustType, toppings);
     }
 
     public void addPrebuiltPizza(PrebuiltPizza prebuiltPizza) {

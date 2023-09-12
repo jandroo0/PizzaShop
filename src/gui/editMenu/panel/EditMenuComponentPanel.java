@@ -4,7 +4,7 @@ package gui.editMenu.panel;
 import gui.config.Utils;
 import gui.editMenu.listener.EditMenuListener;
 import gui.tools.Button;
-import gui.tools.EditMenuCustomList;
+import gui.tools.MenuCustomList;
 import gui.tools.PlaceholderTextField;
 import model.Ingredient;
 import model.MenuItem;
@@ -21,7 +21,7 @@ public class EditMenuComponentPanel extends JPanel {
 
     private final JLabel label;
     private final String category;
-    private final EditMenuCustomList itemList;
+    private final MenuCustomList itemList;
 
     private final PlaceholderTextField textField;
     private final PlaceholderTextField priceTextField;
@@ -44,7 +44,7 @@ public class EditMenuComponentPanel extends JPanel {
         this.label.setHorizontalAlignment(JLabel.CENTER);
         this.label.setBorder(BorderFactory.createEmptyBorder(20, 0, 0, 0));
 
-        itemList = new EditMenuCustomList(13, new Dimension(140, 100));
+        itemList = new MenuCustomList(13, new Dimension(140, 100));
 
 
         textField = new PlaceholderTextField(placeholderText, 88, 26, 16);

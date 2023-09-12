@@ -131,6 +131,12 @@ public class MenuBar extends JMenuBar {
         employeeMenu.add(logoutItem);
     }
 
+    public void employeeNewOrderView() {
+        removeAll();
+        add(employeeMenu);
+        employeeMenu.add(logoutItem);
+    }
+
     public void employeeEditMenuView() {
         removeAll();
         add(employeeMenu);

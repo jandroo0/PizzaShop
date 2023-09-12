@@ -19,7 +19,7 @@ public class TitlePanel extends JPanel { // JPanel containing the label for appl
         setLayout(new BorderLayout()); // set layout of this panel to a BorderLayout
         setBackground(Utils.getBackgroundColor());
 
-        setBorder(BorderFactory.createEmptyBorder(20, 0, 0, 0)); // set empty border
+        setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0)); // set empty border
 
         add(titleLabel, BorderLayout.CENTER); // center label
 

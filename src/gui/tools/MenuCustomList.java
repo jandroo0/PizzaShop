@@ -7,14 +7,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.LinkedList;
 
-public class EditMenuCustomList extends JPanel {
+public class MenuCustomList extends JPanel {
 
     private JList<MenuItem> list;
     private DefaultListModel<MenuItem> model;
     private JScrollPane scrollPane;
-    private boolean displayInSpecialFormat;
+    private boolean displayInSpecialFormat, alignCenter;
 
-    public EditMenuCustomList(int fontSize, Dimension preferredSize) {
+    public MenuCustomList(int fontSize, Dimension preferredSize) {
         setLayout(new BorderLayout());
         setPreferredSize(preferredSize);
 
@@ -41,6 +41,10 @@ public class EditMenuCustomList extends JPanel {
 
     public void setDisplayInSpecialFormat(boolean displayInSpecialFormat) {
         this.displayInSpecialFormat = displayInSpecialFormat;
+    }
+
+    public void setAlignCenter(boolean alignCenter) {
+        this.alignCenter = alignCenter;
     }
 
     // Add an item to the list
@@ -102,6 +106,11 @@ public class EditMenuCustomList extends JPanel {
                     MenuItem menuItem = (MenuItem) value;
                     setText(menuItem.getCategory() + " - " + menuItem.getItemName() + " $" + menuItem.getPrice());
                 }
+            }
+
+            if (alignCenter) {
+                setHorizontalAlignment(SwingConstants.CENTER);
+
             }
 
             return c;

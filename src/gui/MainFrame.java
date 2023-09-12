@@ -6,7 +6,6 @@ import gui.dialog.employee.management.event.AddEmployeeEvent;
 import gui.dialog.employee.management.listener.ManageEmployeeListener;
 import gui.editMenu.listener.EditMenuListener;
 import gui.home.customer.CustomerHomePanel;
-import gui.home.employee.event.EmployeeHomeEvent;
 import gui.home.employee.listener.EmployeeHomeListener;
 import gui.home.employee.panel.EmployeeHomePanel;
 import gui.login.createAccount.NewCustomerPanel;
@@ -103,9 +102,9 @@ public class MainFrame extends JFrame {
         containerPanel.add(newCustomerPanel, "NEW_CUSTOMER");
 
         CardLayout cl = (CardLayout) containerPanel.getLayout();
-        cl.show(containerPanel, "HOME"); // set the default to the login
-        CardLayout hl = (CardLayout) employeeHomePanel.getContainerPanel().getLayout();
-        hl.show(employeeHomePanel.getContainerPanel(), "EDIT_MENU");
+        cl.show(containerPanel, "LOGIN"); // set the default to the login
+//        CardLayout hl = (CardLayout) employeeHomePanel.getContainerPanel().getLayout();
+//        hl.show(employeeHomePanel.getContainerPanel(), "NEW_ORDER");
 
         // dialog
         manageEmployeesDialog = new ManageEmployeesDialog(this);
@@ -225,7 +224,16 @@ public class MainFrame extends JFrame {
         this.employeeHomePanel.setEmployeeHomeListener(new EmployeeHomeListener() {
 
             @Override
-            public void editMenuEvent(EmployeeHomeEvent e) throws ParseException, IOException {
+            public void newOrderEvent(Employee currentEmployee) throws IOException, ParseException {
+                MainFrame.this.controller.loadMenu();
+                employeeHomePanel.setNewOrderMenuItems(MainFrame.this.controller.getMenu(), MainFrame.this.controller.getPrebuiltPizzas()); // set the new order items
+                CardLayout hl = (CardLayout) employeeHomePanel.getContainerPanel().getLayout(); // set hl to the employee home panel container layout
+                hl.show(employeeHomePanel.getContainerPanel(), "NEW_ORDER"); // change the cardPanel in the container layout to display the newOrderPanel
+                menuBar.employeeNewOrderView(); // set the menuBar to the employee new order view
+            }
+
+            @Override
+            public void editMenuEvent(Employee currentEmployee) throws ParseException, IOException {
                 MainFrame.this.controller.loadInventory();
                 MainFrame.this.controller.loadMenu();
                 employeeHomePanel.setEditMenuItems(MainFrame.this.controller.getMenu(), MainFrame.this.controller.getInventory(), MainFrame.this.controller.getPrebuiltPizzas()); // set the edit menu items
@@ -358,6 +366,7 @@ public class MainFrame extends JFrame {
 
         manageEmployeesDialog.displayEmployees(MainFrame.this.controller.getEmployees());
         employeeHomePanel.setEditMenuItems(MainFrame.this.controller.getMenu(), MainFrame.this.controller.getInventory(), MainFrame.this.controller.getPrebuiltPizzas());
+        employeeHomePanel.setNewOrderMenuItems(MainFrame.this.controller.getMenu(), MainFrame.this.controller.getPrebuiltPizzas());
     }
 
 
