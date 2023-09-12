@@ -134,6 +134,14 @@ public class EditMenuComponentPanel extends JPanel {
         removeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
+                if (itemList.getSelectedItem().getTypeID().equalsIgnoreCase("INGREDIENT")) {
+                    listener.removeIngredientEvent((Ingredient) itemList.getSelectedItem());
+                } else if (itemList.getSelectedItem().getTypeID().equalsIgnoreCase("MENU_ITEM")) {
+                    listener.removeMenuItemEvent((MenuItem) itemList.getSelectedItem());
+                }
+                textField.setText("");
+                priceTextField.setText("");
                 itemList.removeSelectedItem();
             }
         });

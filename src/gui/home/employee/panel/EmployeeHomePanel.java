@@ -9,6 +9,7 @@ import gui.tools.Button;
 import model.Employee;
 import model.Ingredient;
 import model.MenuItem;
+import model.PrebuiltPizza;
 import org.json.simple.parser.ParseException;
 
 import javax.swing.*;
@@ -104,9 +105,9 @@ public class EmployeeHomePanel extends JPanel {
         editMenuPanel.clearItems();
     }
 
-    public void setEditMenuItems(LinkedList<MenuItem> items, LinkedList<Ingredient> ingredients) {
+    public void setEditMenuItems(LinkedList<MenuItem> items, LinkedList<Ingredient> ingredients, LinkedList<PrebuiltPizza> pizzas) {
         editMenuPanel.clearItems();
-        editMenuPanel.setItems(items, ingredients);
+        editMenuPanel.setItems(items, ingredients, pizzas);
     }
 
     public void setEmployeeHomeListener(EmployeeHomeListener listener) {

@@ -12,7 +12,7 @@ public class EditMenuCustomList extends JPanel {
     private JList<MenuItem> list;
     private DefaultListModel<MenuItem> model;
     private JScrollPane scrollPane;
-
+    private boolean displayInSpecialFormat;
 
     public EditMenuCustomList(int fontSize, Dimension preferredSize) {
         setLayout(new BorderLayout());
@@ -34,10 +34,14 @@ public class EditMenuCustomList extends JPanel {
         list.setForeground(Utils.getTextColor());
         list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
-
         add(scrollPane, BorderLayout.CENTER);
+
+        this.displayInSpecialFormat = false; // Set the default value
     }
 
+    public void setDisplayInSpecialFormat(boolean displayInSpecialFormat) {
+        this.displayInSpecialFormat = displayInSpecialFormat;
+    }
 
     // Add an item to the list
     public void addItem(MenuItem item) {
@@ -55,6 +59,15 @@ public class EditMenuCustomList extends JPanel {
         return null;
     }
 
+    // set list of ingredient items
+    public void setList(LinkedList<MenuItem> items) {
+        DefaultListModel<MenuItem> model = (DefaultListModel<MenuItem>) list.getModel();
+        model.removeAllElements();
+        for (MenuItem item : items) {
+            model.addElement(item);
+        }
+    }
+
     // get the list model items as a menu item linked list
     public LinkedList<MenuItem> getList() {
         DefaultListModel<MenuItem> model = (DefaultListModel<MenuItem>) list.getModel();
@@ -64,7 +77,6 @@ public class EditMenuCustomList extends JPanel {
         }
         return items;
     }
-
 
     // Remove the selected item from the list
     public void removeSelectedItem() {
@@ -80,14 +92,17 @@ public class EditMenuCustomList extends JPanel {
         model.removeAllElements();
     }
 
-
-    // Custom ListCellRenderer class
     private class CustomListCellRenderer extends DefaultListCellRenderer {
         @Override
         public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
             Component c = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 
-            // Customize the appearance here if needed
+            if (displayInSpecialFormat) {
+                if (value instanceof MenuItem) {
+                    MenuItem menuItem = (MenuItem) value;
+                    setText(menuItem.getCategory() + " - " + menuItem.getItemName() + " $" + menuItem.getPrice());
+                }
+            }
 
             return c;
         }

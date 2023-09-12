@@ -1,4 +1,30 @@
 {
+  "SALAD": [
+    {
+      "Type": "MENU_ITEM",
+      "Category": "SALAD",
+      "Price": 6.0,
+      "Item_Name": "Ceaser"
+    }
+  ],
+  "Prebuilt": [
+    {
+      "Type": "MENU_ITEM",
+      "Crust": "Garlic",
+      "Category": "Prebuilt",
+      "Price": 10.99,
+      "Item_Name": "Pepperoni",
+      "Toppings": "MEATS-Pepperoni"
+    },
+    {
+      "Type": "MENU_ITEM",
+      "Crust": "Garlic",
+      "Category": "Prebuilt",
+      "Price": 15.99,
+      "Item_Name": "Meat Lovers",
+      "Toppings": "MEATS-Pepperoni,MEATS-Sausage,MEATS-Ham,MEATS-Bacon"
+    }
+  ],
   "DESSERT": [
     {
       "Type": "MENU_ITEM",
@@ -55,16 +81,6 @@
       "Category": "DRINK",
       "Price": 3.0,
       "Item_Name": "Peach"
-    }
-  ],
-  "PREBUILT": [
-    {
-      "Type": "MENU_ITEM",
-      "Crust": "Garlic",
-      "Category": "PREBUILT",
-      "Price": 10.99,
-      "Item_Name": "Pepperoni",
-      "Toppings": "MEATS-Pepperoni"
     }
   ]
 }

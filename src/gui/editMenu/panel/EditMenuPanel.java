@@ -7,6 +7,7 @@ import gui.editMenu.navbar.NavbarPanel;
 import gui.tools.Button;
 import model.Ingredient;
 import model.MenuItem;
+import model.PrebuiltPizza;
 import org.json.simple.parser.ParseException;
 
 import javax.swing.*;
@@ -37,6 +38,7 @@ public class EditMenuPanel extends JPanel {
     private PizzaBuilderPanel pizzaBuilderPanel;
     private LinkedList<String> pizzaPanelMenuComponents;
     private LinkedList<String> otherPanelMenuComponents;
+    private LinkedList<String> sidePanelMenuComponents;
     // nav panel
     private NavbarPanel navButtonsPanel;
     // title label
@@ -76,6 +78,13 @@ public class EditMenuPanel extends JPanel {
 
         otherPanelMenuComponents.add("DRINK");
         otherPanelMenuComponents.add("DESSERT");
+
+        // sidePanel
+        sidePanelMenuComponents = new LinkedList<String>();
+        sidePanelMenuComponents.add("BREADS");
+        sidePanelMenuComponents.add("SALAD");
+        sidePanelMenuComponents.add("SOUP");
+        sidePanelMenuComponents.add("FRIES");
 
 
         //buttons panel
@@ -131,6 +140,7 @@ public class EditMenuPanel extends JPanel {
 
         addPizzaBuilderPanel();
         newContainerPanel("INGREDIENT", "PIZZA", pizzaPanelMenuComponents);
+        newContainerPanel("MENU_ITEM", "SIDE", sidePanelMenuComponents);
         newContainerPanel("MENU_ITEM", "MISC", otherPanelMenuComponents);
 
         layoutComponents();
@@ -156,9 +166,9 @@ public class EditMenuPanel extends JPanel {
         }
     }
 
-    public void setItems(LinkedList<MenuItem> items, LinkedList<Ingredient> ingredients) {
+    public void setItems(LinkedList<MenuItem> items, LinkedList<Ingredient> ingredients, LinkedList<PrebuiltPizza> pizzas) {
         pizzaBuilderPanel.setAvailableIngredients(ingredients);
-        pizzaBuilderPanel.setPizzasList(items);
+        pizzaBuilderPanel.setPizzasList(pizzas);
         for (EditMenuContainerPanel panel : containerPanels) {
 
             for (MenuItem item : items) {

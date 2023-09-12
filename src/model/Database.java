@@ -19,6 +19,7 @@ public class Database {
     private final LinkedList<Customer> customers; // create list of customer
 
     private final LinkedList<MenuItem> menu; // create list of menu items
+    private LinkedList<PrebuiltPizza> prebuiltPizzas; // create list of prebuilt pizzas
 
     private final LinkedList<Ingredient> ingredients; // create list of ingredients
 
@@ -35,6 +36,7 @@ public class Database {
         employees = new LinkedList<Employee>();
         customers = new LinkedList<Customer>();
         menu = new LinkedList<MenuItem>();
+        prebuiltPizzas = new LinkedList<PrebuiltPizza>();
         ingredients = new LinkedList<Ingredient>();
 
 
@@ -73,10 +75,41 @@ public class Database {
     // MENU
 
     // Save menu to file
+
+
     public void saveMenu() throws IOException {
         fileWriter = new FileWriter(menuFilePath);
 
         JSONObject categoriesJSON = new JSONObject();
+
+        for (PrebuiltPizza prebuiltPizza : prebuiltPizzas) {
+            JSONObject menuItemJSON = new JSONObject();
+
+//          menuItemJSON.put("Size", prebuiltPizza.getSize().toString());
+            menuItemJSON.put("Type", prebuiltPizza.getTypeID());
+            menuItemJSON.put("Category", prebuiltPizza.getCategory());
+            menuItemJSON.put("Item_Name", prebuiltPizza.getItemName());
+            menuItemJSON.put("Price", prebuiltPizza.getPrice());
+
+            menuItemJSON.put("Crust", prebuiltPizza.getCrustType());
+
+            String category = prebuiltPizza.getCategory();
+
+            StringBuilder toppingsString = new StringBuilder();
+
+            for (Ingredient topping : prebuiltPizza.getToppings()) {
+                toppingsString.append(topping.getCategory() + "-" + topping.getName() + ",");
+            }
+
+            toppingsString.deleteCharAt(toppingsString.length() - 1); // delete last comma
+            menuItemJSON.put("Toppings", toppingsString.toString());
+
+            JSONArray categoryArray = (categoriesJSON.containsKey(category))
+                    ? (JSONArray) categoriesJSON.get(category)
+                    : new JSONArray();
+            categoryArray.add(menuItemJSON);
+            categoriesJSON.put(category, categoryArray);
+        }
 
         // Group menu items by category
         for (MenuItem menuItem : menu) {
@@ -87,20 +120,6 @@ public class Database {
             menuItemJSON.put("Item_Name", menuItem.getItemName());
             menuItemJSON.put("Price", menuItem.getPrice());
 
-            // Check if the item is a Pizza
-            if (menuItem.getCategory().equalsIgnoreCase("prebuilt")) {
-                PrebuiltPizza prebuiltPizza = (PrebuiltPizza) menuItem;
-
-//                menuItemJSON.put("Size", prebuiltPizza.getSize().toString());
-                menuItemJSON.put("Crust", prebuiltPizza.getCrustType());
-
-                StringBuilder toppingsString = new StringBuilder();
-                for (Ingredient topping : prebuiltPizza.getToppings()) {
-                    toppingsString.append(topping.getCategory() + "-" + topping.getName() + ",");
-                }
-                toppingsString.deleteCharAt(toppingsString.length() - 1); // delete last comma
-                menuItemJSON.put("Toppings", toppingsString.toString());
-            }
 
             String category = menuItem.getCategory();
 
@@ -109,7 +128,9 @@ public class Database {
                     : new JSONArray();
             categoryArray.add(menuItemJSON);
             categoriesJSON.put(category, categoryArray);
+
         }
+
 
         // Write categories JSON to file
         fileWriter.write(categoriesJSON.toJSONString());
@@ -120,6 +141,7 @@ public class Database {
 
     public void loadMenu() throws ParseException, IOException {
         menu.clear(); // Clear the current menu list
+        prebuiltPizzas.clear(); // Clear the current prebuilt pizza list
 
         JSONParser parser = new JSONParser(); // Create JSON parser
         JSONObject categoriesJSON = (JSONObject) parser.parse(new FileReader(menuFilePath)); // Create JSON object from file
@@ -138,9 +160,9 @@ public class Database {
                     String itemName = (String) menuItemObj.get("Item_Name");
                     float price = Float.parseFloat(menuItemObj.get("Price").toString());
 
-                    if (category.equalsIgnoreCase("Pizza")) {
+                    if (category.equalsIgnoreCase("prebuilt")) {
                         PrebuiltPizza prebuiltPizza = loadPrebuiltPizza(menuItemObj);
-                        menu.add(prebuiltPizza);
+                        prebuiltPizzas.add(prebuiltPizza);
                     } else {
                         MenuItem menuItem = new MenuItem(typeID, category, itemName, price);
                         menu.add(menuItem);
@@ -177,6 +199,14 @@ public class Database {
         }
 
         return new PrebuiltPizza(typeID, "Prebuilt", itemName, price, crustType, toppings);
+    }
+
+    public void addPrebuiltPizza(PrebuiltPizza prebuiltPizza) {
+        prebuiltPizzas.add(prebuiltPizza);
+    }
+
+    public LinkedList<PrebuiltPizza> getPrebuiltPizzas() {
+        return prebuiltPizzas;
     }
 
 
@@ -415,7 +445,6 @@ public class Database {
             jsonObject.put("Address", customer.getAddress());
             jsonObject.put("Details", customer.getDetails());
 
-            //TODO  save payments
 
             sb.append(jsonObject.toJSONString() + ',');
         }
@@ -566,5 +595,13 @@ public class Database {
     // return employee list
     public LinkedList<Employee> getEmployees() { // return employees
         return employees;
+    }
+
+    public void removeIngredient(Ingredient selectedItem) {
+        ingredients.remove(selectedItem);
+    }
+
+    public void removePizza(PrebuiltPizza pizza) {
+        prebuiltPizzas.remove(pizza);
     }
 }

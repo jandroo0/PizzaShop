@@ -19,4 +19,10 @@ public interface EditMenuListener extends EventListener {
     void editMenuCancelEvent() throws IOException, ParseException;
 
     void addNewPrebuiltPizzaEvent(PrebuiltPizza newPrebuiltPizza);
+
+    void removeIngredientEvent(Ingredient selectedItem);
+
+    void removeMenuItemEvent(MenuItem selectedItem);
+
+    void removePizzaEvent(PrebuiltPizza pizza);
 }

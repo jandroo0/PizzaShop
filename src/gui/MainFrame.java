@@ -228,7 +228,7 @@ public class MainFrame extends JFrame {
             public void editMenuEvent(EmployeeHomeEvent e) throws ParseException, IOException {
                 MainFrame.this.controller.loadInventory();
                 MainFrame.this.controller.loadMenu();
-                employeeHomePanel.setEditMenuItems(MainFrame.this.controller.getMenu(), MainFrame.this.controller.getInventory()); // set the edit menu items
+                employeeHomePanel.setEditMenuItems(MainFrame.this.controller.getMenu(), MainFrame.this.controller.getInventory(), MainFrame.this.controller.getPrebuiltPizzas()); // set the edit menu items
                 CardLayout hl = (CardLayout) employeeHomePanel.getContainerPanel().getLayout(); // set hl to the employee home panel container layout
                 hl.show(employeeHomePanel.getContainerPanel(), "EDIT_MENU"); // change the cardPanel in the container layout to display the editMenuPanel
                 menuBar.employeeEditMenuView(); // set the menuBar to the employee edit menu view
@@ -241,7 +241,7 @@ public class MainFrame extends JFrame {
             public void saveMenuEvent() throws IOException {
                 MainFrame.this.controller.saveMenu(); // save the menu to the database
                 MainFrame.this.controller.saveInventory(); // save the inventory to the database
-                employeeHomePanel.setEditMenuItems(MainFrame.this.controller.getMenu(), MainFrame.this.controller.getInventory()); // set the edit menu items
+                employeeHomePanel.setEditMenuItems(MainFrame.this.controller.getMenu(), MainFrame.this.controller.getInventory(), MainFrame.this.controller.getPrebuiltPizzas()); // set the edit menu items
                 CardLayout hl = (CardLayout) employeeHomePanel.getContainerPanel().getLayout(); // set hl to the employee home panel container layout
                 hl.show(employeeHomePanel.getContainerPanel(), "HOME"); // change the cardPanel in the container layout to display the homePanel
             }
@@ -249,29 +249,48 @@ public class MainFrame extends JFrame {
             @Override
             public void addIngredientEvent(Ingredient ingredient) {
                 MainFrame.this.controller.addIngredient(ingredient); // add the ingredient to the database
-                employeeHomePanel.setEditMenuItems(MainFrame.this.controller.getMenu(), MainFrame.this.controller.getInventory()); // set the edit menu items
+                employeeHomePanel.setEditMenuItems(MainFrame.this.controller.getMenu(), MainFrame.this.controller.getInventory(), MainFrame.this.controller.getPrebuiltPizzas()); // set the edit menu items
 
             }
 
             @Override
             public void addMenuItemEvent(MenuItem menuItem) throws IOException {
                 MainFrame.this.controller.addMenuItem(menuItem); // add the menuItem to the database
-                employeeHomePanel.setEditMenuItems(MainFrame.this.controller.getMenu(), MainFrame.this.controller.getInventory()); // set the edit menu items
+                employeeHomePanel.setEditMenuItems(MainFrame.this.controller.getMenu(), MainFrame.this.controller.getInventory(), MainFrame.this.controller.getPrebuiltPizzas()); // set the edit menu items
 
             }
 
             @Override
             public void editMenuCancelEvent() throws IOException, ParseException {
+                MainFrame.this.controller.loadMenu(); // load the menu from the database;
+                MainFrame.this.controller.loadInventory(); // load the inventory from the database;
                 CardLayout hl = (CardLayout) employeeHomePanel.getContainerPanel().getLayout(); // set hl to the employee home panel container layout
                 hl.show(employeeHomePanel.getContainerPanel(), "HOME"); // change the cardPanel in the container layout to display the homePanel
-                MainFrame.this.controller.loadMenu(); // load the menu from the database;
-                employeeHomePanel.clearEditMenuItems(); // clear the edit menu items
-                employeeHomePanel.setEditMenuItems(MainFrame.this.controller.getMenu(), MainFrame.this.controller.getInventory()); // set the edit menu items
+
             }
 
             @Override
             public void addNewPrebuiltPizzaEvent(PrebuiltPizza newPrebuiltPizza) {
-                MainFrame.this.controller.addMenuItem(newPrebuiltPizza);
+                MainFrame.this.controller.addPrebuiltPizza(newPrebuiltPizza);
+            }
+
+            @Override
+            public void removeIngredientEvent(Ingredient selectedItem) {
+                MainFrame.this.controller.removeIngredient(selectedItem); // remove the ingredient from the database
+                employeeHomePanel.setEditMenuItems(MainFrame.this.controller.getMenu(), MainFrame.this.controller.getInventory(), MainFrame.this.controller.getPrebuiltPizzas()); // set the edit menu items
+
+            }
+
+            @Override
+            public void removeMenuItemEvent(MenuItem selectedItem) {
+                MainFrame.this.controller.removeMenuItem(selectedItem); // remove the menuItem from the database
+                employeeHomePanel.setEditMenuItems(MainFrame.this.controller.getMenu(), MainFrame.this.controller.getInventory(), MainFrame.this.controller.getPrebuiltPizzas()); // set the edit menu items
+
+            }
+
+            @Override
+            public void removePizzaEvent(PrebuiltPizza pizza) {
+                MainFrame.this.controller.removePizza(pizza); // remove the prebuilt pizza from the database
             }
         });
 
@@ -338,7 +357,7 @@ public class MainFrame extends JFrame {
         MainFrame.this.controller.loadInventory();
 
         manageEmployeesDialog.displayEmployees(MainFrame.this.controller.getEmployees());
-        employeeHomePanel.setEditMenuItems(MainFrame.this.controller.getMenu(), MainFrame.this.controller.getInventory());
+        employeeHomePanel.setEditMenuItems(MainFrame.this.controller.getMenu(), MainFrame.this.controller.getInventory(), MainFrame.this.controller.getPrebuiltPizzas());
     }
 
 

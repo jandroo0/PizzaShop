@@ -34,6 +34,10 @@ public class Controller {
         this.db.addMenuItem(e);
     }
 
+    public void addPrebuiltPizza(PrebuiltPizza e) {
+        this.db.addPrebuiltPizza(e);
+    }
+
     public void addEmployee(Employee e) {
         this.db.addEmployee(e);
     }
@@ -104,5 +108,19 @@ public class Controller {
         return this.db.getInventory();
     }
 
+    public LinkedList<PrebuiltPizza> getPrebuiltPizzas() {
+        return this.db.getPrebuiltPizzas();
+    }
 
+    public void removeIngredient(Ingredient selectedItem) {
+        this.db.removeIngredient(selectedItem);
+    }
+
+    public void removeMenuItem(MenuItem selectedItem) {
+        this.db.removeMenuItem(selectedItem);
+    }
+
+    public void removePizza(PrebuiltPizza pizza) {
+        this.db.removePizza(pizza);
+    }
 }

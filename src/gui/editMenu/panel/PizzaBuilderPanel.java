@@ -19,11 +19,14 @@ public class PizzaBuilderPanel extends JPanel {
 
     private final EditMenuCustomList availableIngredientsList;
     private final EditMenuCustomList selectedIngredientsList;
+    private final Button removePizzaButton;
     private final EditMenuCustomList pizzasList;
     private final PlaceholderTextField pizzaNameField;
+    private final PlaceholderTextField pizzaPriceField;
     private final Button addButton;
     private final Button removeButton;
     private final Button savePizzaButton;
+    private LinkedList<Ingredient> originalIngredientsList;
 
     private JLabel titleLabel;
     private JPanel titlePanel;
@@ -46,13 +49,16 @@ public class PizzaBuilderPanel extends JPanel {
 
         titleLabel = new JLabel("Pizza Builder", SwingConstants.CENTER);
 
-        availableIngredientsList = new EditMenuCustomList(13, new Dimension(200, 160));
+        availableIngredientsList = new EditMenuCustomList(13, new Dimension(220, 160));
         availableIngredientsList.setBorder(BorderFactory.createLineBorder(Utils.getButtonBackgroundColor(), 2, true));
 
-        selectedIngredientsList = new EditMenuCustomList(13, new Dimension(200, 160));
+        selectedIngredientsList = new EditMenuCustomList(13, new Dimension(220, 160));
         selectedIngredientsList.setBorder(BorderFactory.createLineBorder(Utils.getButtonBackgroundColor(), 2, true));
 
-        pizzasList = new EditMenuCustomList(13, new Dimension(150, 150));
+        availableIngredientsList.setDisplayInSpecialFormat(true);
+        selectedIngredientsList.setDisplayInSpecialFormat(true);
+
+        pizzasList = new EditMenuCustomList(13, new Dimension(150, 100));
         pizzasList.setBorder(BorderFactory.createLineBorder(Utils.getButtonBackgroundColor(), 2, true));
 
         addButton = new Button("Add", Utils.getTextFont(16), Utils.getTextColor(),
@@ -67,7 +73,12 @@ public class PizzaBuilderPanel extends JPanel {
                 Utils.getButtonBackgroundColor(), Utils.getButtonHoverColor(),
                 BorderFactory.createEmptyBorder(5, 8, 5, 8));
 
-        pizzaNameField = new PlaceholderTextField("NEW PIZZA", 120, 26, 16);
+        removePizzaButton = new Button("Remove", Utils.getTextFont(14), Utils.getTextColor(),
+                Utils.getButtonBackgroundColor(), Utils.getButtonHoverColor(),
+                BorderFactory.createEmptyBorder(5, 8, 5, 8));
+
+        pizzaNameField = new PlaceholderTextField("NEW PIZZA", 120, 24, 16);
+        pizzaPriceField = new PlaceholderTextField("$", 50, 24, 16);
 
 
         layoutComponents();
@@ -81,6 +92,7 @@ public class PizzaBuilderPanel extends JPanel {
                 if (selectedIngredient != null) {
                     selectedIngredientsList.addItem(selectedIngredient);
                     availableIngredientsList.removeSelectedItem();
+
                 }
             }
         });
@@ -102,20 +114,43 @@ public class PizzaBuilderPanel extends JPanel {
                 LinkedList<MenuItem> selectedIngredients = selectedIngredientsList.getList();
                 String pizzaName = pizzaNameField.getText();
                 if (!pizzaName.isEmpty() && !selectedIngredients.isEmpty()) {
-                    String crustType = "Original";
-                    LinkedList<Ingredient> ingredients = new LinkedList<Ingredient>();
-                    for (MenuItem ingredient : selectedIngredients) {
-                        if (ingredient.getCategory().equalsIgnoreCase("crust")) {
-                            crustType = ingredient.getItemName();
-                        } else ingredients.add((Ingredient) ingredient);
+                    try {
+                        float price = Float.parseFloat(pizzaPriceField.getText());
+                        String crustType = "Original";
+                        LinkedList<Ingredient> ingredients = new LinkedList<Ingredient>();
+                        for (MenuItem ingredient : selectedIngredients) {
+                            if (ingredient.getCategory().equalsIgnoreCase("crust")) {
+                                crustType = ingredient.getItemName();
+                            } else ingredients.add((Ingredient) ingredient);
+                        }
+                        PrebuiltPizza newPrebuiltPizza = new PrebuiltPizza("MENU_ITEM", "PREBUILT", pizzaName, price, crustType, ingredients);
+                        selectedIngredientsList.clearList();
+                        availableIngredientsList.clearList();
+                        for (Ingredient ingredient : originalIngredientsList) {
+                            availableIngredientsList.addItem(ingredient);
+                        }
+
+                        pizzaNameField.setText("");
+
+                        pizzasList.addItem(newPrebuiltPizza);
+
+                        editMenuListener.addNewPrebuiltPizzaEvent(newPrebuiltPizza);
+                    } catch (NumberFormatException ex) {
+                        JOptionPane.showMessageDialog(null, "Please enter a valid price");
+                        return;
                     }
-                    PrebuiltPizza newPrebuiltPizza = new PrebuiltPizza("MENU_ITEM", "PREBUILT", pizzaName, 10.99f, crustType, ingredients);
-                    selectedIngredientsList.clearList();
-                    pizzaNameField.setText("");
+                }
+            }
+        });
 
-                    pizzasList.addItem(newPrebuiltPizza);
 
-                    editMenuListener.addNewPrebuiltPizzaEvent(newPrebuiltPizza);
+        removePizzaButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                PrebuiltPizza selectedPizza = (PrebuiltPizza) pizzasList.getSelectedItem();
+                if (selectedPizza != null) {
+                    pizzasList.removeSelectedItem();
+                    editMenuListener.removePizzaEvent(selectedPizza);
                 }
             }
         });
@@ -156,18 +191,29 @@ public class PizzaBuilderPanel extends JPanel {
         gc.gridy = 0;
         gc.gridwidth = 2;
         gc.insets = new Insets(0, 0, 10, 0);
-        pizzaPanel.add(pizzaNameField, gc);
-        gc.gridy++;
-        pizzaPanel.add(savePizzaButton, gc);
-        gc.gridy++;
         pizzaPanel.add(pizzasList, gc);
+        gc.gridy++;
+        pizzaPanel.add(removePizzaButton, gc);
+        gc.gridy++;
+        gc.gridwidth = 1;
+        pizzaPanel.add(pizzaNameField, gc);
+        gc.gridx++;
+        gc.insets = new Insets(0, 5, 10, 0);
+        pizzaPanel.add(pizzaPriceField, gc);
+        gc.gridx = 0;
+        gc.gridy++;
+        gc.gridwidth = 2;
+        gc.insets = new Insets(0, 0, 0, 0);
+        pizzaPanel.add(savePizzaButton, gc);
 
 
         // contents panel
-        contentsPanel.setLayout(new GridLayout(2, 1));
+        GridLayout gridLayout = new GridLayout(2, 1);
+        gridLayout.setVgap(0);
+        contentsPanel.setLayout(gridLayout);
         contentsPanel.setBorder(BorderFactory.createEmptyBorder());
-        contentsPanel.add(ingredientsPanel);
         contentsPanel.add(pizzaPanel);
+        contentsPanel.add(ingredientsPanel);
 
 
         add(titlePanel, BorderLayout.NORTH);
@@ -183,6 +229,9 @@ public class PizzaBuilderPanel extends JPanel {
         titleLabel.setFont(Utils.getTextFont(30));
         titleLabel.setForeground(Utils.getTitleColor());
 
+        // contents panel
+        contentsPanel.setBackground(Utils.getBackgroundColor());
+
         // ingredients panel
         ingredientsPanel.setBackground(Utils.getBackgroundColor());
 
@@ -191,17 +240,17 @@ public class PizzaBuilderPanel extends JPanel {
     }
 
     public void setAvailableIngredients(LinkedList<Ingredient> ingredients) {
+        this.originalIngredientsList = ingredients;
         availableIngredientsList.clearList();
         for (Ingredient ingredient : ingredients) {
             availableIngredientsList.addItem(ingredient);
         }
     }
 
-    public void setPizzasList(LinkedList<MenuItem> items) {
-        for (MenuItem item : items) {
-            if (item.getCategory().equalsIgnoreCase("prebuilt")) {
-                pizzasList.addItem(item);
-            }
+    public void setPizzasList(LinkedList<PrebuiltPizza> pizzas) {
+        pizzasList.clearList();
+        for (PrebuiltPizza pizza : pizzas) {
+            pizzasList.addItem(pizza);
         }
     }
 
