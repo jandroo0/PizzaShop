@@ -6,29 +6,24 @@ import java.util.LinkedList;
 
 public class PrebuiltPizza extends MenuItem {
 
-    private Size size;
+    private String type;
+    //    private Size size;
     private String cheeseAmt;
     private String sauceAmt;
     private String crustType;
 
     private LinkedList<Ingredient> toppings;
 
-    public PrebuiltPizza(String type, String category, String name, float price, Size size, String cheeseAmt, String sauceAmt, String crustType, LinkedList<Ingredient> toppings) {
+    public PrebuiltPizza(String type, String category, String name, float price, String crustType, LinkedList<Ingredient> toppings) {
         super(type, category, name, price);
-        this.size = size;
+//        this.size = size;
         this.cheeseAmt = cheeseAmt;
         this.sauceAmt = sauceAmt;
         this.crustType = crustType;
         this.toppings = toppings;
+        this.type = type;
     }
 
-    public Size getSize() {
-        return size;
-    }
-
-    public void setSize(Size size) {
-        this.size = size;
-    }
 
     public String getCheeseAmt() {
         return cheeseAmt;
@@ -62,5 +57,8 @@ public class PrebuiltPizza extends MenuItem {
         this.toppings = toppings;
     }
 
+    public String getType() {
+        return type;
+    }
 
 }

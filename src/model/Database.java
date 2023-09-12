@@ -88,17 +88,15 @@ public class Database {
             menuItemJSON.put("Price", menuItem.getPrice());
 
             // Check if the item is a Pizza
-            if (menuItem.getCategory().equals("Pizza")) {
+            if (menuItem.getCategory().equalsIgnoreCase("prebuilt")) {
                 PrebuiltPizza prebuiltPizza = (PrebuiltPizza) menuItem;
 
-                menuItemJSON.put("Size", prebuiltPizza.getSize().toString());
-                menuItemJSON.put("Chz", prebuiltPizza.getCheeseAmt());
-                menuItemJSON.put("Sauce", prebuiltPizza.getSauceAmt());
+//                menuItemJSON.put("Size", prebuiltPizza.getSize().toString());
                 menuItemJSON.put("Crust", prebuiltPizza.getCrustType());
 
                 StringBuilder toppingsString = new StringBuilder();
                 for (Ingredient topping : prebuiltPizza.getToppings()) {
-                    toppingsString.append(topping.getName() + ",");
+                    toppingsString.append(topping.getCategory() + "-" + topping.getName() + ",");
                 }
                 toppingsString.deleteCharAt(toppingsString.length() - 1); // delete last comma
                 menuItemJSON.put("Toppings", toppingsString.toString());
@@ -119,7 +117,7 @@ public class Database {
         fileWriter.close();
     }
 
-    // load menu
+
     public void loadMenu() throws ParseException, IOException {
         menu.clear(); // Clear the current menu list
 
@@ -140,14 +138,13 @@ public class Database {
                     String itemName = (String) menuItemObj.get("Item_Name");
                     float price = Float.parseFloat(menuItemObj.get("Price").toString());
 
-                    // Check if the item is a Pizza
-                    if (category.equals("Pizza")) {
-                        // Handle PrebuiltPizza properties
-                        // ...
+                    if (category.equalsIgnoreCase("Pizza")) {
+                        PrebuiltPizza prebuiltPizza = loadPrebuiltPizza(menuItemObj);
+                        menu.add(prebuiltPizza);
+                    } else {
+                        MenuItem menuItem = new MenuItem(typeID, category, itemName, price);
+                        menu.add(menuItem);
                     }
-
-                    MenuItem menuItem = new MenuItem(typeID, category, itemName, price);
-                    menu.add(menuItem);
 
                     System.out.println("MENU ITEM : " + category + " : " + itemName + " : $" + price);
                 }
@@ -158,6 +155,30 @@ public class Database {
             e.printStackTrace();
         }
     }
+
+    private PrebuiltPizza loadPrebuiltPizza(JSONObject menuItemObj) {
+        String typeID = (String) menuItemObj.get("Type");
+        String itemName = (String) menuItemObj.get("Item_Name");
+        float price = Float.parseFloat(menuItemObj.get("Price").toString());
+        String crustType = (String) menuItemObj.get("Crust");
+
+        // Load toppings
+        String toppingsString = (String) menuItemObj.get("Toppings");
+        String[] toppingsArray = toppingsString.split(",");
+
+        LinkedList<Ingredient> toppings = new LinkedList<>();
+        for (String toppingStr : toppingsArray) {
+            String[] toppingParts = toppingStr.split("-");
+            String category = toppingParts[0];
+            String name = toppingParts[1];
+            float toppingPrice = 0.0f; // You may need to adjust this based on your data structure
+            Ingredient topping = new Ingredient(typeID, category, name, toppingPrice);
+            toppings.add(topping);
+        }
+
+        return new PrebuiltPizza(typeID, "Prebuilt", itemName, price, crustType, toppings);
+    }
+
 
 //     INGREDIENTS
 

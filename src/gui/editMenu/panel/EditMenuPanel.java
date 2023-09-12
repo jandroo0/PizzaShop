@@ -143,12 +143,14 @@ public class EditMenuPanel extends JPanel {
     }
 
     public void resetFields() {
+//        pizzaBuilderPanel.resetFields();
         for (EditMenuContainerPanel panel : containerPanels) {
             panel.resetFields();
         }
     }
 
     public void clearItems() {
+
         for (EditMenuContainerPanel panel : containerPanels) {
             panel.clearItems();
         }
@@ -156,6 +158,7 @@ public class EditMenuPanel extends JPanel {
 
     public void setItems(LinkedList<MenuItem> items, LinkedList<Ingredient> ingredients) {
         pizzaBuilderPanel.setAvailableIngredients(ingredients);
+        pizzaBuilderPanel.setPizzasList(items);
         for (EditMenuContainerPanel panel : containerPanels) {
 
             for (MenuItem item : items) {
@@ -176,6 +179,7 @@ public class EditMenuPanel extends JPanel {
 
     public void setEditMenuListener(EditMenuListener listener) {
         this.editMenuListener = listener;
+        pizzaBuilderPanel.setEditMenuListener(listener);
         for (EditMenuContainerPanel panel : containerPanels) {
             panel.setEditMenuListener(listener);
         }

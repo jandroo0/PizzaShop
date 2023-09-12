@@ -9,12 +9,14 @@ import gui.tools.Button;
 import model.Employee;
 import model.Ingredient;
 import model.MenuItem;
+import org.json.simple.parser.ParseException;
 
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.LinkedList;
 
 
@@ -58,7 +60,11 @@ public class EmployeeHomePanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 EmployeeHomeEvent event = new EmployeeHomeEvent(e, currentEmployee);
-                EmployeeHomePanel.this.employeeHomeListener.editMenuEvent(event);
+                try {
+                    EmployeeHomePanel.this.employeeHomeListener.editMenuEvent(event);
+                } catch (ParseException | IOException ex) {
+                    throw new RuntimeException(ex);
+                }
             }
         });
 
@@ -99,6 +105,7 @@ public class EmployeeHomePanel extends JPanel {
     }
 
     public void setEditMenuItems(LinkedList<MenuItem> items, LinkedList<Ingredient> ingredients) {
+        editMenuPanel.clearItems();
         editMenuPanel.setItems(items, ingredients);
     }
 

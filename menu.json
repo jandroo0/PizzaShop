@@ -56,5 +56,15 @@
       "Price": 3.0,
       "Item_Name": "Peach"
     }
+  ],
+  "PREBUILT": [
+    {
+      "Type": "MENU_ITEM",
+      "Crust": "Garlic",
+      "Category": "PREBUILT",
+      "Price": 10.99,
+      "Item_Name": "Pepperoni",
+      "Toppings": "MEATS-Pepperoni"
+    }
   ]
 }

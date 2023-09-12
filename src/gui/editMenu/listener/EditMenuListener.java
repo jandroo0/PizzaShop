@@ -2,6 +2,7 @@ package gui.editMenu.listener;
 
 import model.Ingredient;
 import model.MenuItem;
+import model.PrebuiltPizza;
 import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
@@ -16,4 +17,6 @@ public interface EditMenuListener extends EventListener {
     void addMenuItemEvent(MenuItem menuItem) throws IOException;
 
     void editMenuCancelEvent() throws IOException, ParseException;
+
+    void addNewPrebuiltPizzaEvent(PrebuiltPizza newPrebuiltPizza);
 }

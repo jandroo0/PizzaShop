@@ -1,11 +1,13 @@
 package gui.editMenu.panel;
 
 import gui.config.Utils;
+import gui.editMenu.listener.EditMenuListener;
 import gui.tools.Button;
 import gui.tools.EditMenuCustomList;
 import gui.tools.PlaceholderTextField;
 import model.Ingredient;
 import model.MenuItem;
+import model.PrebuiltPizza;
 
 import javax.swing.*;
 import java.awt.*;
@@ -28,6 +30,7 @@ public class PizzaBuilderPanel extends JPanel {
     private JPanel contentsPanel;
     private JPanel ingredientsPanel;
     private JPanel pizzaPanel;
+    private EditMenuListener editMenuListener;
 
     public PizzaBuilderPanel() {
         setLayout(new BorderLayout());
@@ -99,11 +102,20 @@ public class PizzaBuilderPanel extends JPanel {
                 LinkedList<MenuItem> selectedIngredients = selectedIngredientsList.getList();
                 String pizzaName = pizzaNameField.getText();
                 if (!pizzaName.isEmpty() && !selectedIngredients.isEmpty()) {
-//                    MenuItem pizza = new MenuItem();
-//                    pizzasList.addItem(pizza);
-
+                    String crustType = "Original";
+                    LinkedList<Ingredient> ingredients = new LinkedList<Ingredient>();
+                    for (MenuItem ingredient : selectedIngredients) {
+                        if (ingredient.getCategory().equalsIgnoreCase("crust")) {
+                            crustType = ingredient.getItemName();
+                        } else ingredients.add((Ingredient) ingredient);
+                    }
+                    PrebuiltPizza newPrebuiltPizza = new PrebuiltPizza("MENU_ITEM", "PREBUILT", pizzaName, 10.99f, crustType, ingredients);
                     selectedIngredientsList.clearList();
                     pizzaNameField.setText("");
+
+                    pizzasList.addItem(newPrebuiltPizza);
+
+                    editMenuListener.addNewPrebuiltPizzaEvent(newPrebuiltPizza);
                 }
             }
         });
@@ -179,8 +191,17 @@ public class PizzaBuilderPanel extends JPanel {
     }
 
     public void setAvailableIngredients(LinkedList<Ingredient> ingredients) {
+        availableIngredientsList.clearList();
         for (Ingredient ingredient : ingredients) {
             availableIngredientsList.addItem(ingredient);
+        }
+    }
+
+    public void setPizzasList(LinkedList<MenuItem> items) {
+        for (MenuItem item : items) {
+            if (item.getCategory().equalsIgnoreCase("prebuilt")) {
+                pizzasList.addItem(item);
+            }
         }
     }
 
@@ -193,4 +214,7 @@ public class PizzaBuilderPanel extends JPanel {
     }
 
 
+    public void setEditMenuListener(EditMenuListener listener) {
+        this.editMenuListener = listener;
+    }
 }

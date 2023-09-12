@@ -13,6 +13,7 @@ public class EditMenuCustomList extends JPanel {
     private DefaultListModel<MenuItem> model;
     private JScrollPane scrollPane;
 
+
     public EditMenuCustomList(int fontSize, Dimension preferredSize) {
         setLayout(new BorderLayout());
         setPreferredSize(preferredSize);
@@ -78,6 +79,7 @@ public class EditMenuCustomList extends JPanel {
         DefaultListModel<MenuItem> model = (DefaultListModel<MenuItem>) list.getModel();
         model.removeAllElements();
     }
+
 
     // Custom ListCellRenderer class
     private class CustomListCellRenderer extends DefaultListCellRenderer {
