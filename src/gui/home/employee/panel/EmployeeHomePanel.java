@@ -3,6 +3,7 @@ package gui.home.employee.panel;
 import gui.config.Utils;
 import gui.editMenu.listener.EditMenuListener;
 import gui.editMenu.panel.EditMenuPanel;
+import gui.employeeNewOrder.listener.EmployeeNewOrderListener;
 import gui.home.employee.listener.EmployeeHomeListener;
 import gui.tools.Button;
 import model.Employee;
@@ -127,7 +128,7 @@ public class EmployeeHomePanel extends JPanel {
         menu.addAll(items);
         menu.addAll(pizzas);
 
-        newOrderPanel.setItems(menu);
+        newOrderPanel.setMenu(menu);
     }
 
     public void setEmployeeHomeListener(EmployeeHomeListener listener) {
@@ -136,6 +137,10 @@ public class EmployeeHomePanel extends JPanel {
 
     public void setEditMenuListener(EditMenuListener listener) {
         editMenuPanel.setEditMenuListener(listener);
+    }
+
+    public void setNewOrderListener(EmployeeNewOrderListener employeeNewOrderListener) {
+        newOrderPanel.setEmployeeNewOrderListener(employeeNewOrderListener);
     }
 
     public void setEmployee(Employee e) {

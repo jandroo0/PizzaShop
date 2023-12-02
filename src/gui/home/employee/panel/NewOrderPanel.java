@@ -2,6 +2,8 @@ package gui.home.employee.panel;
 
 import gui.config.Utils;
 import gui.editMenu.listener.NavbarListener;
+import gui.employeeNewOrder.listener.EmployeeNewOrderListener;
+import gui.employeeNewOrder.listener.NewOrderPanelsListener;
 import gui.employeeNewOrder.navBar.NewOrderNavPanel;
 import gui.employeeNewOrder.panel.NewOrderComponentPanel;
 import gui.employeeNewOrder.panel.OrderViewPanel;
@@ -33,6 +35,8 @@ public class NewOrderPanel extends JPanel {
 
     // list of category panels
     private LinkedList<NewOrderComponentPanel> categoryPanels;
+
+    private EmployeeNewOrderListener employeeNewOrderListener;
 
     public NewOrderPanel() {
 
@@ -68,6 +72,10 @@ public class NewOrderPanel extends JPanel {
         styling();
     }
 
+    public void setEmployeeNewOrderListener(EmployeeNewOrderListener employeeNewOrderListener) {
+        orderViewPanel.setEmployeeNewOrderListener(employeeNewOrderListener);
+    }
+
     private void layoutComponents() {
         setLayout(new BorderLayout());
 
@@ -96,7 +104,7 @@ public class NewOrderPanel extends JPanel {
     }
 
 
-    public void setItems(LinkedList<MenuItem> items) {
+    public void setMenu(LinkedList<MenuItem> items) {
         for (MenuItem item : items) {
             if (!categories.contains(item.getCategory())) {
                 categories.add(item.getCategory()); // add category to categories list
@@ -114,6 +122,14 @@ public class NewOrderPanel extends JPanel {
                     categoryPanel.addItem(item);
                 }
             }
+
+            categoryPanel.setEmployeeNewOrderListener(new NewOrderPanelsListener() {
+
+                @Override
+                public void itemAdded(MenuItem item) {
+                    orderViewPanel.addItem(item);
+                }
+            });
         }
     }
 

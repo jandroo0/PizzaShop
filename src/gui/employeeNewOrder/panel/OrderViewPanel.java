@@ -1,13 +1,18 @@
 package gui.employeeNewOrder.panel;
 
 import gui.config.Utils;
+import gui.employeeNewOrder.listener.EmployeeNewOrderListener;
 import gui.tools.Button;
 import gui.tools.MenuCustomList;
 import gui.tools.PlaceholderTextField;
 import model.MenuItem;
+import model.Order;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.LinkedList;
 
 public class OrderViewPanel extends JPanel {
@@ -20,7 +25,7 @@ public class OrderViewPanel extends JPanel {
     private JPanel contentPanel;
 
     private JPanel buttonPanel;
-    private JPanel orderPanel;
+
 
     // order id field
     private PlaceholderTextField orderIDField;
@@ -30,9 +35,16 @@ public class OrderViewPanel extends JPanel {
 
     private LinkedList<MenuItem> orderItems;
 
+    // price label
+    private JLabel totalPriceLabel;
+    private float currentTotalPrice;
+
     // buttons
     private Button orderButton;
     private Button cancelButton;
+
+    private EmployeeNewOrderListener employeeNewOrderListener;
+    ;
 
     public OrderViewPanel() {
 
@@ -47,8 +59,14 @@ public class OrderViewPanel extends JPanel {
         orderIDField = new PlaceholderTextField("ORDER ID", 88, 26, 16);
 
         // order list
-        orderList = new MenuCustomList(16, new Dimension(200, 100));
+        orderList = new MenuCustomList(16, new Dimension(240, 120));
         orderItems = new LinkedList<MenuItem>();
+
+        orderList.setDisplayItemCount(true);
+
+        // price label
+        totalPriceLabel = new JLabel("$ 0.00");
+        currentTotalPrice = 0;
 
         // button panel
         buttonPanel = new JPanel();
@@ -61,6 +79,23 @@ public class OrderViewPanel extends JPanel {
         cancelButton = new Button("CANCEL", Utils.getTextFont(16), Utils.getTextColor(),
                 Utils.getButtonBackgroundColor(), Utils.getButtonHoverColor(),
                 BorderFactory.createEmptyBorder(5, 8, 5, 8));
+
+        orderButton.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                LinkedList<MenuItem> items = orderList.getList();
+                String orderID = orderIDField.getText();
+
+                Order newOrder = new Order(orderID, items, currentTotalPrice);
+                try {
+                    employeeNewOrderListener.newOrderEvent(newOrder);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+
+            }
+        });
 
 
         layoutComponents();
@@ -81,9 +116,13 @@ public class OrderViewPanel extends JPanel {
         gc.gridx = 0;
         gc.gridy = 0;
         gc.insets = new Insets(0, 0, 10, 0);
+        gc.gridwidth = 2;
         contentPanel.add(orderList, gc);
         gc.gridy++;
+        gc.gridwidth = 1;
         contentPanel.add(orderIDField, gc);
+        gc.gridx++;
+        contentPanel.add(totalPriceLabel, gc);
 
 
         // button panel
@@ -110,13 +149,34 @@ public class OrderViewPanel extends JPanel {
         // title
         titlePanel.setBackground(Utils.getBackgroundColor());
         titleLabel.setForeground(Utils.getTextColor());
-        titleLabel.setFont(Utils.getTextFont(24));
+        titleLabel.setFont(Utils.getTextFont(28));
 
         // content panel
         contentPanel.setBackground(Utils.getBackgroundColor());
 
+        // price label
+        totalPriceLabel.setForeground(Utils.getTextColor());
+        totalPriceLabel.setFont(Utils.getTextFont(24));
+        totalPriceLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        totalPriceLabel.setVerticalAlignment(SwingConstants.NORTH);
+
         // buttons panel
         buttonPanel.setBackground(Utils.getBackgroundColor());
 
+    }
+
+    public void addItem(MenuItem item) {
+        // add up price
+        currentTotalPrice += item.getPrice();
+        // Format the price to display two decimal places
+        String formattedPrice = String.format("%.2f", currentTotalPrice);
+        totalPriceLabel.setText("$ " + formattedPrice);
+
+        orderItems.add(item);
+        orderList.addItem(item);
+    }
+
+    public void setEmployeeNewOrderListener(EmployeeNewOrderListener employeeNewOrderListener) {
+        this.employeeNewOrderListener = employeeNewOrderListener;
     }
 }

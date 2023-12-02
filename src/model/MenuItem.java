@@ -7,11 +7,21 @@ public class MenuItem {
     private String itemName;
     private float price;
 
+    private int quantity;
+
     public MenuItem(String typeID, String category, String itemName, float price) {
         this.typeID = typeID;
         this.category = category;
         this.itemName = itemName;
         this.price = price;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 
     public String getItemName() {

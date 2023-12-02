@@ -18,6 +18,8 @@ public class Database {
     private final LinkedList<Employee> employees; // create list of employees
     private final LinkedList<Customer> customers; // create list of customer
 
+    private final LinkedList<Order> orders; // create list of orders
+
     private final LinkedList<MenuItem> menu; // create list of menu items
     private LinkedList<PrebuiltPizza> prebuiltPizzas; // create list of prebuilt pizzas
 
@@ -26,6 +28,7 @@ public class Database {
     // file paths
     private final String employeesFilePath = "employees.json";
     private final String customersFilePath = "customers.json";
+    private final String ordersFilePath = "orders.json";
     private final String paymentsFilePath = "payments.json";
     private final String menuFilePath = "menu.json";
     private final String inventoryFilePath = "inventory.json";
@@ -35,6 +38,7 @@ public class Database {
 
         employees = new LinkedList<Employee>();
         customers = new LinkedList<Customer>();
+        orders = new LinkedList<Order>();
         menu = new LinkedList<MenuItem>();
         prebuiltPizzas = new LinkedList<PrebuiltPizza>();
         ingredients = new LinkedList<Ingredient>();
@@ -82,6 +86,7 @@ public class Database {
 
         JSONObject categoriesJSON = new JSONObject();
 
+        // save prebuilt pizzas
         for (PrebuiltPizza prebuiltPizza : prebuiltPizzas) {
             JSONObject menuItemJSON = new JSONObject();
 
@@ -499,6 +504,107 @@ public class Database {
     }
 
 
+    // CUSTOMER ORDERS
+
+    // save orders to file
+    public void saveOrders() throws IOException {
+        fileWriter = new FileWriter(ordersFilePath);
+
+        JSONObject categoriesJSON = new JSONObject();
+
+        // Group orders by category (order ID)
+        for (Customer customer : customers) {
+            for (Order order : customer.getOrders()) {
+
+                JSONObject orderJSONObject = new JSONObject();
+                orderJSONObject.put("ID", order.getID());
+                orderJSONObject.put("Items", order.getItems());
+                orderJSONObject.put("Total", order.getTotalPrice());
+
+                String category = order.getID(); // Use customer ID as the category (order ID)
+
+                StringBuilder itemsString = new StringBuilder();
+
+                for (MenuItem item : order.getItems()) {
+                    itemsString.append(item.getCategory() + "-" + item.getItemName() + ",");
+                }
+
+                itemsString.deleteCharAt(itemsString.length() - 1); // delete last comma
+                orderJSONObject.put("Items", itemsString.toString());
+
+                JSONArray categoryArray = (categoriesJSON.containsKey(category))
+                        ? (JSONArray) categoriesJSON.get(category)
+                        : new JSONArray();
+                categoryArray.add(orderJSONObject);
+                categoriesJSON.put(category, categoryArray);
+            }
+        }
+        // Write categories JSON to file
+        fileWriter.write(categoriesJSON.toJSONString());
+        System.out.println("ORDERS JSON CREATED AND SAVED");
+        fileWriter.close();
+    }
+
+
+    // load orders
+    public void loadOrders() throws IOException {
+        JSONParser parser = new JSONParser();
+
+        try (FileReader reader = new FileReader(ordersFilePath)) {
+            JSONObject categoriesJSON = (JSONObject) parser.parse(reader);
+
+            for (Object categoryKey : categoriesJSON.keySet()) {
+                String category = (String) categoryKey;
+                JSONArray ordersArray = (JSONArray) categoriesJSON.get(category);
+
+                for (Object orderObject : ordersArray) {
+                    JSONObject orderJSON = (JSONObject) orderObject;
+                    String orderID = (String) orderJSON.get("ID");
+                    String itemsString = (String) orderJSON.get("Items");
+                    float totalPrice = ((Number) orderJSON.get("Total")).floatValue();
+
+                    String[] itemTokens = itemsString.split(",");
+
+                    LinkedList<MenuItem> items = new LinkedList<>();
+                    for (String itemToken : itemTokens) {
+                        String[] itemInfo = itemToken.split("-");
+                        String typeID = itemInfo[0];
+                        String itemName = itemInfo[1];
+
+                        // Check if the item is a PrebuiltPizza
+                        if (typeID.equals("PREBUILT")) {
+                            // Assume you have methods to retrieve the PrebuiltPizza details
+                            PrebuiltPizza prebuiltPizza = getPrebuiltPizzaByName(itemName);
+                            if (prebuiltPizza != null) {
+                                items.add(prebuiltPizza);
+                            }
+                        } else {
+                            MenuItem menuItem = getMenuItemByName(itemName);
+                            items.add(menuItem);
+                        }
+                    }
+
+                    Order order = new Order(orderID, items, totalPrice);
+                    Customer customer = findCustomerByID(category);
+                    if (customer != null) {
+                        customer.getOrders().add(order);
+                        ;
+                    } else {
+                        // Handle case where customer is not found
+                    }
+                }
+            }
+
+            System.out.println("ORDERS LOADED");
+            for (Customer customer : customers) {
+                System.out.println(customer.getOrders());
+            }
+        } catch (ParseException e) {
+            e.printStackTrace(); // Handle parsing exception
+        }
+    }
+
+
     // PAYMENTS
 
     // save payments to file
@@ -580,6 +686,36 @@ public class Database {
     }
 
 
+    private Customer findCustomerByID(String customerID) {
+        for (Customer customer : customers) {
+            if (customer.getID().equals(customerID)) {
+                return customer;
+            }
+        }
+        return null;
+    }
+
+    private PrebuiltPizza getPrebuiltPizzaByName(String name) {
+        for (PrebuiltPizza pizza : prebuiltPizzas) {
+            if (pizza.getItemName().equals(name)) {
+                return pizza;
+            }
+        }
+        return null;
+    }
+
+    private MenuItem getMenuItemByName(String name) {
+        for (MenuItem item : menu) {
+            System.out.println(item.getItemName());
+            System.out.println(name);
+            if (item.getItemName().equalsIgnoreCase(name)) {
+                return item;
+            }
+        }
+        return null;
+    }
+
+
     // getters
 
     // return all menu items
@@ -603,5 +739,14 @@ public class Database {
 
     public void removePizza(PrebuiltPizza pizza) {
         prebuiltPizzas.remove(pizza);
+    }
+
+    public void createOrder(Order order) {
+        for (Customer customer : customers) {
+            if (customer.getID().equals(order.getID())) {
+                customer.getOrders().add(order);
+            }
+        }
+//        saveOrders();
     }
 }

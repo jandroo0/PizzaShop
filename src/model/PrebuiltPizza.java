@@ -12,6 +12,8 @@ public class PrebuiltPizza extends MenuItem {
     private String sauceAmt;
     private String crustType;
 
+    private int quantity;
+
     private LinkedList<Ingredient> toppings;
 
     public PrebuiltPizza(String type, String category, String name, float price, String crustType, LinkedList<Ingredient> toppings) {
@@ -24,6 +26,13 @@ public class PrebuiltPizza extends MenuItem {
         this.type = type;
     }
 
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
 
     public String getCheeseAmt() {
         return cheeseAmt;

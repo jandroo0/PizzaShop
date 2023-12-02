@@ -5,6 +5,7 @@ import gui.dialog.employee.management.ManageEmployeesDialog;
 import gui.dialog.employee.management.event.AddEmployeeEvent;
 import gui.dialog.employee.management.listener.ManageEmployeeListener;
 import gui.editMenu.listener.EditMenuListener;
+import gui.employeeNewOrder.listener.EmployeeNewOrderListener;
 import gui.home.customer.CustomerHomePanel;
 import gui.home.employee.listener.EmployeeHomeListener;
 import gui.home.employee.panel.EmployeeHomePanel;
@@ -82,7 +83,7 @@ public class MainFrame extends JFrame {
         customerLoginPanel = new CustomerLoginPanel();
 
         // add login panels to the loginPanels panel with cardLayout
-        loginPanels.add(customerLoginPanel, "CUSTOMER_LOGIN");
+//        loginPanels.add(customerLoginPanel, "CUSTOMER_LOGIN");
         loginPanels.add(employeeLoginPanel, "EMPLOYEE_LOGIN");
 
         //home panels
@@ -103,8 +104,8 @@ public class MainFrame extends JFrame {
 
         CardLayout cl = (CardLayout) containerPanel.getLayout();
         cl.show(containerPanel, "LOGIN"); // set the default to the login
-//        CardLayout hl = (CardLayout) employeeHomePanel.getContainerPanel().getLayout();
-//        hl.show(employeeHomePanel.getContainerPanel(), "NEW_ORDER");
+        CardLayout hl = (CardLayout) employeeHomePanel.getContainerPanel().getLayout();
+        hl.show(employeeHomePanel.getContainerPanel(), "HOME");
 
         // dialog
         manageEmployeesDialog = new ManageEmployeesDialog(this);
@@ -243,6 +244,16 @@ public class MainFrame extends JFrame {
             }
         });
 
+        // handles the employee new order panel events
+        this.employeeHomePanel.setNewOrderListener(new EmployeeNewOrderListener() {
+            @Override
+            public void newOrderEvent(Order newOrder) throws IOException {
+                MainFrame.this.controller.createOrder(newOrder); // add the order to the database
+                MainFrame.this.controller.saveOrders(); // save the orders to the database
+                employeeHomePanel.setNewOrderMenuItems(MainFrame.this.controller.getMenu(), MainFrame.this.controller.getPrebuiltPizzas()); // set the new order items
+            }
+        });
+
         // handles the employee edit menu panel events
         this.employeeHomePanel.setEditMenuListener(new EditMenuListener() {
             @Override
@@ -360,6 +371,7 @@ public class MainFrame extends JFrame {
     private void load() throws IOException, ParseException {
         MainFrame.this.controller.loadEmployees();
         MainFrame.this.controller.loadCustomers();
+        MainFrame.this.controller.loadOrders();
         MainFrame.this.controller.loadPayments();
         MainFrame.this.controller.loadMenu();
         MainFrame.this.controller.loadInventory();

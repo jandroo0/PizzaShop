@@ -7,6 +7,7 @@ public class Customer {
     private String ID, phoneNumber, firstName, lastName, address, details;
 
     private LinkedList<Payment> payments;
+    private LinkedList<Order> orders;
 
     public Customer(String phoneNumber, String firstName, String lastName, String address, String details) {
         this.ID = phoneNumber;
@@ -17,6 +18,12 @@ public class Customer {
         this.details = details;
 
         payments = new LinkedList<>();
+        orders = new LinkedList<>();
+    }
+
+    // get orders
+    public LinkedList<Order> getOrders() {
+        return orders;
     }
 
     public LinkedList<Payment> getPayments() {

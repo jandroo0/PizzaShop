@@ -1,14 +1,15 @@
 package gui.employeeNewOrder.panel;
 
 import gui.config.Utils;
+import gui.employeeNewOrder.listener.NewOrderPanelsListener;
 import gui.tools.Button;
 import gui.tools.MenuCustomList;
 import model.MenuItem;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.LinkedList;
 
 public class NewOrderComponentPanel extends JPanel {
@@ -25,6 +26,8 @@ public class NewOrderComponentPanel extends JPanel {
     private Button addButton;
 
     private LinkedList<MenuItem> items;
+
+    private NewOrderPanelsListener newOrderPanelsListener;
 
     public NewOrderComponentPanel(String category) {
 
@@ -49,15 +52,11 @@ public class NewOrderComponentPanel extends JPanel {
                 Utils.getButtonBackgroundColor(), Utils.getButtonHoverColor(),
                 BorderFactory.createEmptyBorder(5, 8, 5, 8));
 
-        itemList.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent evt) {
-                JList<String> list = (JList<String>) evt.getSource();
-                if (evt.getClickCount() == 2) { // Double-click detected
-                    int index = list.locationToIndex(evt.getPoint());
-                    MenuItem selectedItem = itemList.getSelectedItem();
-                    // Add the selected item back to the list
-                    itemList.addItem(selectedItem);
-                }
+        addButton.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                newOrderPanelsListener.itemAdded(itemList.getSelectedItem());
             }
         });
 
@@ -65,6 +64,13 @@ public class NewOrderComponentPanel extends JPanel {
         layoutComponents();
         styling();
 
+    }
+
+    public void setEmployeeNewOrderListener(NewOrderPanelsListener listener) {
+        this.newOrderPanelsListener = listener;
+    }
+
+    public void setEmployeeNewOrderListener() {
     }
 
 

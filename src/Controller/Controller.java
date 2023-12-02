@@ -123,4 +123,16 @@ public class Controller {
     public void removePizza(PrebuiltPizza pizza) {
         this.db.removePizza(pizza);
     }
+
+    public void createOrder(Order order) {
+        this.db.createOrder(order);
+    }
+
+    public void saveOrders() throws IOException {
+        this.db.saveOrders();
+    }
+
+    public void loadOrders() throws IOException {
+        this.db.loadOrders();
+    }
 }
